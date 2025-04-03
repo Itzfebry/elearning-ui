@@ -1,0 +1,75 @@
+### Flutter/Dart ###
+# Core Flutter/Dart files to ignore
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+*.dart.js
+*.js.map
+*.info.json
+**/.last_build_id
+
+# Generated files
+**/doc/api/
+*.symbols
+*.map.json
+
+### Platform Specific ###
+# Android
+/android/
+/local.properties
+**/gradle-wrapper.jar
+
+# iOS
+/ios/
+**/Podfile.lock
+**/Pods/
+
+# Web
+/web/
+
+# Desktop
+/windows/
+/linux/
+/macos/
+
+### Build Directories ###
+**/debug/
+**/profile/
+**/release/
+**/test/coverage/
+
+### IDE ###
+# IntelliJ/Android Studio
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code (uncomment if needed)
+#.vscode/
+
+### Environment ###
+.env
+.env*
+.env.local
+.env.*.local
+
+### System Files ###
+.DS_Store
+Thumbs.db
+*.swp
+*.log
+
+### Version Control ###
+.svn/
+.history/
+migrate_working_dir/
+
+### Miscellaneous ###
+*.class
+*.pyc
+.atom/
+.buildlog/

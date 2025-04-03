@@ -1,0 +1,53 @@
+[
+  {
+    "kelas": "VI",
+    "mapel": [
+      {
+        "nama": "Matematika",
+        "materi": [
+          {"id": 1, "judul": "Materi 1", "url": "url_materi_1"},
+          {"id": 2, "judul": "Materi 2", "url": "url_materi_2"},
+          {"id": 3, "judul": "Materi 3", "url": "url_materi_3"}
+        ],
+        "video": [
+          {"id": 1, "judul": "Video 1", "url": "url_video_1"},
+          {"id": 2, "judul": "Video 2", "url": "url_video_2"},
+          {"id": 3, "judul": "Video 3", "url": "url_video_3"}
+        ],
+        "update": "8 Agustus",
+        "semester": "1 & 2",
+        "guru": "Bu Siti"
+      },
+      {
+        "nama": "Bahasa Inggris",
+        "materi": [
+          {"id": 1, "judul": "Materi 1", "url": "url_materi_1"},
+          {"id": 2, "judul": "Materi 2", "url": "url_materi_2"},
+          {"id": 3, "judul": "Materi 3", "url": "url_materi_3"}
+        ],
+        "video": [
+          {"id": 1, "judul": "Video 1", "url": "url_video_1"},
+          {"id": 2, "judul": "Video 2", "url": "url_video_2"}
+        ],
+        "update": "2 Agustus",
+        "semester": "1 & 2",
+        "guru": "Mrs. Ratna"
+      },
+      {
+        "nama": "Bahasa Indonesia",
+        "materi": [
+          {"id": 1, "judul": "Materi 1", "url": "url_materi_1"},
+          {"id": 2, "judul": "Materi 2", "url": "url_materi_2"},
+          {"id": 3, "judul": "Materi 3", "url": "url_materi_3"}
+        ],
+        "video": [
+          {"id": 1, "judul": "Video 1", "url": "url_video_1"},
+          {"id": 2, "judul": "Video 2", "url": "url_video_2"}
+        ],
+        "update": "2 Agustus",
+        "semester": "1 & 2",
+        "guru": "Mrs. Ratna"
+      }
+    ]
+  }
+]
