@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  final String baseUrl = "http://10.0.2.2:5000/auth";
+  final String baseUrl = "http://10.0.2.2:5001/auth";
 
   Future<Map<String, dynamic>> login(String idOrEmail, String password) async {
     final Uri url = Uri.parse("$baseUrl/login");
@@ -46,10 +46,7 @@ class AuthService {
         };
       }
     } catch (e) {
-      return {
-        'success': false,
-        'message': 'Koneksi error: $e'
-      };
+      return {'success': false, 'message': 'Koneksi error: $e'};
     }
   }
 
