@@ -155,28 +155,33 @@ class SiswaDashboardPage extends StatelessWidget {
                     // Notification Icon
                     Align(
                       alignment: Alignment.topRight,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.green.shade100,
-                        radius: 30,
-                        child: const Stack(
-                          alignment: Alignment.topCenter,
-                          children: [
-                            Icon(Icons.notifications, color: Colors.black),
-                            Positioned(
-                              left: 10,
-                              bottom: 10,
-                              child: CircleAvatar(
-                                backgroundColor: Colors.yellow,
-                                radius: 8,
-                                child: Text(
-                                  "10",
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold),
+                      child: InkWell(
+                        onTap: () {
+                          Get.toNamed(AppRoutes.notifikasiSiswa);
+                        },
+                        child: CircleAvatar(
+                          backgroundColor: Colors.green.shade100,
+                          radius: 30,
+                          child: const Stack(
+                            alignment: Alignment.topCenter,
+                            children: [
+                              Icon(Icons.notifications, color: Colors.black),
+                              Positioned(
+                                left: 10,
+                                bottom: 10,
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.yellow,
+                                  radius: 8,
+                                  child: Text(
+                                    "10",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -360,10 +365,11 @@ class SiswaDashboardPage extends StatelessWidget {
                         // "Tugas" Card
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => Tugas()),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Tugas()),
+                            );
                           },
                           child: Container(
                             width: screenWidth * 0.9,

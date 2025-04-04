@@ -8,6 +8,7 @@ import 'package:ui/views/common/welcome_page.dart';
 import 'package:ui/views/common/selection_page.dart';
 import 'package:ui/views/guru/guruDashboard.dart';
 import 'package:ui/views/siswa/matapelajaran/mata_pelajaran.dart';
+import 'package:ui/views/siswa/notifikasi.dart';
 import 'package:ui/views/siswa/siswaDashboard.dart';
 import 'package:ui/bindings/auth_binding.dart'; // Import AuthBinding
 import 'app_routes.dart';
@@ -27,6 +28,12 @@ class AppPages {
       page: () => const SiswaDashboardPage(),
       middlewares: [AuthMiddleware()], // AuthMiddleware for siswaDashboard
       binding: AuthBinding(), // Binding for AuthController
+    ),
+    GetPage(
+      name: AppRoutes.notifikasiSiswa,
+      page: () => const NotifSiswa(),
+      middlewares: [AuthMiddleware()], // AuthMiddleware for siswaDashboard
+      // binding: AuthBinding(),
     ),
     GetPage(
       name: AppRoutes.guruDashboard,
