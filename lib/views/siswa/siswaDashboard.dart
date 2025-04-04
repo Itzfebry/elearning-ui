@@ -9,6 +9,7 @@ import 'package:ui/views/siswa/quiz.dart';
 import 'package:ui/views/siswa/ruang_diskusi.dart';
 import 'package:ui/views/siswa/tugas/tugas.dart';
 import 'package:ui/views/siswa/ranksiswa.dart';
+
 class SiswaDashboardPage extends StatelessWidget {
   const SiswaDashboardPage({super.key});
 
@@ -23,7 +24,7 @@ class SiswaDashboardPage extends StatelessWidget {
       if (authController.namaUser.value.isNotEmpty &&
           !authController.isDialogShown.value) {
         // Pastikan dialog tidak dipanggil lebih dari sekali
-        if (Get.isDialogOpen!) return;  // Cek jika dialog sudah terbuka
+        if (Get.isDialogOpen!) return; // Cek jika dialog sudah terbuka
 
         await showDialog(
           context: context,
@@ -50,7 +51,8 @@ class SiswaDashboardPage extends StatelessWidget {
                   ),
                   onPressed: () {
                     Navigator.of(context).pop();
-                    authController.setDialogShown(); // Set dialog shown after closing
+                    authController
+                        .setDialogShown(); // Set dialog shown after closing
                   },
                 ),
               ],
@@ -167,7 +169,7 @@ class SiswaDashboardPage extends StatelessWidget {
                                 backgroundColor: Colors.yellow,
                                 radius: 8,
                                 child: Text(
-                                  "3",
+                                  "10",
                                   style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold),
@@ -302,7 +304,7 @@ class SiswaDashboardPage extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => QuizSiswa()),
+                                      builder: (context) => const QuizSiswa()),
                                 );
                               },
                               child: Container(
@@ -330,7 +332,8 @@ class SiswaDashboardPage extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => ProfileSiswa()),
+                                      builder: (context) =>
+                                          const ProfileSiswa()),
                                 );
                               },
                               child: Container(

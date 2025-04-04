@@ -1,12 +1,26 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ui/constans/api_constans.dart';
 import 'package:ui/models/kelasmatapelajarans.dart';
 
 class KelasMataPelajaranService {
   static Future<List<KelasMataPelajaran>> getKelasMataPelajaran() async {
     try {
-      final response = await http.get(Uri.parse(ApiConstants.klsMatpelEnpoint));
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("token");
+      print("object TESSS");
+      print(token);
+
+      final header = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      final response = await http.get(
+        Uri.parse(ApiConstants.klsMatpelEnpoint),
+        headers: header,
+      );
 
       print("Response Status: ${response.statusCode}");
       print("Response Body: ${response.body}");
