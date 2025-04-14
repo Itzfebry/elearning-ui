@@ -160,26 +160,26 @@ class SiswaDashboardPage extends StatelessWidget {
                               },
                               child: Container(
                                 width: screenWidth * 0.45,
-                                height: screenHeight * 0.35,
+                                height: screenHeight * 0.15,
                                 decoration: BoxDecoration(
                                   color: Colors.teal.shade300,
                                   borderRadius: BorderRadius.circular(50),
                                 ),
-                                child: Stack(
+                                child: const Stack(
                                   children: [
-                                    Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(15),
-                                        decoration: const BoxDecoration(
-                                          color: Colors.yellow,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: const Text('1'),
-                                      ),
-                                    ),
-                                    const Center(
+                                    // Positioned(
+                                    //   top: 0,
+                                    //   right: 0,
+                                    //   child: Container(
+                                    //     padding: const EdgeInsets.all(15),
+                                    //     decoration: const BoxDecoration(
+                                    //       color: Colors.yellow,
+                                    //       shape: BoxShape.circle,
+                                    //     ),
+                                    //     child: const Text('1'),
+                                    //   ),
+                                    // ),
+                                    Center(
                                       child: Text(
                                         'Mata Pelajaran',
                                         style: TextStyle(
@@ -223,36 +223,34 @@ class SiswaDashboardPage extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                    height: screenHeight *
-                                        0.022), // Spacing between cards
+                                SizedBox(height: screenHeight * 0.022),
 
                                 // "Ruang Diskusi" Card
-                                GestureDetector(
-                                  onTap: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(builder: (context) => ()),
-                                    // );
-                                  },
-                                  child: Container(
-                                    width: screenWidth * 0.37,
-                                    height: screenHeight * 0.2,
-                                    decoration: BoxDecoration(
-                                      color: Colors.green.shade400,
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    child: const Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'Ruang Diskusi',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     // Navigator.push(
+                                //     //   context,
+                                //     //   MaterialPageRoute(builder: (context) => ()),
+                                //     // );
+                                //   },
+                                //   child: Container(
+                                //     width: screenWidth * 0.37,
+                                //     height: screenHeight * 0.2,
+                                //     decoration: BoxDecoration(
+                                //       color: Colors.green.shade400,
+                                //       borderRadius: BorderRadius.circular(50),
+                                //     ),
+                                //     child: const Align(
+                                //       alignment: Alignment.center,
+                                //       child: Text(
+                                //         'Ruang Diskusi',
+                                //         style: TextStyle(
+                                //             fontSize: 18,
+                                //             fontWeight: FontWeight.bold),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ],
@@ -337,21 +335,21 @@ class SiswaDashboardPage extends StatelessWidget {
                               color: Colors.teal.shade400,
                               borderRadius: BorderRadius.circular(50),
                             ),
-                            child: Stack(
+                            child: const Stack(
                               children: [
-                                Positioned(
-                                  top: 8,
-                                  right: 8,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.yellow,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Text('2'),
-                                  ),
-                                ),
-                                const Center(
+                                // Positioned(
+                                //   top: 8,
+                                //   right: 8,
+                                //   child: Container(
+                                //     padding: const EdgeInsets.all(8),
+                                //     decoration: const BoxDecoration(
+                                //       color: Colors.yellow,
+                                //       shape: BoxShape.circle,
+                                //     ),
+                                //     child: const Text('2'),
+                                //   ),
+                                // ),
+                                Center(
                                   child: Text(
                                     'Tugas',
                                     style: TextStyle(

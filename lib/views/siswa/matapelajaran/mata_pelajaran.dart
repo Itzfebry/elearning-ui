@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ui/routes/app_routes.dart';
 import 'package:ui/views/siswa/matapelajaran/controllers/mata_pelajaran_controller.dart';
 import 'package:ui/widgets/my_date_format.dart';
 
@@ -10,47 +11,47 @@ class KelasMataPelajaranPage extends StatelessWidget {
 
   MataPelajaranController mataPelajaranC = Get.find<MataPelajaranController>();
 
-  void _showOptions(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                "Pilih kategori untuk",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.book),
-                label: const Text("Materi"),
-                onPressed: () {
-                  // Get.back();
-                  // Get.to(() => MaterisSiswaPage(kelasMataPelajaranId: kelasMataPelajaran.id));
-                },
-              ),
-              const SizedBox(height: 8),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.video_library),
-                label: const Text("Video"),
-                onPressed: () {
-                  // Get.back();
-                  // Get.to(() => VideosSiswaPage(kelasMataPelajaranId: kelasMataPelajaran.id));
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  // void _showOptions(BuildContext context) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+  //     ),
+  //     builder: (context) {
+  //       return Container(
+  //         padding: const EdgeInsets.all(16),
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             const Text(
+  //               "Pilih kategori untuk",
+  //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+  //               textAlign: TextAlign.center,
+  //             ),
+  //             const SizedBox(height: 16),
+  //             ElevatedButton.icon(
+  //               icon: const Icon(Icons.book),
+  //               label: const Text("Materi"),
+  //               onPressed: () {
+  //                 // Get.back();
+  //                 // Get.to(() => MaterisSiswaPage(kelasMataPelajaranId: kelasMataPelajaran.id));
+  //               },
+  //             ),
+  //             const SizedBox(height: 8),
+  //             ElevatedButton.icon(
+  //               icon: const Icon(Icons.video_library),
+  //               label: const Text("Video"),
+  //               onPressed: () {
+  //                 // Get.back();
+  //                 // Get.to(() => VideosSiswaPage(kelasMataPelajaranId: kelasMataPelajaran.id));
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +66,7 @@ class KelasMataPelajaranPage extends StatelessWidget {
           itemBuilder: (context, index) {
             final data = mataPelajaranC.mataPelajaranM!.data;
             return GestureDetector(
-              onTap: () => _showOptions(context),
+              onTap: () => Get.toNamed(AppRoutes.materiSiswa),
               child: Card(
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 shape: RoundedRectangleBorder(

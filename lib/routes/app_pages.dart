@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:ui/middlewares/auth_middleware.dart';
-import 'package:ui/views/admin/adminDashboard.dart';
 import 'package:ui/views/auth/bindings/auth_binding.dart';
 import 'package:ui/views/auth/login_page.dart';
 import 'package:ui/views/common/splash_screen.dart';
@@ -10,6 +9,7 @@ import 'package:ui/views/guru/guruDashboard.dart';
 import 'package:ui/views/siswa/bindings/siswa_binding.dart';
 import 'package:ui/views/siswa/matapelajaran/bindings/mata_pelajaran_binding.dart';
 import 'package:ui/views/siswa/matapelajaran/mata_pelajaran.dart';
+import 'package:ui/views/siswa/materi/index.dart';
 import 'package:ui/views/siswa/notifikasi.dart';
 import 'package:ui/views/siswa/siswaDashboard.dart';
 import 'app_routes.dart';
@@ -42,15 +42,14 @@ class AppPages {
       binding: AuthBinding(), // Binding for AuthController
     ),
     GetPage(
-      name: AppRoutes.adminDashboard,
-      page: () => const AdminDashboardPage(),
-      middlewares: [AuthMiddleware()], // AuthMiddleware for adminDashboard
-      binding: AuthBinding(), // Binding for AuthController
-    ),
-    GetPage(
       name: AppRoutes.kelasmatapelajarans,
       page: () => KelasMataPelajaranPage(),
       binding: MataPelajaranBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.materiSiswa,
+      page: () => MateriView(),
+      // binding: MataPelajaranBinding(),
     ),
   ];
 }

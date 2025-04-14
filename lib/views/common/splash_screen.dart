@@ -33,9 +33,6 @@ class _SplashScreenState extends State<SplashScreen> {
         case 'guru':
           Get.offAllNamed(AppRoutes.guruDashboard);
           break;
-        case 'admin':
-          Get.offAllNamed(AppRoutes.adminDashboard);
-          break;
         default:
           Get.offAllNamed(AppRoutes.login); // Jika role tidak dikenali
           break;
