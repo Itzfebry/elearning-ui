@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ui/controllers/auth_controller.dart';
 import 'package:ui/routes/app_routes.dart';
 import 'package:ui/views/siswa/controllers/siswa_controller.dart';
 import 'package:ui/views/siswa/profile.dart';
@@ -18,50 +15,6 @@ class SiswaDashboardPage extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final siswaC = Get.find<SiswaController>();
-    // final authController = Get.find<AuthController>();
-
-    // // Menampilkan dialog selamat datang hanya sekali
-    // WidgetsBinding.instance.addPostFrameCallback((_) async {
-    //   if (authController.namaUser.value.isNotEmpty &&
-    //       !authController.isDialogShown.value) {
-    //     // Pastikan dialog tidak dipanggil lebih dari sekali
-    //     if (Get.isDialogOpen!) return; // Cek jika dialog sudah terbuka
-
-    //     await showDialog(
-    //       context: context,
-    //       barrierColor: Colors.black54,
-    //       builder: (BuildContext context) {
-    //         return AlertDialog(
-    //           backgroundColor: Colors.white,
-    //           shape: RoundedRectangleBorder(
-    //             borderRadius: BorderRadius.circular(20),
-    //           ),
-    //           title: const Text(
-    //             'Selamat Datang',
-    //             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-    //           ),
-    //           content: Text(
-    //             'Selamat Datang, ${authController.namaUser.value}!',
-    //             style: const TextStyle(fontSize: 18),
-    //           ),
-    //           actions: <Widget>[
-    //             TextButton(
-    //               child: const Text(
-    //                 'OK',
-    //                 style: TextStyle(fontSize: 18, color: Colors.teal),
-    //               ),
-    //               onPressed: () {
-    //                 Navigator.of(context).pop();
-    //                 authController
-    //                     .setDialogShown(); // Set dialog shown after closing
-    //               },
-    //             ),
-    //           ],
-    //         );
-    //       },
-    //     );
-    //   }
-    // });
 
     return WillPopScope(
       onWillPop: () async {
