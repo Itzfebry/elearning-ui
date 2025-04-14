@@ -62,7 +62,7 @@ class SiswaController extends GetxController {
         throw Exception("Token not found");
       }
 
-      http.Response response = await http.delete(
+      http.Response response = await http.post(
         Uri.parse(ApiConstants.logoutEnpoint),
         headers: headers,
       );
@@ -75,7 +75,7 @@ class SiswaController extends GetxController {
         await prefs.clear();
         snackbarSuccess("Berhasil Logout");
       } else {
-        debugPrint(response.body.toString());
+        log(response.body.toString());
       }
     } catch (e) {
       log(e.toString());
