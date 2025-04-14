@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ui/routes/app_routes.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -16,11 +18,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _checkLoginStatus() async {
-    await Future.delayed(Duration(seconds: 2)); // Simulasi loading
+    await Future.delayed(const Duration(seconds: 2));
 
-    final prefs = Get.find<SharedPreferences>();
+    final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    final role = prefs.getString('role'); // Ambil role user jika ada
+    final role = prefs.getString('role');
 
     if (token != null && token.isNotEmpty) {
       // Jika token ada, arahkan ke dashboard sesuai role
@@ -40,7 +42,6 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     } else {
       if (!mounted) return;
-      // Jika tidak ada token, arahkan ke halaman Welcome
       Get.offAllNamed(AppRoutes.welcome);
     }
   }
@@ -53,9 +54,11 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset("assets/images/skoda.png", width: 100), // Tambahkan logo
-            SizedBox(height: 20),
-            CircularProgressIndicator(color: Colors.white), // Animasi loading
+            Image.asset("assets/images/skoda.png",
+                width: 100), // Tambahkan logo
+            const SizedBox(height: 20),
+            const CircularProgressIndicator(
+                color: Colors.white), // Animasi loading
           ],
         ),
       ),

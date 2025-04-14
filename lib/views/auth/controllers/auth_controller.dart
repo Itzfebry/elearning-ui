@@ -9,7 +9,7 @@ import 'package:ui/constans/api_constans.dart';
 import 'package:ui/routes/app_routes.dart';
 import 'package:ui/widgets/my_snackbar.dart';
 
-class AuthController {
+class AuthController extends GetxController {
   var isLoading = false.obs;
   SharedPreferences? prefs;
   TextEditingController loginC = TextEditingController();
@@ -43,6 +43,7 @@ class AuthController {
         if (response.statusCode == 200) {
           await prefs?.setString('token', json['data']['token']);
           await prefs?.setString('nama', user['nama']);
+          await prefs?.setString('role', user['user']['role']);
 
           if (user['user']['role'] == "siswa") {
             Get.offAllNamed(AppRoutes.siswaDashboard);

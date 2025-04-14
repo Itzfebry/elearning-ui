@@ -1,12 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ui/controllers/auth_controller.dart';
 import 'package:ui/routes/app_routes.dart';
-import 'package:ui/views/siswa/matapelajaran/mata_pelajaran.dart';
-import 'package:ui/views/siswa/notifikasi.dart';
+import 'package:ui/views/siswa/controllers/siswa_controller.dart';
 import 'package:ui/views/siswa/profile.dart';
 import 'package:ui/views/siswa/quiz.dart';
-import 'package:ui/views/siswa/ruang_diskusi.dart';
 import 'package:ui/views/siswa/tugas/tugas.dart';
 import 'package:ui/views/siswa/ranksiswa.dart';
 
@@ -17,50 +17,51 @@ class SiswaDashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final authController = Get.find<AuthController>();
+    final siswaC = Get.find<SiswaController>();
+    // final authController = Get.find<AuthController>();
 
-    // Menampilkan dialog selamat datang hanya sekali
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (authController.namaUser.value.isNotEmpty &&
-          !authController.isDialogShown.value) {
-        // Pastikan dialog tidak dipanggil lebih dari sekali
-        if (Get.isDialogOpen!) return; // Cek jika dialog sudah terbuka
+    // // Menampilkan dialog selamat datang hanya sekali
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   if (authController.namaUser.value.isNotEmpty &&
+    //       !authController.isDialogShown.value) {
+    //     // Pastikan dialog tidak dipanggil lebih dari sekali
+    //     if (Get.isDialogOpen!) return; // Cek jika dialog sudah terbuka
 
-        await showDialog(
-          context: context,
-          barrierColor: Colors.black54,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              title: const Text(
-                'Selamat Datang',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              content: Text(
-                'Selamat Datang, ${authController.namaUser.value}!',
-                style: const TextStyle(fontSize: 18),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text(
-                    'OK',
-                    style: TextStyle(fontSize: 18, color: Colors.teal),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    authController
-                        .setDialogShown(); // Set dialog shown after closing
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      }
-    });
+    //     await showDialog(
+    //       context: context,
+    //       barrierColor: Colors.black54,
+    //       builder: (BuildContext context) {
+    //         return AlertDialog(
+    //           backgroundColor: Colors.white,
+    //           shape: RoundedRectangleBorder(
+    //             borderRadius: BorderRadius.circular(20),
+    //           ),
+    //           title: const Text(
+    //             'Selamat Datang',
+    //             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    //           ),
+    //           content: Text(
+    //             'Selamat Datang, ${authController.namaUser.value}!',
+    //             style: const TextStyle(fontSize: 18),
+    //           ),
+    //           actions: <Widget>[
+    //             TextButton(
+    //               child: const Text(
+    //                 'OK',
+    //                 style: TextStyle(fontSize: 18, color: Colors.teal),
+    //               ),
+    //               onPressed: () {
+    //                 Navigator.of(context).pop();
+    //                 authController
+    //                     .setDialogShown(); // Set dialog shown after closing
+    //               },
+    //             ),
+    //           ],
+    //         );
+    //       },
+    //     );
+    //   }
+    // });
 
     return WillPopScope(
       onWillPop: () async {
@@ -106,8 +107,7 @@ class SiswaDashboardPage extends StatelessWidget {
         );
 
         if (shouldLogout == true) {
-          authController.logout();
-          Get.offAllNamed('/login');
+          siswaC.logout();
         }
 
         return false; // Mencegah navigasi back default
@@ -140,14 +140,20 @@ class SiswaDashboardPage extends StatelessWidget {
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 8),
-                          Obx(() => Text(
-                                'Hi, ${authController.namaUser.value}',
-                                style: const TextStyle(
-                                  fontSize: 32,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )),
+                          Obx(() {
+                            if (siswaC.isLoading.value) {
+                              return const CircularProgressIndicator();
+                            }
+                            var user = siswaC.dataUser['user'];
+                            return Text(
+                              'Hi, ${user?['nama']}',
+                              style: const TextStyle(
+                                fontSize: 32,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.bold,
+                              ),
+                            );
+                          }),
                         ],
                       ),
                     ),

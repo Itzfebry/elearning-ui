@@ -8,6 +8,7 @@ import 'package:ui/views/common/splash_screen.dart';
 import 'package:ui/views/common/welcome_page.dart';
 import 'package:ui/views/common/selection_page.dart';
 import 'package:ui/views/guru/guruDashboard.dart';
+import 'package:ui/views/siswa/bindings/siswa_binding.dart';
 import 'package:ui/views/siswa/matapelajaran/mata_pelajaran.dart';
 import 'package:ui/views/siswa/notifikasi.dart';
 import 'package:ui/views/siswa/siswaDashboard.dart';
@@ -15,7 +16,7 @@ import 'app_routes.dart';
 
 class AppPages {
   static final pages = [
-    GetPage(name: AppRoutes.splash, page: () => SplashScreen()),
+    GetPage(name: AppRoutes.splash, page: () => const SplashScreen()),
     GetPage(name: AppRoutes.welcome, page: () => const WelcomePage()),
     GetPage(name: AppRoutes.selection, page: () => const SelectionPage()),
     GetPage(
@@ -26,7 +27,7 @@ class AppPages {
       name: AppRoutes.siswaDashboard,
       page: () => const SiswaDashboardPage(),
       middlewares: [AuthMiddleware()], // AuthMiddleware for siswaDashboard
-      // binding: AuthBinding(),
+      binding: SiswaBinding(),
     ),
     GetPage(
       name: AppRoutes.notifikasiSiswa,
