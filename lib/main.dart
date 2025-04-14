@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ui/routes/app_pages.dart';
 import 'package:ui/routes/app_routes.dart';
-import 'package:ui/bindings/auth_binding.dart';
+import 'package:ui/views/auth/bindings/auth_binding.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

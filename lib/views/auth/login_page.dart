@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ui/controllers/auth_controller.dart';
-import 'package:ui/routes/app_routes.dart';
+import 'package:ui/views/auth/controllers/auth_controller.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,8 +12,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late String role;
   late String idFieldLabel;
-  final TextEditingController idController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
   final AuthController authController = Get.find<AuthController>();
 
   final Map<String, String> roleImages = {
@@ -34,11 +30,9 @@ class _LoginPageState extends State<LoginPage> {
   String getIdFieldLabel(String role) {
     switch (role.toLowerCase()) {
       case "siswa":
-        return "NIS Siswa";
+        return "NIS atau Email Siswa";
       case "guru":
-        return "Email Guru";
-      case "admin":
-        return "Email Admin";
+        return "Email atau Nip Guru";
       default:
         return "ID";
     }
@@ -62,29 +56,21 @@ class _LoginPageState extends State<LoginPage> {
                       fontSize: 18.0, fontWeight: FontWeight.w500)),
               const SizedBox(height: 32.0),
               TextField(
-                  controller: idController,
+                  controller: authController.loginC,
                   decoration: _inputDecoration(idFieldLabel)),
               const SizedBox(height: 24.0),
               TextField(
-                  controller: passwordController,
+                  controller: authController.passwordC,
                   obscureText: true,
                   decoration: _inputDecoration("Kata Sandi")),
               const SizedBox(height: 16.0),
-              // Show error message if any
-              Obx(() => authController.errorMessage.value.isNotEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        authController.errorMessage.value,
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                    )
-                  : const SizedBox.shrink()),
               const SizedBox(height: 8.0),
               Obx(() => authController.isLoading.value
                   ? const CircularProgressIndicator()
                   : ElevatedButton(
-                      onPressed: () => _handleLogin(),
+                      onPressed: () {
+                        authController.login();
+                      },
                       child: const Text("Masuk"),
                     )),
             ],
@@ -92,30 +78,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  void _handleLogin() async {
-    if (idController.text.isEmpty || passwordController.text.isEmpty) {
-      authController.errorMessage.value = 'Harap isi semua field';
-      return;
-    }
-
-    final success = await authController.login(
-      idController.text,
-      passwordController.text,
-    );
-
-    print("Login result: $success");
-    print("User role: ${authController.roleUser.value}");
-
-    if (success) {
-      // Route based on user role
-      final destination = authController.getRedirectRouteBasedOnRole();
-      print("Navigating to: $destination");
-      
-      // Use this navigation approach for better flow
-      Get.offAllNamed(destination);
-    }
   }
 
   InputDecoration _inputDecoration(String label) {

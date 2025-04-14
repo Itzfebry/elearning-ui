@@ -3,8 +3,6 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ui/routes/app_routes.dart';
 
-
-
 class AuthMiddleware extends GetMiddleware {
   @override
   int? get priority => 1;

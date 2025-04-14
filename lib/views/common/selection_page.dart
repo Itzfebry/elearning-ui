@@ -27,9 +27,11 @@ class SelectionPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _roleButton("Siswa", "siswa", "https://cdn-icons-png.flaticon.com/512/201/201818.png"),
-                _roleButton("Guru", "guru", "https://cdn-icons-png.flaticon.com/512/1995/1995574.png"),
-                _roleButton("Admin", "admin", "https://cdn-icons-png.flaticon.com/512/2206/2206368.png"),
+                _roleButton("Siswa", "siswa",
+                    "https://cdn-icons-png.flaticon.com/512/201/201818.png"),
+                _roleButton("Guru", "guru",
+                    "https://cdn-icons-png.flaticon.com/512/1995/1995574.png"),
+                // _roleButton("Admin", "admin", "https://cdn-icons-png.flaticon.com/512/2206/2206368.png"),
               ],
             ),
           ),
@@ -41,7 +43,8 @@ class SelectionPage extends StatelessWidget {
   Widget _roleButton(String label, String role, String imageUrl) {
     return GestureDetector(
       onTap: () {
-        Get.offAllNamed(AppRoutes.login, arguments: role); // Pastikan tidak bisa kembali ke Selection
+        Get.offAllNamed(AppRoutes.login,
+            arguments: role); // Pastikan tidak bisa kembali ke Selection
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 20),

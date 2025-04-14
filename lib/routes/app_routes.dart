@@ -8,6 +8,7 @@ class AppRoutes {
   static const String guruDashboard = "/guru-dashboard";
   // Admin
   static const String adminDashboard = "/admin-dashboard";
+
   //
   static const String welcome = "/welcome";
   static const String selection = "/selection";

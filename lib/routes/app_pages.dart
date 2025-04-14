@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:ui/bindings/kelasmatapelajarans_bindings.dart';
 import 'package:ui/middlewares/auth_middleware.dart';
 import 'package:ui/views/admin/adminDashboard.dart';
+import 'package:ui/views/auth/bindings/auth_binding.dart';
 import 'package:ui/views/auth/login_page.dart';
 import 'package:ui/views/common/splash_screen.dart';
 import 'package:ui/views/common/welcome_page.dart';
@@ -10,7 +11,6 @@ import 'package:ui/views/guru/guruDashboard.dart';
 import 'package:ui/views/siswa/matapelajaran/mata_pelajaran.dart';
 import 'package:ui/views/siswa/notifikasi.dart';
 import 'package:ui/views/siswa/siswaDashboard.dart';
-import 'package:ui/bindings/auth_binding.dart'; // Import AuthBinding
 import 'app_routes.dart';
 
 class AppPages {
@@ -19,15 +19,14 @@ class AppPages {
     GetPage(name: AppRoutes.welcome, page: () => const WelcomePage()),
     GetPage(name: AppRoutes.selection, page: () => const SelectionPage()),
     GetPage(
-      name: AppRoutes.login,
-      page: () => const LoginPage(),
-      binding: AuthBinding(), // AuthBinding for login page
-    ),
+        name: AppRoutes.login,
+        page: () => const LoginPage(),
+        binding: AuthBinding()),
     GetPage(
       name: AppRoutes.siswaDashboard,
       page: () => const SiswaDashboardPage(),
       middlewares: [AuthMiddleware()], // AuthMiddleware for siswaDashboard
-      binding: AuthBinding(), // Binding for AuthController
+      // binding: AuthBinding(),
     ),
     GetPage(
       name: AppRoutes.notifikasiSiswa,
