@@ -7,4 +7,5 @@ class ApiConstants {
 
   static String klsMatpelEnpoint = "$baseUrl/kelasmatapelajarans";
   static String getMeEnpoint = "$baseUrl/get-me";
+  static String mataPelajaranEnpoint = "$baseUrl/get-mata-pelajaran";
 }

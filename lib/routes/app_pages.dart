@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:ui/bindings/kelasmatapelajarans_bindings.dart';
 import 'package:ui/middlewares/auth_middleware.dart';
 import 'package:ui/views/admin/adminDashboard.dart';
 import 'package:ui/views/auth/bindings/auth_binding.dart';
@@ -9,6 +8,7 @@ import 'package:ui/views/common/welcome_page.dart';
 import 'package:ui/views/common/selection_page.dart';
 import 'package:ui/views/guru/guruDashboard.dart';
 import 'package:ui/views/siswa/bindings/siswa_binding.dart';
+import 'package:ui/views/siswa/matapelajaran/bindings/mata_pelajaran_binding.dart';
 import 'package:ui/views/siswa/matapelajaran/mata_pelajaran.dart';
 import 'package:ui/views/siswa/notifikasi.dart';
 import 'package:ui/views/siswa/siswaDashboard.dart';
@@ -50,7 +50,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.kelasmatapelajarans,
       page: () => KelasMataPelajaranPage(),
-      binding: KelasMataPelajaranBinding(),
+      binding: MataPelajaranBinding(),
     ),
   ];
 }

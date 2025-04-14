@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ui/controllers/kelasmatapelajarans_controller.dart';
 import 'package:ui/models/kelasmatapelajarans.dart';
+import 'package:ui/views/siswa/matapelajaran/controllers/mata_pelajaran_controller.dart';
 import 'package:ui/views/siswa/matapelajaran/materi_siswa.dart';
 import 'package:ui/views/siswa/matapelajaran/video_siswa.dart';
+import 'package:ui/widgets/my_date_format.dart';
 
 class KelasMataPelajaranPage extends StatelessWidget {
-  final KelasMataPelajaranController controller =
-      Get.find<KelasMataPelajaranController>();
-
   KelasMataPelajaranPage({super.key});
 
-  void _showOptions(
-      BuildContext context, KelasMataPelajaran kelasMataPelajaran) {
+  MataPelajaranController mataPelajaranC = Get.find<MataPelajaranController>();
+
+  void _showOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -24,10 +23,9 @@ class KelasMataPelajaranPage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                "Pilih kategori untuk ${kelasMataPelajaran.mataPelajaranId}",
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              const Text(
+                "Pilih kategori untuk",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
@@ -60,15 +58,15 @@ class KelasMataPelajaranPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Kelas Mata Pelajaran")),
       body: Obx(() {
-        if (controller.isLoading.value) {
+        if (mataPelajaranC.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
         return ListView.builder(
-          itemCount: controller.kelasMataPelajaranList.length,
+          itemCount: mataPelajaranC.mataPelajaranM!.data.length,
           itemBuilder: (context, index) {
-            final kelasMataPelajaran = controller.kelasMataPelajaranList[index];
+            final data = mataPelajaranC.mataPelajaranM!.data;
             return GestureDetector(
-              onTap: () => _showOptions(context, kelasMataPelajaran),
+              onTap: () => _showOptions(context),
               child: Card(
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 shape: RoundedRectangleBorder(
@@ -80,37 +78,42 @@ class KelasMataPelajaranPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        kelasMataPelajaran.mataPelajaranId,
+                        data[index].nama,
                         style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 4),
-                      Text("Guru: ${kelasMataPelajaran.guruId}"),
-                      Text(
-                          "Semester: ${kelasMataPelajaran.semester.toString()}"),
+                      Text("Guru: ${data[index].guru.nama}"),
+                      // const Text("Semester: 1"),
                       const SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
                             flex: 1,
-                            child: Text(
-                                "${kelasMataPelajaran.materiCount} Materi",
+                            child: Text("${data[index].jumlahBuku} Materi",
                                 style: const TextStyle(color: Colors.red)),
                           ),
                           Expanded(
                             flex: 1,
-                            child: Text(
-                                "${kelasMataPelajaran.videoCount} Video",
+                            child: Text("${data[index].jumlahVideo} Video",
                                 style: const TextStyle(color: Colors.blue),
                                 textAlign: TextAlign.center),
                           ),
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                                "Diperbarui: ${kelasMataPelajaran.lastUpdated}",
-                                textAlign: TextAlign.end),
-                          ),
+                          if (data[index].materi.isNotEmpty)
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                  "Diperbarui: \n${data[index].materi.last.tanggal.getSimpleDayAndDate()}",
+                                  textAlign: TextAlign.end),
+                            )
+                          else
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                  "Diperbarui: \n${data[index].createdAt.getSimpleDayAndDate()}",
+                                  textAlign: TextAlign.end),
+                            )
                         ],
                       ),
                     ],

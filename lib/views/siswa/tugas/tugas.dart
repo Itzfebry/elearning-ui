@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ui/models/matapelajarans.dart';
-import 'package:ui/services/matapelajarans.dart';
 import 'package:ui/views/siswa/tugas/tugas_detail.dart'; // Import halaman detail tugas
 
 class Tugas extends StatefulWidget {
@@ -11,29 +10,12 @@ class Tugas extends StatefulWidget {
 }
 
 class _TugasState extends State<Tugas> {
-  final MataPelajaranService _service = MataPelajaranService();
   List<MataPelajaran> mataPelajaranList = [];
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    fetchMataPelajaran();
-  }
-
-  Future<void> fetchMataPelajaran() async {
-    try {
-      List<MataPelajaran> data = await _service.getAllMataPelajaran();
-      setState(() {
-        mataPelajaranList = data;
-        isLoading = false;
-      });
-    } catch (e) {
-      print("Error: $e");
-      setState(() {
-        isLoading = false;
-      });
-    }
   }
 
   @override
