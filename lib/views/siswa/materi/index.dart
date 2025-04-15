@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -29,12 +31,9 @@ class MateriView extends StatelessWidget {
     },
   ];
 
-  // Fungsi untuk membuka link YouTube di browser
-  void _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
+  Future<void> _launchUrl(String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
     }
   }
 
@@ -104,7 +103,7 @@ class MateriView extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                        _launchURL(video['url']!);
+                        _launchUrl(video['url']!);
                       },
                       child: Container(
                         width: double.infinity,
