@@ -1,4 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ui/views/siswa/materi/controllers/materi_controller.dart';
+import 'package:ui/widgets/my_date_format.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MateriView extends StatefulWidget {
@@ -11,67 +16,33 @@ class MateriView extends StatefulWidget {
 class _MateriViewState extends State<MateriView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  MateriController materiC = Get.find<MateriController>();
 
-  bool isMateriLoaded = false;
-  bool isVideoLoaded = false;
-
-  List<Map<String, String>> materiList = [];
-  List<Map<String, String>> videoList = [];
+  String? selectedSemester = "1";
+  String? selectedSemesterVideo = "1";
+  final List<String> semesterList = ['1', '2'];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    log(Get.arguments.toString());
 
-    // add listener untuk tab perubahan
     _tabController.addListener(() {
-      if (_tabController.indexIsChanging) return; // biar gak dua kali
+      if (_tabController.indexIsChanging) return;
 
-      if (_tabController.index == 0 && !isMateriLoaded) {
-        _loadMateri();
-      } else if (_tabController.index == 1 && !isVideoLoaded) {
-        _loadVideo();
+      if (_tabController.index == 0 && !materiC.isMateriLoaded.value) {
+        materiC.getMateriBuku(
+            idMatpel: Get.arguments, semester: selectedSemester);
+        log("Materi");
+      } else if (_tabController.index == 1 && !materiC.isVideoLoaded.value) {
+        log("VIdeo");
+        materiC.getMateriVideo(
+            idMatpel: Get.arguments, semester: selectedSemesterVideo);
       }
     });
 
-    // Optionally load tab pertama langsung
-    _loadMateri();
-  }
-
-  void _loadMateri() {
-    setState(() {
-      isMateriLoaded = true;
-      materiList = [
-        {
-          'judul': 'Materi Pemrograman Flutter',
-          'tanggal': '10 April 2025',
-          'fileUrl': 'https://example.com/flutter.pdf',
-        },
-        {
-          'judul': 'Materi Machine Learning',
-          'tanggal': '12 April 2025',
-          'fileUrl': 'https://example.com/ml.pdf',
-        },
-      ];
-    });
-  }
-
-  void _loadVideo() {
-    setState(() {
-      isVideoLoaded = true;
-      videoList = [
-        {
-          'url': 'https://www.youtube.com/watch?v=-LXyD5cOuoM',
-          'judul': 'Belajar Flutter Dasar',
-          'desc': 'Video ini membahas dasar-dasar Flutter.'
-        },
-        {
-          'url': 'https://www.youtube.com/watch?v=tHIffjpnoM0',
-          'judul': 'State Management di Flutter',
-          'desc': 'Penjelasan lengkap tentang State Management.'
-        },
-      ];
-    });
+    materiC.getMateriBuku(idMatpel: Get.arguments, semester: selectedSemester);
   }
 
   Future<void> _launchUrl(String url) async {
@@ -100,100 +71,180 @@ class _MateriViewState extends State<MateriView>
           ],
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          // Tab Materi
-          isMateriLoaded
-              ? ListView.builder(
-                  padding: const EdgeInsets.all(12),
-                  itemCount: materiList.length,
-                  itemBuilder: (context, index) {
-                    final materi = materiList[index];
-                    return Card(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              materi['judul']!,
+      body: Obx(
+        () => TabBarView(
+          controller: _tabController,
+          children: [
+            // Tab Materi
+            Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  child: DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(
+                      labelText: 'Pilih Semester',
+                      border: OutlineInputBorder(),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    ),
+                    value: selectedSemester ?? "1",
+                    items: semesterList.map((semester) {
+                      return DropdownMenuItem<String>(
+                        value: semester,
+                        child: Text('Semester $semester'),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedSemester = value!;
+                      });
+                      materiC.getMateriBuku(
+                          idMatpel: Get.arguments, semester: selectedSemester);
+                    },
+                  ),
+                ),
+                if (materiC.isLoadingBuku.value)
+                  const Center(child: CircularProgressIndicator())
+                else if (materiC.materiBuku == null ||
+                    materiC.materiBuku!.data.isEmpty)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 50),
+                    child: Center(child: Text('Tidak ada materi')),
+                  )
+                else
+                  ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    shrinkWrap: true,
+                    itemCount: materiC.materiBuku?.data.length ?? 0,
+                    itemBuilder: (context, index) {
+                      final materi = materiC.materiBuku!.data;
+                      return Card(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                materi[index].judulMateri,
+                                style: const TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                  'Tanggal: ${materi[index].tanggal.simpleDateRevers()}'),
+                              const SizedBox(height: 12),
+                              ElevatedButton.icon(
+                                onPressed: () {
+                                  // _launchUrl(materi['fileUrl']!);
+                                },
+                                icon: const Icon(Icons.download),
+                                label: const Text("Download Materi"),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+              ],
+            ),
+
+            // Tab Video
+            Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  child: DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(
+                      labelText: 'Pilih Semester',
+                      border: OutlineInputBorder(),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    ),
+                    value: selectedSemesterVideo ?? "1",
+                    items: semesterList.map((semester) {
+                      return DropdownMenuItem<String>(
+                        value: semester,
+                        child: Text('Semester $semester'),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedSemesterVideo = value!;
+                      });
+                      materiC.getMateriVideo(
+                          idMatpel: Get.arguments,
+                          semester: selectedSemesterVideo);
+                    },
+                  ),
+                ),
+                if (materiC.isLoadingVideo.value)
+                  const Center(child: CircularProgressIndicator())
+                else if (materiC.materiVideo == null ||
+                    materiC.materiVideo!.data.isEmpty)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 50),
+                    child: Center(child: Text('Tidak ada materi video')),
+                  )
+                else
+                  ListView.builder(
+                    padding: const EdgeInsets.all(12),
+                    shrinkWrap: true,
+                    itemCount: materiC.materiVideo?.data.length ?? 0,
+                    itemBuilder: (context, index) {
+                      final video = materiC.materiVideo!.data[index];
+                      final videoId =
+                          Uri.parse(video.path).queryParameters['v'];
+                      final thumbnailUrl =
+                          'https://img.youtube.com/vi/$videoId/0.jpg';
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              // _launchUrl(video.path);
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(thumbnailUrl),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: const Align(
+                                alignment: Alignment.center,
+                                child: Icon(
+                                  Icons.play_circle_fill,
+                                  color: Colors.white,
+                                  size: 60,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: Text(
+                              video.judulMateri,
                               style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 8),
-                            Text('Tanggal: ${materi['tanggal']}'),
-                            const SizedBox(height: 12),
-                            ElevatedButton.icon(
-                              onPressed: () {
-                                _launchUrl(materi['fileUrl']!);
-                              },
-                              icon: const Icon(Icons.download),
-                              label: const Text("Download Materi"),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                )
-              : const Center(child: CircularProgressIndicator()),
-
-          // Tab Video
-          isVideoLoaded
-              ? ListView.builder(
-                  padding: const EdgeInsets.all(12),
-                  itemCount: videoList.length,
-                  itemBuilder: (context, index) {
-                    final video = videoList[index];
-                    final videoId =
-                        Uri.parse(video['url']!).queryParameters['v'];
-                    final thumbnailUrl =
-                        'https://img.youtube.com/vi/$videoId/0.jpg';
-
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            _launchUrl(video['url']!);
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(thumbnailUrl),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            child: const Align(
-                              alignment: Alignment.center,
-                              child: Icon(
-                                Icons.play_circle_fill,
-                                color: Colors.white,
-                                size: 60,
-                              ),
+                                  fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Text(
-                            video['judul']!,
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Text(video['desc']!),
-                        const SizedBox(height: 20),
-                      ],
-                    );
-                  },
-                )
-              : const Center(child: CircularProgressIndicator()),
-        ],
+                          Text(video.deskripsi),
+                          const SizedBox(height: 20),
+                        ],
+                      );
+                    },
+                  ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

@@ -9,6 +9,7 @@ import 'package:ui/views/guru/guruDashboard.dart';
 import 'package:ui/views/siswa/bindings/siswa_binding.dart';
 import 'package:ui/views/siswa/matapelajaran/bindings/mata_pelajaran_binding.dart';
 import 'package:ui/views/siswa/matapelajaran/mata_pelajaran.dart';
+import 'package:ui/views/siswa/materi/bindings/materi_binding.dart';
 import 'package:ui/views/siswa/materi/index.dart';
 import 'package:ui/views/siswa/notifikasi.dart';
 import 'package:ui/views/siswa/siswaDashboard.dart';
@@ -49,7 +50,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.materiSiswa,
       page: () => const MateriView(),
-      // binding: MataPelajaranBinding(),
+      binding: MateriBinding(),
     ),
   ];
 }
