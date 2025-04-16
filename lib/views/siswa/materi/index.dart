@@ -206,7 +206,7 @@ class _MateriViewState extends State<MateriView>
                         children: [
                           InkWell(
                             onTap: () {
-                              // _launchUrl(video.path);
+                              _launchUrl(video.path);
                             },
                             child: Container(
                               width: double.infinity,
