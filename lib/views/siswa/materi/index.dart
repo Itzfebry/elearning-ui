@@ -137,9 +137,11 @@ class _MateriViewState extends State<MateriView>
                               const SizedBox(height: 12),
                               ElevatedButton.icon(
                                 onPressed: () async {
-                                  print(materi[index].path);
-                                  await materiC
-                                      .downloadPdfWithHttp(materi[index].path);
+                                  await materiC.downloadPdfWithHttp(
+                                    materi[index].path,
+                                    materi[index].judulMateri,
+                                    materi[index].semester,
+                                  );
                                 },
                                 icon: const Icon(Icons.download),
                                 label: const Text("Download Materi"),
