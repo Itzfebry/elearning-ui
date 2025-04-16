@@ -136,8 +136,10 @@ class _MateriViewState extends State<MateriView>
                                   'Tanggal: ${materi[index].tanggal.simpleDateRevers()}'),
                               const SizedBox(height: 12),
                               ElevatedButton.icon(
-                                onPressed: () {
-                                  // _launchUrl(materi['fileUrl']!);
+                                onPressed: () async {
+                                  print(materi[index].path);
+                                  await materiC
+                                      .downloadPdfWithHttp(materi[index].path);
                                 },
                                 icon: const Icon(Icons.download),
                                 label: const Text("Download Materi"),
