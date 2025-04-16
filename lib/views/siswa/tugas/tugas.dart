@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ui/models/matapelajarans.dart';
 import 'package:ui/views/siswa/tugas/tugas_detail.dart'; // Import halaman detail tugas
 
 class Tugas extends StatefulWidget {
@@ -10,7 +9,6 @@ class Tugas extends StatefulWidget {
 }
 
 class _TugasState extends State<Tugas> {
-  List<MataPelajaran> mataPelajaranList = [];
   bool isLoading = true;
 
   @override
@@ -40,38 +38,27 @@ class _TugasState extends State<Tugas> {
               Expanded(
                 child: isLoading
                     ? const Center(child: CircularProgressIndicator())
-                    : TaskList(mataPelajaranList: mataPelajaranList),
+                    : Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFBBDBD0),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: const EdgeInsets.fromLTRB(23, 19, 23, 40),
+                        child: ListView.builder(
+                          itemCount: 1,
+                          itemBuilder: (context, index) {
+                            return const TaskItem(
+                              title: "matapelajaran.name",
+                              mataPelajaranId:
+                                  "matapelajaran.id", // Kirim ID ke halaman detail
+                            );
+                          },
+                        ),
+                      ),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class TaskList extends StatelessWidget {
-  final List<MataPelajaran> mataPelajaranList;
-
-  const TaskList({super.key, required this.mataPelajaranList});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFBBDBD0),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      padding: const EdgeInsets.fromLTRB(23, 19, 23, 40),
-      child: ListView.builder(
-        itemCount: mataPelajaranList.length,
-        itemBuilder: (context, index) {
-          final matapelajaran = mataPelajaranList[index];
-          return TaskItem(
-            title: matapelajaran.name,
-            mataPelajaranId: matapelajaran.id, // Kirim ID ke halaman detail
-          );
-        },
       ),
     );
   }
@@ -89,12 +76,12 @@ class TaskItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Navigasi ke halaman detail tugas
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TugasDetail(mataPelajaranId: mataPelajaranId),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => TugasDetail(mataPelajaranId: mataPelajaranId),
+        //   ),
+        // );
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 40),

@@ -48,7 +48,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.materiSiswa,
-      page: () => MateriView(),
+      page: () => const MateriView(),
       // binding: MataPelajaranBinding(),
     ),
   ];

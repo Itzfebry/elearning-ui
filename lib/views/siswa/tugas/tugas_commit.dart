@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ui/services/tugas_siswas.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -56,7 +55,8 @@ class _TugasCommitState extends State<TugasCommit> {
   Future<void> pickFile() async {
     // **Implementasi pemilihan file di sini**
     setState(() {
-      fileUrl = "https://example.com/sample.pdf"; // Simulasi URL file yang diunggah
+      fileUrl =
+          "https://example.com/sample.pdf"; // Simulasi URL file yang diunggah
     });
   }
 
@@ -69,7 +69,8 @@ class _TugasCommitState extends State<TugasCommit> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Unggah Tugas", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const Text("Unggah Tugas",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: pickFile,
@@ -83,7 +84,8 @@ class _TugasCommitState extends State<TugasCommit> {
             const SizedBox(height: 20),
             TextField(
               controller: komentarController,
-              decoration: const InputDecoration(labelText: "Tambahkan Komentar"),
+              decoration:
+                  const InputDecoration(labelText: "Tambahkan Komentar"),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
