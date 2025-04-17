@@ -26,35 +26,24 @@ class _TugasState extends State<Tugas> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Tugas',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Poppins',
-                ),
-              ),
-              const SizedBox(height: 20),
               Expanded(
-                child: isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFBBDBD0),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        padding: const EdgeInsets.fromLTRB(23, 19, 23, 40),
-                        child: ListView.builder(
-                          itemCount: 1,
-                          itemBuilder: (context, index) {
-                            return const TaskItem(
-                              title: "matapelajaran.name",
-                              mataPelajaranId:
-                                  "matapelajaran.id", // Kirim ID ke halaman detail
-                            );
-                          },
-                        ),
-                      ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFBBDBD0),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: const EdgeInsets.fromLTRB(23, 19, 23, 40),
+                  child: ListView.builder(
+                    itemCount: 1,
+                    itemBuilder: (context, index) {
+                      return const TaskItem(
+                        title: "matapelajaran.name",
+                        mataPelajaranId:
+                            "matapelajaran.id", // Kirim ID ke halaman detail
+                      );
+                    },
+                  ),
+                ),
               ),
             ],
           ),
