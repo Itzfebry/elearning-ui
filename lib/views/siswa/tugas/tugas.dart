@@ -44,6 +44,7 @@ class Tugas extends StatelessWidget {
                                 .mataPelajaranSimpleM?.data[index];
                             return TaskItem(
                               title: data!.nama,
+                              guru: data.guru.nama,
                               mataPelajaranId: data.id.toString(),
                             );
                           },
@@ -63,16 +64,20 @@ class Tugas extends StatelessWidget {
 
 class TaskItem extends StatelessWidget {
   final String title;
-  final String mataPelajaranId; // ID mata pelajaran
+  final String guru;
+  final String mataPelajaranId;
 
-  const TaskItem(
-      {super.key, required this.title, required this.mataPelajaranId});
+  const TaskItem({
+    super.key,
+    required this.title,
+    required this.guru,
+    required this.mataPelajaranId,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigasi ke halaman detail tugas
         // Navigator.push(
         //   context,
         //   MaterialPageRoute(
@@ -87,13 +92,26 @@ class TaskItem extends StatelessWidget {
           color: const Color(0xFF67DEAC),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Text(
-          title,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Poppins',
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Poppins',
+              ),
+            ),
+            Text(
+              "Guru : $guru",
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Poppins',
+              ),
+            ),
+          ],
         ),
       ),
     );
