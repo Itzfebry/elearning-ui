@@ -15,6 +15,7 @@ import 'package:ui/views/siswa/notifikasi.dart';
 import 'package:ui/views/siswa/siswaDashboard.dart';
 import 'package:ui/views/siswa/tugas/bindings/tugas_binding.dart';
 import 'package:ui/views/siswa/tugas/tugas.dart';
+import 'package:ui/views/siswa/tugas/tugas_detail.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -58,6 +59,11 @@ class AppPages {
       name: AppRoutes.tugasSiswa,
       page: () => Tugas(),
       binding: TugasBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.tugasDetailSiswa,
+      page: () => const TugasDetail(),
+      // binding: TugasBinding(),
     ),
   ];
 }
