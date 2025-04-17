@@ -1,20 +1,14 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ui/views/siswa/matapelajaran/controllers/mata_pelajaran_simple_controller.dart';
 import 'package:ui/views/siswa/tugas/tugas_detail.dart'; // Import halaman detail tugas
 
-class Tugas extends StatefulWidget {
-  const Tugas({super.key});
-
-  @override
-  _TugasState createState() => _TugasState();
-}
-
-class _TugasState extends State<Tugas> {
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+class Tugas extends StatelessWidget {
+  Tugas({super.key});
+  MataPelajaranSimpleController matapelajaranSimpleC =
+      Get.find<MataPelajaranSimpleController>();
 
   @override
   Widget build(BuildContext context) {
@@ -27,22 +21,36 @@ class _TugasState extends State<Tugas> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFBBDBD0),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding: const EdgeInsets.fromLTRB(23, 19, 23, 40),
-                  child: ListView.builder(
-                    itemCount: 1,
-                    itemBuilder: (context, index) {
-                      return const TaskItem(
-                        title: "matapelajaran.name",
-                        mataPelajaranId:
-                            "matapelajaran.id", // Kirim ID ke halaman detail
+                child: Obx(
+                  () {
+                    if (matapelajaranSimpleC.isLoading.value) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
                       );
-                    },
-                  ),
+                    } else {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFBBDBD0),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 30),
+                        child: ListView.builder(
+                          itemCount: matapelajaranSimpleC
+                                  .mataPelajaranSimpleM?.data.length ??
+                              0,
+                          itemBuilder: (context, index) {
+                            var data = matapelajaranSimpleC
+                                .mataPelajaranSimpleM?.data[index];
+                            return TaskItem(
+                              title: data!.nama,
+                              mataPelajaranId: data.id.toString(),
+                            );
+                          },
+                        ),
+                      );
+                    }
+                  },
                 ),
               ),
             ],
@@ -73,11 +81,11 @@ class TaskItem extends StatelessWidget {
         // );
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 25),
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: const Color(0xFF67DEAC),
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
           title,

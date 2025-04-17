@@ -13,6 +13,8 @@ import 'package:ui/views/siswa/materi/bindings/materi_binding.dart';
 import 'package:ui/views/siswa/materi/index.dart';
 import 'package:ui/views/siswa/notifikasi.dart';
 import 'package:ui/views/siswa/siswaDashboard.dart';
+import 'package:ui/views/siswa/tugas/bindings/tugas_binding.dart';
+import 'package:ui/views/siswa/tugas/tugas.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -51,6 +53,11 @@ class AppPages {
       name: AppRoutes.materiSiswa,
       page: () => const MateriView(),
       binding: MateriBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.tugasSiswa,
+      page: () => Tugas(),
+      binding: TugasBinding(),
     ),
   ];
 }

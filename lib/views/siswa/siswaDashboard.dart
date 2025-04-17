@@ -322,11 +322,7 @@ class SiswaDashboardPage extends StatelessWidget {
                         // "Tugas" Card
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Tugas()),
-                            );
+                            Get.toNamed(AppRoutes.tugasSiswa);
                           },
                           child: Container(
                             width: screenWidth * 0.9,

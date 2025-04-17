@@ -5,6 +5,7 @@ class AppRoutes {
   static const String mataPelajaran = "/mata-pelajaran";
   static const String notifikasiSiswa = '/notifikasi-siswa';
   static const String materiSiswa = '/materi-siswa';
+  static const String tugasSiswa = '/tugas-siswa';
   // Guru
   static const String guruDashboard = "/guru-dashboard";
 
