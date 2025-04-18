@@ -46,8 +46,10 @@ class AuthController extends GetxController {
           await prefs?.setString('role', user['user']['role']);
 
           if (user['user']['role'] == "siswa") {
+            await prefs?.setString('nisn', user['nisn']);
             Get.offAllNamed(AppRoutes.siswaDashboard);
           } else {
+            await prefs?.setString('nip', user['nip']);
             Get.offAllNamed(AppRoutes.guruDashboard);
           }
           snackbarSuccess("Login Berhasil");

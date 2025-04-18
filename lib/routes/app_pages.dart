@@ -14,6 +14,7 @@ import 'package:ui/views/siswa/materi/index.dart';
 import 'package:ui/views/siswa/notifikasi.dart';
 import 'package:ui/views/siswa/siswaDashboard.dart';
 import 'package:ui/views/siswa/tugas/bindings/detail_tugas_binding.dart';
+import 'package:ui/views/siswa/tugas/bindings/submit_tugas_binding.dart';
 import 'package:ui/views/siswa/tugas/bindings/tugas_binding.dart';
 import 'package:ui/views/siswa/tugas/tugas.dart';
 import 'package:ui/views/siswa/tugas/tugas_commit.dart';
@@ -70,7 +71,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.tugasCommitSiswa,
       page: () => const TugasCommit(),
-      // binding: TugasBinding(),
+      binding: SubmitTugasBinding(),
     ),
   ];
 }

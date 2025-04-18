@@ -59,6 +59,7 @@ class _TugasDetailState extends State<TugasDetail> {
             setState(() {
               isActive = "belum";
             });
+            tugasC.getTugas(id: Get.arguments);
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
@@ -83,6 +84,7 @@ class _TugasDetailState extends State<TugasDetail> {
             setState(() {
               isActive = "selesai";
             });
+            tugasC.getTugas(id: Get.arguments);
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
@@ -168,7 +170,15 @@ class _TugasDetailState extends State<TugasDetail> {
                             snackbarfailed(
                                 "Batas waktu sudah lewat, tidak bisa mengumpulkan tugas.");
                           } else {
-                            Get.toNamed(AppRoutes.tugasCommitSiswa);
+                            Get.toNamed(
+                              AppRoutes.tugasCommitSiswa,
+                              arguments: data.id,
+                            )?.then((value) {
+                              if (value == true) {
+                                // Panggil ulang controller atau refresh data di halaman ini
+                                tugasC.getTugas(id: Get.arguments);
+                              }
+                            });
                           }
                         }),
                   );
@@ -254,21 +264,7 @@ class _TugasDetailState extends State<TugasDetail> {
                           ),
                         ),
                         onTap: () async {
-                          var tenggat = data.tenggat;
-                          int year = int.parse(tenggat.getYear());
-                          int month = int.parse(tenggat.getMonthNumber());
-                          int day = int.parse(tenggat.getTgl());
-
-                          await getCurrentTime();
-
-                          DateTime batasTanggal = DateTime(year, month, day);
-
-                          if (dateNow!.isAfter(batasTanggal)) {
-                            snackbarfailed(
-                                "Batas waktu sudah lewat, tidak bisa mengumpulkan tugas.");
-                          } else {
-                            Get.toNamed(AppRoutes.tugasCommitSiswa);
-                          }
+                          Get.toNamed(AppRoutes.tugasCommitSiswa);
                         }),
                   );
           },

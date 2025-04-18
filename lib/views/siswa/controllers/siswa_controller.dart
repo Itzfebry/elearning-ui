@@ -71,6 +71,8 @@ class SiswaController extends GetxController {
         await prefs.remove('nama');
         await prefs.remove('token');
         await prefs.remove('role');
+        await prefs.remove('nisn');
+        await prefs.remove('nip');
         await prefs.clear();
         snackbarSuccess("Berhasil Logout");
       } else {

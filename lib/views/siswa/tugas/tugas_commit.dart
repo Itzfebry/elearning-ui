@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ui/views/siswa/tugas/controllers/submit_tugas_controller.dart';
 import 'package:ui/widgets/my_text.dart';
 
 class TugasCommit extends StatefulWidget {
@@ -14,15 +17,18 @@ enum SubmissionMethod { file, text }
 
 class _TugasCommitState extends State<TugasCommit> {
   String? fileName;
+  File? selectedFile;
   SubmissionMethod _method = SubmissionMethod.file;
   final TextEditingController _textController = TextEditingController();
+  SubmitTugasController submitTugasC = Get.find<SubmitTugasController>();
 
   Future<void> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
-    if (result != null) {
+    if (result != null && result.files.single.path != null) {
       setState(() {
         fileName = result.files.single.name;
+        selectedFile = File(result.files.single.path!); // simpan file-nya
       });
     }
   }
@@ -30,8 +36,10 @@ class _TugasCommitState extends State<TugasCommit> {
   void submitTask() {
     if (_method == SubmissionMethod.file) {
       if (fileName != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Tugas berhasil diserahkan (file)")),
+        submitTugasC.postTugas(
+          tugasId: Get.arguments.toString(),
+          text: _textController.text,
+          file: selectedFile,
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -41,8 +49,10 @@ class _TugasCommitState extends State<TugasCommit> {
       }
     } else {
       if (_textController.text.trim().isNotEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Tugas berhasil diserahkan (tulisan)")),
+        submitTugasC.postTugas(
+          tugasId: Get.arguments.toString(),
+          text: _textController.text,
+          file: selectedFile,
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -191,27 +201,29 @@ class _TugasCommitState extends State<TugasCommit> {
                 ),
               ),
             const SizedBox(height: 24),
-            SizedBox(
-              width: Get.width,
-              child: ElevatedButton(
-                onPressed: submitTask,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF57E389),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 50, vertical: 16),
-                ),
-                child: const Text(
-                  "SERAHKAN TUGAS",
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            )
+            Obx(() => submitTugasC.isLoading.value
+                ? const CircularProgressIndicator()
+                : SizedBox(
+                    width: Get.width,
+                    child: ElevatedButton(
+                      onPressed: submitTask,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF57E389),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 50, vertical: 16),
+                      ),
+                      child: const Text(
+                        "SERAHKAN TUGAS",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ))
           ],
         ),
       ),
