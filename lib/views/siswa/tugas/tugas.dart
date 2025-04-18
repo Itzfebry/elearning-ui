@@ -31,7 +31,8 @@ class Tugas extends StatelessWidget {
                         child: CircularProgressIndicator(),
                       );
                     } else if (matapelajaranSimpleC
-                        .mataPelajaranSimpleM!.data.isEmpty) {
+                            .mataPelajaranSimpleM?.data.isEmpty ??
+                        true) {
                       return const Center(
                         child: MyText(
                             text: "Tidak Ada Mata Pelajaran",
