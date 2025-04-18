@@ -12,4 +12,5 @@ class ApiConstants {
   static String mataPelajaranEnpoint = "$baseUrlApi/get-mata-pelajaran";
   static String mataPelajaranSimpleEnpoint =
       "$baseUrlApi/get-mata-pelajaran-simple";
+  static String tugasEnpoint = "$baseUrlApi/get-tugas";
 }

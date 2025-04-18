@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ui/routes/app_routes.dart';
 import 'package:ui/views/siswa/matapelajaran/controllers/mata_pelajaran_simple_controller.dart';
+import 'package:ui/widgets/my_text.dart';
 
 class Tugas extends StatelessWidget {
   Tugas({super.key});
@@ -29,6 +30,15 @@ class Tugas extends StatelessWidget {
                       return const Center(
                         child: CircularProgressIndicator(),
                       );
+                    } else if (matapelajaranSimpleC
+                        .mataPelajaranSimpleM!.data.isEmpty) {
+                      return const Center(
+                        child: MyText(
+                            text: "Tidak Ada Mata Pelajaran",
+                            fontSize: 15,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700),
+                      );
                     } else {
                       return Container(
                         decoration: BoxDecoration(
@@ -45,7 +55,8 @@ class Tugas extends StatelessWidget {
                             var data = matapelajaranSimpleC
                                 .mataPelajaranSimpleM?.data[index];
                             return TaskItem(
-                              title: data!.nama,
+                              id: data!.id.toString(),
+                              title: data.nama,
                               guru: data.guru.nama,
                               mataPelajaranId: data.id.toString(),
                             );
@@ -65,12 +76,14 @@ class Tugas extends StatelessWidget {
 }
 
 class TaskItem extends StatelessWidget {
+  final String id;
   final String title;
   final String guru;
   final String mataPelajaranId;
 
   const TaskItem({
     super.key,
+    required this.id,
     required this.title,
     required this.guru,
     required this.mataPelajaranId,
@@ -80,7 +93,7 @@ class TaskItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.toNamed(AppRoutes.tugasDetailSiswa);
+        Get.toNamed(AppRoutes.tugasDetailSiswa, arguments: id);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 25),
