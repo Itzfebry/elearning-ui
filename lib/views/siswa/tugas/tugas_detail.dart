@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ntp/ntp.dart';
 import 'package:ui/routes/app_routes.dart';
+import 'package:ui/widgets/my_date_format.dart';
 import 'package:ui/widgets/my_snackbar.dart';
 import 'package:ui/widgets/my_text.dart';
 
@@ -13,6 +17,14 @@ class TugasDetail extends StatefulWidget {
 
 class _TugasDetailState extends State<TugasDetail> {
   var isActive = "belum";
+  DateTime? dateNow;
+
+  Future<void> getCurrentTime() async {
+    DateTime now = await NTP.now();
+    dateNow = DateTime(now.year, now.month, now.day);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,37 +108,43 @@ class _TugasDetailState extends State<TugasDetail> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: ListTile(
-            title: const Text(
-              "tugas.judul",
-              style: TextStyle(fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            subtitle: const Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  MyText(
-                    text: "12-01-2025",
-                    fontSize: 14,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  MyText(
-                    text: "Tenggat : 12-01-2025",
-                    fontSize: 14,
-                    color: Colors.red,
-                    fontWeight: FontWeight.w600,
-                  )
-                ],
+              title: const Text(
+                "tugas.judul",
+                style: TextStyle(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
               ),
-            ),
-            onTap: () {
-              Get.toNamed(AppRoutes.tugasCommitSiswa);
-              // snackbarfailed(
-              //     "Batas waktu sudah lewat, tidak bisa mengumpulkan tugas.");
-            },
-          ),
+              subtitle: const Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    MyText(
+                      text: "12-01-2025",
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    MyText(
+                      text: "Tenggat : 12-01-2025",
+                      fontSize: 14,
+                      color: Colors.red,
+                      fontWeight: FontWeight.w600,
+                    )
+                  ],
+                ),
+              ),
+              onTap: () async {
+                await getCurrentTime();
+
+                DateTime batasTanggal = DateTime(2025, 4, 19);
+
+                if (dateNow!.isBefore(batasTanggal)) {
+                  snackbarfailed(
+                      "Batas waktu sudah lewat, tidak bisa mengumpulkan tugas.");
+                } else {
+                  Get.toNamed(AppRoutes.tugasCommitSiswa);
+                }
+              }),
         );
       },
     );
