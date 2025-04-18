@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ui/routes/app_routes.dart';
+import 'package:ui/widgets/my_snackbar.dart';
 import 'package:ui/widgets/my_text.dart';
 
 class TugasDetail extends StatefulWidget {
@@ -118,7 +121,11 @@ class _TugasDetailState extends State<TugasDetail> {
                 ],
               ),
             ),
-            onTap: () {},
+            onTap: () {
+              Get.toNamed(AppRoutes.tugasCommitSiswa);
+              // snackbarfailed(
+              //     "Batas waktu sudah lewat, tidak bisa mengumpulkan tugas.");
+            },
           ),
         );
       },
