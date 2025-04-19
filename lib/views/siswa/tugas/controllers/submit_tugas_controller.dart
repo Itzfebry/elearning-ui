@@ -15,6 +15,7 @@ class SubmitTugasController extends GetxController {
     String? text,
     File? file,
   }) async {
+    log(tugasId.toString());
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     final nisn = prefs.getString('nisn');
