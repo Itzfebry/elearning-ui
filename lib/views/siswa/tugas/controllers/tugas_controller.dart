@@ -11,7 +11,7 @@ class TugasController extends GetxController {
   TugasModel? tugasM;
   var isLoading = false.obs;
 
-  Future<void> getTugas({required id}) async {
+  Future<void> getTugas({required id, required type}) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
 
@@ -25,7 +25,8 @@ class TugasController extends GetxController {
     try {
       isLoading(true);
       final response = await http.get(
-        Uri.parse("${ApiConstants.tugasEnpoint}?id_matpel=$id"),
+        Uri.parse(
+            "${ApiConstants.tugasEnpoint}?id_matpel=$id&type_tugas=$type"),
         headers: headers,
       );
       if (response.statusCode == 200) {

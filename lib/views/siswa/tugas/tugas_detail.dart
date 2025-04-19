@@ -24,7 +24,7 @@ class _TugasDetailState extends State<TugasDetail> {
   @override
   void initState() {
     super.initState();
-    tugasC.getTugas(id: Get.arguments);
+    tugasC.getTugas(id: Get.arguments, type: "belum");
   }
 
   Future<void> getCurrentTime() async {
@@ -59,7 +59,7 @@ class _TugasDetailState extends State<TugasDetail> {
             setState(() {
               isActive = "belum";
             });
-            tugasC.getTugas(id: Get.arguments);
+            tugasC.getTugas(id: Get.arguments, type: "belum");
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
@@ -84,7 +84,7 @@ class _TugasDetailState extends State<TugasDetail> {
             setState(() {
               isActive = "selesai";
             });
-            tugasC.getTugas(id: Get.arguments);
+            tugasC.getTugas(id: Get.arguments, type: "selesai");
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
@@ -176,7 +176,8 @@ class _TugasDetailState extends State<TugasDetail> {
                             )?.then((value) {
                               if (value == true) {
                                 // Panggil ulang controller atau refresh data di halaman ini
-                                tugasC.getTugas(id: Get.arguments);
+                                tugasC.getTugas(
+                                    id: Get.arguments, type: "belum");
                               }
                             });
                           }
