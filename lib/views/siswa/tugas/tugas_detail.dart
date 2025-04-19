@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ntp/ntp.dart';
@@ -174,7 +172,7 @@ class _TugasDetailState extends State<TugasDetail> {
                               AppRoutes.tugasCommitSiswa,
                               arguments: {
                                 "id": data.id,
-                                "type": "belum",
+                                "tipe_tugas": "belum",
                                 "submitTugas": null
                               },
                             )?.then((value) {
@@ -272,7 +270,7 @@ class _TugasDetailState extends State<TugasDetail> {
                         onTap: () async {
                           Get.toNamed(AppRoutes.tugasCommitSiswa, arguments: {
                             "id": data.submitTugas!.id,
-                            "type": "selesai",
+                            "tipe_tugas": "selesai",
                             "submitTugas": {
                               "id": data.submitTugas!.id,
                               "tanggal": data.submitTugas!.tanggal,

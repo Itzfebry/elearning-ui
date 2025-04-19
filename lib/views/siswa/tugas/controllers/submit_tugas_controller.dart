@@ -59,4 +59,52 @@ class SubmitTugasController extends GetxController {
       isLoading(false);
     }
   }
+
+  Future<void> updateTugas({
+    required int id,
+    String? text,
+    File? file,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final nisn = prefs.getString('nisn');
+
+    if (token == null) {
+      throw Exception("Token not found");
+    }
+
+    try {
+      isLoading(true);
+
+      var uri = Uri.parse("${ApiConstants.updateTugasEnpoint}?id=$id");
+      var request = http.MultipartRequest('POST', uri);
+      request.headers['Authorization'] = 'Bearer $token';
+
+      request.fields['nisn'] = nisn!;
+
+      if (text != null && text.isNotEmpty) {
+        request.fields['text'] = text;
+      }
+
+      if (file != null) {
+        request.files.add(await http.MultipartFile.fromPath('file', file.path));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        Get.back(result: true);
+        snackbarSuccess("Berhasil update tugas");
+      } else {
+        log("Submit error: ${response.statusCode} ${response.body}");
+        snackbarfailed("Gagal update tugas");
+      }
+    } catch (e) {
+      log("Submit Exception: $e");
+      snackbarfailed("Terjadi kesalahan saat update");
+    } finally {
+      isLoading(false);
+    }
+  }
 }

@@ -30,6 +30,7 @@ class _TugasCommitState extends State<TugasCommit> {
     if (Get.arguments['submitTugas'] != null) {
       if (Get.arguments['submitTugas']['text'] == null) {
         _method = SubmissionMethod.file;
+        fileName = Get.arguments['submitTugas']['file'];
       } else {
         _method = SubmissionMethod.text;
         _textController.text = Get.arguments['submitTugas']['text'];
@@ -59,11 +60,19 @@ class _TugasCommitState extends State<TugasCommit> {
   void submitTask() {
     if (_method == SubmissionMethod.file) {
       if (fileName != null) {
-        submitTugasC.postTugas(
-          tugasId: Get.arguments['id'].toString(),
-          text: _textController.text,
-          file: selectedFile,
-        );
+        if (Get.arguments['submitTugas'] != null) {
+          submitTugasC.updateTugas(
+            id: Get.arguments['submitTugas']['id'],
+            file: selectedFile,
+            text: _textController.text,
+          );
+        } else {
+          submitTugasC.postTugas(
+            tugasId: Get.arguments['id'].toString(),
+            text: _textController.text,
+            file: selectedFile,
+          );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -72,11 +81,19 @@ class _TugasCommitState extends State<TugasCommit> {
       }
     } else {
       if (_textController.text.trim().isNotEmpty) {
-        submitTugasC.postTugas(
-          tugasId: Get.arguments['id'].toString(),
-          text: _textController.text,
-          file: selectedFile,
-        );
+        if (Get.arguments['submitTugas'] != null) {
+          submitTugasC.updateTugas(
+            id: Get.arguments['submitTugas']['id'],
+            file: selectedFile,
+            text: _textController.text,
+          );
+        } else {
+          submitTugasC.postTugas(
+            tugasId: Get.arguments['id'].toString(),
+            text: _textController.text,
+            file: selectedFile,
+          );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Silakan tulis tugas terlebih dahulu")),
@@ -223,7 +240,7 @@ class _TugasCommitState extends State<TugasCommit> {
                   ),
                 ),
               ),
-            if (Get.arguments['type'] == "selesai" &&
+            if (Get.arguments['tipe_tugas'] == "selesai" &&
                 Get.arguments['submitTugas']['text'] == null)
               InkWell(
                 onTap: () {
@@ -236,7 +253,7 @@ class _TugasCommitState extends State<TugasCommit> {
                     SizedBox(
                       width: Get.width,
                       child: const MyText(
-                          text: "Klik Lihat File",
+                          text: "Klik disini untuk Lihat File",
                           fontSize: 15,
                           color: Colors.blue,
                           fontWeight: FontWeight.w700),
@@ -245,31 +262,31 @@ class _TugasCommitState extends State<TugasCommit> {
                 ),
               ),
             const SizedBox(height: 20),
-            Obx(() => submitTugasC.isLoading.value
-                ? const CircularProgressIndicator()
-                : SizedBox(
-                    width: Get.width,
-                    child: ElevatedButton(
-                      onPressed: submitTask,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF57E389),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 50, vertical: 16),
-                      ),
-                      child: Text(
-                        Get.arguments['type'] == "belum"
-                            ? "SERAHKAN TUGAS"
-                            : "UPDATE TUGAS",
-                        style: const TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+            Obx(() {
+              return SizedBox(
+                width: Get.width,
+                child: ElevatedButton(
+                  onPressed: submitTask,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF57E389),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
                     ),
-                  ))
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 16),
+                  ),
+                  child: submitTugasC.isLoading.value
+                      ? const CircularProgressIndicator()
+                      : const Text(
+                          "SIMPAN TUGAS",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                ),
+              );
+            }),
           ],
         ),
       ),
