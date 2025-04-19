@@ -172,12 +172,17 @@ class _TugasDetailState extends State<TugasDetail> {
                           } else {
                             Get.toNamed(
                               AppRoutes.tugasCommitSiswa,
-                              arguments: data.id,
+                              arguments: {
+                                "id": data.id,
+                                "type": "belum",
+                                "submitTugas": null
+                              },
                             )?.then((value) {
                               if (value == true) {
                                 // Panggil ulang controller atau refresh data di halaman ini
                                 tugasC.getTugas(
-                                    id: Get.arguments, type: "belum");
+                                    id: Get.arguments.toString(),
+                                    type: "belum");
                               }
                             });
                           }
@@ -265,7 +270,18 @@ class _TugasDetailState extends State<TugasDetail> {
                           ),
                         ),
                         onTap: () async {
-                          Get.toNamed(AppRoutes.tugasCommitSiswa);
+                          Get.toNamed(AppRoutes.tugasCommitSiswa, arguments: {
+                            "id": data.submitTugas!.id,
+                            "type": "selesai",
+                            "submitTugas": {
+                              "id": data.submitTugas!.id,
+                              "tanggal": data.submitTugas!.tanggal,
+                              "nisn": data.submitTugas!.nisn,
+                              "tugas_id": data.submitTugas!.tugasId,
+                              "text": data.submitTugas?.text,
+                              "file": data.submitTugas?.file,
+                            }
+                          });
                         }),
                   );
           },

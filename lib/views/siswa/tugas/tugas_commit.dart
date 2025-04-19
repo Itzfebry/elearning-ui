@@ -1,11 +1,12 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ui/constans/api_constans.dart';
 import 'package:ui/views/siswa/tugas/controllers/submit_tugas_controller.dart';
 import 'package:ui/widgets/my_text.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TugasCommit extends StatefulWidget {
   const TugasCommit({super.key});
@@ -23,13 +24,34 @@ class _TugasCommitState extends State<TugasCommit> {
   final TextEditingController _textController = TextEditingController();
   SubmitTugasController submitTugasC = Get.find<SubmitTugasController>();
 
+  @override
+  void initState() {
+    super.initState();
+    if (Get.arguments['submitTugas'] != null) {
+      if (Get.arguments['submitTugas']['text'] == null) {
+        _method = SubmissionMethod.file;
+      } else {
+        _method = SubmissionMethod.text;
+        _textController.text = Get.arguments['submitTugas']['text'];
+      }
+      setState(() {});
+    }
+  }
+
+  Future<void> _launchUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
   Future<void> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null && result.files.single.path != null) {
       setState(() {
         fileName = result.files.single.name;
-        selectedFile = File(result.files.single.path!); // simpan file-nya
+        selectedFile = File(result.files.single.path!);
       });
     }
   }
@@ -38,7 +60,7 @@ class _TugasCommitState extends State<TugasCommit> {
     if (_method == SubmissionMethod.file) {
       if (fileName != null) {
         submitTugasC.postTugas(
-          tugasId: Get.arguments.toString(),
+          tugasId: Get.arguments['id'].toString(),
           text: _textController.text,
           file: selectedFile,
         );
@@ -51,7 +73,7 @@ class _TugasCommitState extends State<TugasCommit> {
     } else {
       if (_textController.text.trim().isNotEmpty) {
         submitTugasC.postTugas(
-          tugasId: Get.arguments.toString(),
+          tugasId: Get.arguments['id'].toString(),
           text: _textController.text,
           file: selectedFile,
         );
@@ -201,7 +223,28 @@ class _TugasCommitState extends State<TugasCommit> {
                   ),
                 ),
               ),
-            const SizedBox(height: 24),
+            if (Get.arguments['type'] == "selesai" &&
+                Get.arguments['submitTugas']['text'] == null)
+              InkWell(
+                onTap: () {
+                  _launchUrl(
+                      "${ApiConstants.baseUrl}/storage/${Get.arguments['submitTugas']['file']}");
+                },
+                child: Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: Get.width,
+                      child: const MyText(
+                          text: "Klik Lihat File",
+                          fontSize: 15,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
+              ),
+            const SizedBox(height: 20),
             Obx(() => submitTugasC.isLoading.value
                 ? const CircularProgressIndicator()
                 : SizedBox(
@@ -216,9 +259,11 @@ class _TugasCommitState extends State<TugasCommit> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 50, vertical: 16),
                       ),
-                      child: const Text(
-                        "SERAHKAN TUGAS",
-                        style: TextStyle(
+                      child: Text(
+                        Get.arguments['type'] == "belum"
+                            ? "SERAHKAN TUGAS"
+                            : "UPDATE TUGAS",
+                        style: const TextStyle(
                           color: Colors.red,
                           fontWeight: FontWeight.bold,
                         ),
