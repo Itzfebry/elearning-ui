@@ -4,7 +4,6 @@ import 'package:ui/routes/app_routes.dart';
 import 'package:ui/views/siswa/controllers/siswa_controller.dart';
 import 'package:ui/views/siswa/profile.dart';
 import 'package:ui/views/siswa/quiz.dart';
-import 'package:ui/views/siswa/tugas/tugas.dart';
 import 'package:ui/views/siswa/ranksiswa.dart';
 
 class SiswaDashboardPage extends StatelessWidget {

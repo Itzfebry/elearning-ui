@@ -2,12 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ui/routes/app_routes.dart';
 import 'package:ui/views/siswa/matapelajaran/controllers/mata_pelajaran_simple_controller.dart';
 import 'package:ui/widgets/my_text.dart';
 
-class Tugas extends StatelessWidget {
-  Tugas({super.key});
+class TugasGuruPage extends StatelessWidget {
+  TugasGuruPage({super.key});
   MataPelajaranSimpleController matapelajaranSimpleC =
       Get.find<MataPelajaranSimpleController>();
 
@@ -92,7 +91,7 @@ class TaskItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.toNamed(AppRoutes.tugasDetailSiswa, arguments: id);
+        // Get.toNamed(AppRoutes.tugasDetailSiswa, arguments: id);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 25),
