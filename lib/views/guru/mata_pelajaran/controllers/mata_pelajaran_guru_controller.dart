@@ -11,8 +11,12 @@ class MataPelajaranGuruController extends GetxController {
   var isLoading = false.obs;
   MataPelajaranModel? mataPelajaranM;
   var isEmptyData = true.obs;
+  var isFetchData = false.obs;
 
-  Future<void> getMatPel({required String kelas}) async {
+  Future<void> getMatPel({
+    required String kelas,
+    required String tahunAjaran,
+  }) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
 
@@ -24,9 +28,11 @@ class MataPelajaranGuruController extends GetxController {
       'Authorization': 'Bearer $token',
     };
     try {
+      isFetchData(true);
       isLoading(true);
       final response = await http.get(
-        Uri.parse("${ApiConstants.mataPelajaranEnpoint}?kelas=$kelas"),
+        Uri.parse(
+            "${ApiConstants.mataPelajaranEnpoint}?kelas=$kelas&tahun_ajaran=$tahunAjaran"),
         headers: headers,
       );
 

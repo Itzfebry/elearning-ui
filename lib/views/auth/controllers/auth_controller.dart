@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,7 +36,6 @@ class AuthController extends GetxController {
         );
 
         final json = jsonDecode(response.body);
-        log(json.toString());
         final user = json['data']['user'];
 
         if (response.statusCode == 200) {

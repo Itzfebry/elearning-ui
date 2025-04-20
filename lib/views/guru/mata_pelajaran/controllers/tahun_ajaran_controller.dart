@@ -5,20 +5,29 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:ui/constans/api_constans.dart';
-import 'package:ui/models/kelas_model.dart';
+import 'package:ui/models/tahun_ajaran.dart';
+// import 'package:ui/views/guru/mata_pelajaran/controllers/mata_pelajaran_guru_controller.dart';
 
-class KelasController extends GetxController {
+class TahunAjaranController extends GetxController {
   var isLoading = false.obs;
-  var selectedKelas = Rxn<String>();
-  KelasModel? kelasM;
+  var selectedTahun = Rxn<String>();
+  TahunAjaranModel? tahunAjaranM;
 
   @override
   void onInit() {
     super.onInit();
-    getKelas();
+    getTahunAjaran();
+
+    // // fetch matpel tiap kali kelas berubah
+    // ever(selectedTahun, (kelas) {
+    //   if (kelas != null) {
+    //     final matpelGuruC = Get.find<MataPelajaranGuruController>();
+    //     matpelGuruC.getMatPel(kelas: kelas);
+    //   }
+    // });
   }
 
-  Future<void> getKelas() async {
+  Future<void> getTahunAjaran() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
 
@@ -34,17 +43,17 @@ class KelasController extends GetxController {
     try {
       isLoading(true);
       final response = await http.get(
-        Uri.parse(ApiConstants.kelasEnpoint),
+        Uri.parse(ApiConstants.tahunAjaranEnpoint),
         headers: headers,
       );
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
-        kelasM = KelasModel.fromJson(json);
+        tahunAjaranM = TahunAjaranModel.fromJson(json);
 
-        // Set nilai pertama ke selectedKelas jika belum ada
-        if (kelasM != null && kelasM!.data.isNotEmpty) {
-          selectedKelas.value = kelasM!.data[0].nama;
+        // Set nilai pertama ke selectedTahun jika belum ada
+        if (tahunAjaranM != null && tahunAjaranM!.data.isNotEmpty) {
+          selectedTahun.value = tahunAjaranM!.data[0].tahun;
         }
       } else {
         log("Terjadi kesalahan get data: ${response.statusCode}");
