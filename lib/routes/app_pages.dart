@@ -1,4 +1,6 @@
 import 'package:ui/views/guru/dashboard/bindings/dashboard_binding.dart';
+import 'package:ui/views/guru/mata_pelajaran/bindings/matpel_guru_binding.dart';
+import 'package:ui/views/guru/mata_pelajaran/index.dart';
 
 import 'app_routes.dart';
 import 'export.dart';
@@ -54,6 +56,13 @@ class AppPages {
       name: AppRoutes.tugasCommitSiswa,
       page: () => const TugasCommit(),
       binding: SubmitTugasBinding(),
+    ),
+
+    // GURU
+    GetPage(
+      name: AppRoutes.guruMatpel,
+      page: () => const MataPelajaranGuru(),
+      binding: MatpelGuruBinding(),
     ),
   ];
 }

@@ -1,6 +1,10 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ui/routes/app_routes.dart';
 import 'package:ui/views/siswa/controllers/siswa_controller.dart';
+import 'package:ui/widgets/my_snackbar.dart';
 
 class GuruDashboardPage extends StatelessWidget {
   final List<MenuItem> items = [
@@ -30,15 +34,18 @@ class GuruDashboardPage extends StatelessWidget {
                 "E-Learning",
                 style: TextStyle(fontSize: 24, color: Colors.black),
               ),
-              Obx(
-                () => siswaC.isLoading.value
-                    ? const CircularProgressIndicator()
-                    : Text(
-                        "Hi, ${siswaC.dataUser['user']['nama']}",
-                        style: const TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold),
-                      ),
-              ),
+              Obx(() {
+                var data = siswaC.dataUser['user'];
+                if (siswaC.isLoading.value) {
+                  return const CircularProgressIndicator();
+                } else {
+                  return Text(
+                    "Hi, ${data?['nama']}",
+                    style: const TextStyle(
+                        fontSize: 30, fontWeight: FontWeight.bold),
+                  );
+                }
+              }),
               const SizedBox(height: 32),
               Expanded(
                 child: GridView.builder(
@@ -52,7 +59,25 @@ class GuruDashboardPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
-                        print(index);
+                        switch (index) {
+                          case 0:
+                            Get.toNamed(AppRoutes.guruMatpel);
+                            break;
+                          case 1:
+                            Get.toNamed(AppRoutes.guruMatpel);
+                            break;
+                          case 2:
+                            Get.toNamed(AppRoutes.guruMatpel);
+                            break;
+                          case 3:
+                            Get.toNamed(AppRoutes.guruMatpel);
+                            break;
+                          default:
+                            snackbarfailed("Tidak ada fitur lagi");
+                        }
+                        // if (index == 0) {
+                        //   Get.to(AppRoutes.guruMatpel);
+                        // }else if(index == )
                       },
                       child: buildMenuCard(items[index]),
                     );

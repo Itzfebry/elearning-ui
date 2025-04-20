@@ -10,6 +10,7 @@ class AppRoutes {
   static const String tugasCommitSiswa = '/tugas-commit-siswa';
   // Guru
   static const String guruDashboard = "/guru-dashboard";
+  static const String guruMatpel = "/guru-Matpel";
 
   //
   static const String welcome = "/welcome";
