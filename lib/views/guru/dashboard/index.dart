@@ -70,7 +70,7 @@ class GuruDashboardPage extends StatelessWidget {
                             Get.toNamed(AppRoutes.guruMatpel);
                             break;
                           case 3:
-                            Get.toNamed(AppRoutes.guruMatpel);
+                            Get.toNamed(AppRoutes.profileguru);
                             break;
                           default:
                             snackbarfailed("Tidak ada fitur lagi");

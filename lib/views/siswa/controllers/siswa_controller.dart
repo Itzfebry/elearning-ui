@@ -49,7 +49,7 @@ class SiswaController extends GetxController {
     }
   }
 
-  Future<void> logout() async {
+  Future<void> logout({required role}) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     var headers = {
@@ -67,7 +67,11 @@ class SiswaController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        Get.offAllNamed(AppRoutes.login);
+        if (role == "siswa") {
+          Get.offAllNamed(AppRoutes.login, arguments: "siswa");
+        } else {
+          Get.offAllNamed(AppRoutes.login, arguments: "guru");
+        }
         await prefs.remove('nama');
         await prefs.remove('token');
         await prefs.remove('role');

@@ -11,6 +11,7 @@ class AppRoutes {
   // Guru
   static const String guruDashboard = "/guru-dashboard";
   static const String guruMatpel = "/guru-Matpel";
+  static const String profileguru = "/profile-guru";
 
   //
   static const String welcome = "/welcome";

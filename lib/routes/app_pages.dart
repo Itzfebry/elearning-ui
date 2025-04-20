@@ -1,6 +1,7 @@
 import 'package:ui/views/guru/dashboard/bindings/dashboard_binding.dart';
 import 'package:ui/views/guru/mata_pelajaran/bindings/matpel_guru_binding.dart';
 import 'package:ui/views/guru/mata_pelajaran/index.dart';
+import 'package:ui/views/guru/profiles/index.dart';
 
 import 'app_routes.dart';
 import 'export.dart';
@@ -61,8 +62,13 @@ class AppPages {
     // GURU
     GetPage(
       name: AppRoutes.guruMatpel,
-      page: () => MataPelajaranGuru(),
+      page: () => const MataPelajaranGuru(),
       binding: MatpelGuruBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.profileguru,
+      page: () => const ProfileGuruPage(),
+      binding: SiswaBinding(),
     ),
   ];
 }

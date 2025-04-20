@@ -60,7 +60,7 @@ class SiswaDashboardPage extends StatelessWidget {
         );
 
         if (shouldLogout == true) {
-          siswaC.logout();
+          siswaC.logout(role: "siswa");
         }
 
         return false; // Mencegah navigasi back default
