@@ -13,6 +13,7 @@ class AppRoutes {
   static const String guruMatpel = "/guru-Matpel";
   static const String profileguru = "/profile-guru";
   static const String tugasGuru = "/tugas-guru";
+  static const String tugasDetailGuru = "/tugas-detail-guru";
 
   //
   static const String welcome = "/welcome";

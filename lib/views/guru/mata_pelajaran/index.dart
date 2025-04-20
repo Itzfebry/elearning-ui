@@ -63,6 +63,7 @@ class _MataPelajaranGuruState extends State<MataPelajaranGuru> {
             return Expanded(
               child: ListView.builder(
                 itemCount: matpelGuruC.mataPelajaranM?.data.length ?? 0,
+                shrinkWrap: true,
                 itemBuilder: (context, index) {
                   final data = matpelGuruC.mataPelajaranM!.data[index];
                   return GestureDetector(
