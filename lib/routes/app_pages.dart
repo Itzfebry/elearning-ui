@@ -61,7 +61,7 @@ class AppPages {
     // GURU
     GetPage(
       name: AppRoutes.guruMatpel,
-      page: () => const MataPelajaranGuru(),
+      page: () => MataPelajaranGuru(),
       binding: MatpelGuruBinding(),
     ),
   ];

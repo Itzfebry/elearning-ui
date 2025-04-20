@@ -32,7 +32,6 @@ class MataPelajaranGuruController extends GetxController {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        log(data.toString());
         mataPelajaranM = MataPelajaranModel.fromJson(data);
         if (mataPelajaranM?.data.isEmpty ?? true) {
           isEmptyData(true);

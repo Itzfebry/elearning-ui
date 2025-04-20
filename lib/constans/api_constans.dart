@@ -15,4 +15,6 @@ class ApiConstants {
   static String tugasEnpoint = "$baseUrlApi/get-tugas";
   static String submitTugasEnpoint = "$baseUrlApi/submit-tugas";
   static String updateTugasEnpoint = "$baseUrlApi/update-tugas";
+
+  static String kelasEnpoint = "$baseUrlApi/kelas";
 }
