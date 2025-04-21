@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ntp/ntp.dart';
+import 'package:ui/routes/app_routes.dart';
 import 'package:ui/views/guru/tugas/controllers/detail_submit_tugas_siswa_controller.dart';
 import 'package:ui/widgets/my_date_format.dart';
 import 'package:ui/widgets/my_snackbar.dart';
@@ -151,10 +152,10 @@ class _DetailSubmitTugasState extends State<DetailSubmitTugas> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               child: ListTile(
-                leading: const CircleAvatar(
+                leading: CircleAvatar(
                   backgroundColor: Colors.blue,
                   child: MyText(
-                      text: "1",
+                      text: "${index + 1}",
                       fontSize: 15,
                       color: Colors.white,
                       fontWeight: FontWeight.w700),
@@ -211,33 +212,48 @@ class _DetailSubmitTugasState extends State<DetailSubmitTugas> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               child: ListTile(
-                title: ListTile(
-                  leading: const CircleAvatar(
-                    backgroundColor: Colors.blue,
-                    child: MyText(
-                        text: "1",
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        data!.nama,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.start,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        data.submitTugas!.tanggal.simpleDateRevers(),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 12),
-                        textAlign: TextAlign.start,
-                      ),
-                    ],
-                  ),
+                leading: CircleAvatar(
+                  backgroundColor: Colors.blue,
+                  child: MyText(
+                      text: "${index + 1}",
+                      fontSize: 15,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700),
                 ),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      data!.nama,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.start,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      data.submitTugas!.tanggal.simpleDateRevers(),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 12),
+                      textAlign: TextAlign.start,
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  var tugas = data.submitTugas!.tugas;
+                  DateTime tglPengumpulan = data.submitTugas!.tanggal;
+                  var title = tugas.nama;
+                  var text = data.submitTugas!.text;
+                  var file = data.submitTugas!.file;
+
+                  var result = {
+                    "tanggal_pengumpulan": tglPengumpulan,
+                    "title": title,
+                    "text": text,
+                    "file": file,
+                  };
+
+                  Get.toNamed(AppRoutes.reviewSubmitTugasSiswaOnGuru,
+                      arguments: result);
+                },
               ),
             );
           },

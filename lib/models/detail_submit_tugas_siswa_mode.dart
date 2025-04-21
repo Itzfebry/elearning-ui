@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final detailSubmitTugasSiswaModel = detailSubmitTugasSiswaModelFromJson(jsonString);
-
 import 'dart:convert';
 
 DetailSubmitTugasSiswaModel detailSubmitTugasSiswaModelFromJson(String str) =>
@@ -98,6 +94,7 @@ class SubmitTugas {
   String? file;
   DateTime createdAt;
   DateTime updatedAt;
+  Tugas tugas;
 
   SubmitTugas({
     required this.id,
@@ -108,6 +105,7 @@ class SubmitTugas {
     required this.file,
     required this.createdAt,
     required this.updatedAt,
+    required this.tugas,
   });
 
   factory SubmitTugas.fromJson(Map<String, dynamic> json) => SubmitTugas(
@@ -119,6 +117,7 @@ class SubmitTugas {
         file: json["file"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
+        tugas: Tugas.fromJson(json["tugas"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -129,6 +128,61 @@ class SubmitTugas {
         "tugas_id": tugasId,
         "text": text,
         "file": file,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+        "tugas": tugas.toJson(),
+      };
+}
+
+class Tugas {
+  int id;
+  DateTime tanggal;
+  DateTime tenggat;
+  String guruNip;
+  String nama;
+  int matapelajaranId;
+  String kelas;
+  String tahunAjaran;
+  DateTime createdAt;
+  DateTime updatedAt;
+
+  Tugas({
+    required this.id,
+    required this.tanggal,
+    required this.tenggat,
+    required this.guruNip,
+    required this.nama,
+    required this.matapelajaranId,
+    required this.kelas,
+    required this.tahunAjaran,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory Tugas.fromJson(Map<String, dynamic> json) => Tugas(
+        id: json["id"],
+        tanggal: DateTime.parse(json["tanggal"]),
+        tenggat: DateTime.parse(json["tenggat"]),
+        guruNip: json["guru_nip"],
+        nama: json["nama"],
+        matapelajaranId: json["matapelajaran_id"],
+        kelas: json["kelas"],
+        tahunAjaran: json["tahun_ajaran"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "tanggal":
+            "${tanggal.year.toString().padLeft(4, '0')}-${tanggal.month.toString().padLeft(2, '0')}-${tanggal.day.toString().padLeft(2, '0')}",
+        "tenggat":
+            "${tenggat.year.toString().padLeft(4, '0')}-${tenggat.month.toString().padLeft(2, '0')}-${tenggat.day.toString().padLeft(2, '0')}",
+        "guru_nip": guruNip,
+        "nama": nama,
+        "matapelajaran_id": matapelajaranId,
+        "kelas": kelas,
+        "tahun_ajaran": tahunAjaran,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
       };
