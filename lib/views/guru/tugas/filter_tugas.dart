@@ -3,22 +3,20 @@ import 'package:get/get.dart';
 import 'package:ui/views/guru/mata_pelajaran/controllers/kelas_controller.dart';
 import 'package:ui/views/guru/mata_pelajaran/controllers/tahun_ajaran_controller.dart';
 import 'package:ui/views/guru/tugas/controllers/tugas_detail_guru_controller.dart';
-import 'package:ui/widgets/my_snackbar.dart';
-import 'package:ui/widgets/my_text.dart';
 
 class FilterTugas extends StatelessWidget {
   const FilterTugas({
     super.key,
-    required this.id_matpel,
+    required this.idMatpel,
     required this.kelasC,
     required this.tahunAjaranC,
-    required this.tugasDetailGuruC,
+    required this.tugasSubmitDetailGuruC,
   });
 
-  final String id_matpel;
+  final String idMatpel;
   final KelasController kelasC;
   final TahunAjaranController tahunAjaranC;
-  final TugasDetailGuruController tugasDetailGuruC;
+  final TugasDetailGuruController tugasSubmitDetailGuruC;
 
   @override
   Widget build(BuildContext context) {
@@ -99,80 +97,64 @@ class FilterTugas extends StatelessWidget {
                   );
                 }),
               ),
-            ],
-          ),
-          const SizedBox(height: 15),
-          Row(
-            children: [
-              Expanded(
-                flex: 3,
-                child: SizedBox(
-                  height: 55,
-                  child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: 'Tipe Tugas',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    value: tugasDetailGuruC.selectedTypeTugas.value,
-                    items: ["belum", "selesai"].map((type) {
-                      return DropdownMenuItem<String>(
-                        value: type,
-                        child: Text(type),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      tugasDetailGuruC.selectedTypeTugas.value = value;
-                    },
-                  ),
-                ),
-              ),
               const SizedBox(width: 10),
               Material(
                 color: Colors.blueAccent,
                 borderRadius: BorderRadius.circular(10),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(10),
-                  onTap: () {
-                    if (tugasDetailGuruC.selectedTypeTugas.value == null) {
-                      snackbarfailed("Tipe Tugas wajib di isi!");
-                    } else {
-                      tugasDetailGuruC.getTugas(
-                        id: id_matpel,
-                        type: tugasDetailGuruC.selectedTypeTugas.value,
-                        kelas: kelasC.selectedKelas.value,
-                        tahunAjaran: tahunAjaranC.selectedTahun.value,
-                      );
-                    }
+                  onTap: () async {
+                    await tugasSubmitDetailGuruC.getTugas(
+                      id: idMatpel,
+                      kelas: kelasC.selectedKelas.value,
+                      tahunAjaran: tahunAjaranC.selectedTahun.value,
+                    );
                   },
                   child: Container(
-                    width: 110,
+                    width: 55,
                     height: 55,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.tune, // Ikon yang mirip seperti di gambar
-                          color: Colors.white,
-                        ),
-                        SizedBox(width: 5),
-                        MyText(
-                          text: "Filter",
-                          fontSize: 15,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        )
-                      ],
+                    child: const Icon(
+                      Icons.tune, // Ikon yang mirip seperti di gambar
+                      color: Colors.white,
                     ),
                   ),
                 ),
               ),
             ],
-          )
+          ),
+          // const SizedBox(height: 15),
+          // Row(
+          //   children: [
+          // Expanded(
+          //   flex: 3,
+          //   child: SizedBox(
+          //     height: 55,
+          //     child: DropdownButtonFormField<String>(
+          //       decoration: InputDecoration(
+          //         labelText: 'Tipe Tugas',
+          //         border: OutlineInputBorder(
+          //           borderRadius: BorderRadius.circular(10),
+          //         ),
+          //       ),
+          //       value: tugasSubmitDetailGuruC.selectedTypeTugas.value,
+          //       items: ["belum", "selesai"].map((type) {
+          //         return DropdownMenuItem<String>(
+          //           value: type,
+          //           child: Text(type),
+          //         );
+          //       }).toList(),
+          //       onChanged: (value) {
+          //         tugasSubmitDetailGuruC.selectedTypeTugas.value = value;
+          //       },
+          //     ),
+          //   ),
+          // ),
+
+          //   ],
+          // )
         ],
       ),
     );

@@ -92,7 +92,9 @@ class TaskItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.toNamed(AppRoutes.tugasDetailGuru, arguments: id);
+        Get.toNamed(AppRoutes.tugasDetailGuru, arguments: {
+          'id': id,
+        });
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 25),

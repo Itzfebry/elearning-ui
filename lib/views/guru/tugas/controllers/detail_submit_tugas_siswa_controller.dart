@@ -4,28 +4,18 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ui/constans/api_constans.dart';
-import 'package:ui/models/tugas_model.dart';
+import 'package:ui/models/detail_submit_tugas_siswa_mode.dart';
 import 'package:http/http.dart' as http;
 
-class TugasDetailGuruController extends GetxController {
-  TugasModel? tugasM;
+class DetailSubmitTugasSiswaController extends GetxController {
+  DetailSubmitTugasSiswaModel? detailSubmitTugasSiswaM;
   var isLoading = false.obs;
-  var selectedTypeTugas = Rxn<String>();
-  var isEmptyData = true.obs;
-  var isFetchData = false.obs;
 
-  Future<void> getTugas({
-    required id,
-    required kelas,
-    required tahunAjaran,
-  }) async {
-    // var req = {
-    //   'id': id,
-    //   'type': type,
-    //   'kelas': kelas,
-    //   'tahunAjaran': tahunAjaran,
-    // };
-    // log(req.toString());
+  Future<void> getSubmitTugas(
+      {required id,
+      required type,
+      required kelas,
+      required tahunAjaran}) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
 
@@ -37,21 +27,16 @@ class TugasDetailGuruController extends GetxController {
       'Authorization': 'Bearer $token',
     };
     try {
-      isFetchData(true);
       isLoading(true);
       final response = await http.get(
         Uri.parse(
-            "${ApiConstants.tugasEnpoint}?id_matpel=$id&kelas=$kelas&tahun_ajaran=$tahunAjaran"),
+            "${ApiConstants.getDetailSubmitTugasSiswaEnpoint}?tugas_id=$id&kelas=$kelas&tahun_ajaran=$tahunAjaran&type_tugas=$type"),
         headers: headers,
       );
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
-        tugasM = TugasModel.fromJson(json);
-        if (tugasM?.data.isEmpty ?? true) {
-          isEmptyData(true);
-        } else {
-          isEmptyData(false);
-        }
+        log(json.toString());
+        detailSubmitTugasSiswaM = DetailSubmitTugasSiswaModel.fromJson(json);
       } else {
         log("Terjadi kesalahan get data: ${response.statusCode}");
       }

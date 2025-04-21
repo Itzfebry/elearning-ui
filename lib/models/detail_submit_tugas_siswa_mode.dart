@@ -1,0 +1,135 @@
+// To parse this JSON data, do
+//
+//     final detailSubmitTugasSiswaModel = detailSubmitTugasSiswaModelFromJson(jsonString);
+
+import 'dart:convert';
+
+DetailSubmitTugasSiswaModel detailSubmitTugasSiswaModelFromJson(String str) =>
+    DetailSubmitTugasSiswaModel.fromJson(json.decode(str));
+
+String detailSubmitTugasSiswaModelToJson(DetailSubmitTugasSiswaModel data) =>
+    json.encode(data.toJson());
+
+class DetailSubmitTugasSiswaModel {
+  bool status;
+  String message;
+  List<Datum> data;
+
+  DetailSubmitTugasSiswaModel({
+    required this.status,
+    required this.message,
+    required this.data,
+  });
+
+  factory DetailSubmitTugasSiswaModel.fromJson(Map<String, dynamic> json) =>
+      DetailSubmitTugasSiswaModel(
+        status: json["status"],
+        message: json["message"],
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "status": status,
+        "message": message,
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
+}
+
+class Datum {
+  int id;
+  int userId;
+  String nisn;
+  String nama;
+  String jk;
+  String kelas;
+  String tahunAjaran;
+  DateTime createdAt;
+  DateTime updatedAt;
+  SubmitTugas? submitTugas;
+
+  Datum({
+    required this.id,
+    required this.userId,
+    required this.nisn,
+    required this.nama,
+    required this.jk,
+    required this.kelas,
+    required this.tahunAjaran,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.submitTugas,
+  });
+
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+        id: json["id"],
+        userId: json["user_id"],
+        nisn: json["nisn"],
+        nama: json["nama"],
+        jk: json["jk"],
+        kelas: json["kelas"],
+        tahunAjaran: json["tahun_ajaran"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+        submitTugas: json["submit_tugas"] == null
+            ? null
+            : SubmitTugas.fromJson(json["submit_tugas"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "user_id": userId,
+        "nisn": nisn,
+        "nama": nama,
+        "jk": jk,
+        "kelas": kelas,
+        "tahun_ajaran": tahunAjaran,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+        "submit_tugas": submitTugas?.toJson(),
+      };
+}
+
+class SubmitTugas {
+  int id;
+  DateTime tanggal;
+  String nisn;
+  int tugasId;
+  String? text;
+  String? file;
+  DateTime createdAt;
+  DateTime updatedAt;
+
+  SubmitTugas({
+    required this.id,
+    required this.tanggal,
+    required this.nisn,
+    required this.tugasId,
+    required this.text,
+    required this.file,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory SubmitTugas.fromJson(Map<String, dynamic> json) => SubmitTugas(
+        id: json["id"],
+        tanggal: DateTime.parse(json["tanggal"]),
+        nisn: json["nisn"],
+        tugasId: json["tugas_id"],
+        text: json["text"],
+        file: json["file"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "tanggal":
+            "${tanggal.year.toString().padLeft(4, '0')}-${tanggal.month.toString().padLeft(2, '0')}-${tanggal.day.toString().padLeft(2, '0')}",
+        "nisn": nisn,
+        "tugas_id": tugasId,
+        "text": text,
+        "file": file,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+      };
+}
