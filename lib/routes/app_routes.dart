@@ -16,6 +16,8 @@ class AppRoutes {
   static const String tugasDetailGuru = "/tugas-detail-guru";
   static const String detailSubmitTugasDetailGuru =
       "/detail-submit-tugas-siswa-guru";
+  static const String reviewSubmitTugasSiswaOnGuru =
+      "/review-submit-tugas-siswa-on-guru";
 
   //
   static const String welcome = "/welcome";

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ntp/ntp.dart';
 import 'package:ui/views/guru/tugas/controllers/detail_submit_tugas_siswa_controller.dart';
+import 'package:ui/widgets/my_date_format.dart';
+import 'package:ui/widgets/my_snackbar.dart';
 import 'package:ui/widgets/my_text.dart';
 
 class DetailSubmitTugas extends StatefulWidget {
@@ -39,7 +41,11 @@ class _DetailSubmitTugasState extends State<DetailSubmitTugas> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Detail Tugas")),
+      appBar: AppBar(
+          title: const Text(
+        "Detail Pengumpulan Tugas Siswa",
+        style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+      )),
       body: Column(
         children: [
           Padding(
@@ -145,33 +151,22 @@ class _DetailSubmitTugasState extends State<DetailSubmitTugas> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               child: ListTile(
+                leading: const CircleAvatar(
+                  backgroundColor: Colors.blue,
+                  child: MyText(
+                      text: "1",
+                      fontSize: 15,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700),
+                ),
                 title: Text(
                   data!.nama,
                   style: const TextStyle(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.start,
                 ),
-                // subtitle: Padding(
-                //   padding: const EdgeInsets.only(top: 10),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       MyText(
-                //         text: data.tanggal.simpleDateRevers(),
-                //         fontSize: 14,
-                //         color: Colors.black,
-                //         fontWeight: FontWeight.w600,
-                //       ),
-                //       MyText(
-                //         text:
-                //             "Tenggat : ${data.tenggat.simpleDateRevers()}",
-                //         fontSize: 14,
-                //         color: Colors.red,
-                //         fontWeight: FontWeight.w600,
-                //       )
-                //     ],
-                //   ),
-                // ),
-                onTap: () async {},
+                onTap: () async {
+                  snackbarfailed("Siswa ini tidak mengumpulkan tugas");
+                },
               ),
             );
           },
@@ -216,33 +211,33 @@ class _DetailSubmitTugasState extends State<DetailSubmitTugas> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               child: ListTile(
-                title: Text(
-                  data!.nama,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
+                title: ListTile(
+                  leading: const CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    child: MyText(
+                        text: "1",
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data!.nama,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.start,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        data.submitTugas!.tanggal.simpleDateRevers(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 12),
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
+                  ),
                 ),
-                // subtitle: Padding(
-                //   padding: const EdgeInsets.only(top: 10),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       MyText(
-                //         text: data.tanggal.simpleDateRevers(),
-                //         fontSize: 14,
-                //         color: Colors.black,
-                //         fontWeight: FontWeight.w600,
-                //       ),
-                //       MyText(
-                //         text:
-                //             "Tenggat : ${data.tenggat.simpleDateRevers()}",
-                //         fontSize: 14,
-                //         color: Colors.red,
-                //         fontWeight: FontWeight.w600,
-                //       )
-                //     ],
-                //   ),
-                // ),
-                onTap: () async {},
               ),
             );
           },

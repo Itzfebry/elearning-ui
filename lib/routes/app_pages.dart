@@ -8,6 +8,7 @@ import 'package:ui/views/guru/tugas/bindings/tugas_guru_binding.dart';
 import 'package:ui/views/guru/tugas/detail.dart';
 import 'package:ui/views/guru/tugas/detail_submit_tugas.dart';
 import 'package:ui/views/guru/tugas/index.dart';
+import 'package:ui/views/guru/tugas/review_submit_tugas.dart';
 
 import 'app_routes.dart';
 import 'export.dart';
@@ -90,6 +91,11 @@ class AppPages {
       name: AppRoutes.detailSubmitTugasDetailGuru,
       page: () => const DetailSubmitTugas(),
       binding: DetailSubmitTugasSiswaBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.reviewSubmitTugasSiswaOnGuru,
+      page: () => const ReviewSubmitTugas(),
+      // binding: DetailSubmitTugasSiswaBinding(),
     ),
   ];
 }
