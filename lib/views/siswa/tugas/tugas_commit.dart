@@ -120,22 +120,22 @@ class _TugasCommitState extends State<TugasCommit> {
                 color: const Color(0xFF57E389),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Column(
+              child: Column(
                 children: [
-                  Text(
-                    "Daur Hidup Pada Hewan:\nDari Telur Hingga Dewasa",
+                  const Text(
+                    "Soal :",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      fontSize: 15,
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   Text(
-                    "Berikan sebuah struktur daur hidup\nlingkungan pada bioma terdekat di sekolah",
+                    Get.arguments['title'],
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
                     ),

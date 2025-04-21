@@ -173,6 +173,7 @@ class _TugasDetailState extends State<TugasDetail> {
                               arguments: {
                                 "id": data.id,
                                 "tipe_tugas": "belum",
+                                "title": data.nama,
                                 "submitTugas": null
                               },
                             )?.then((value) {
@@ -271,6 +272,7 @@ class _TugasDetailState extends State<TugasDetail> {
                           Get.toNamed(AppRoutes.tugasCommitSiswa, arguments: {
                             "id": data.submitTugas!.id,
                             "tipe_tugas": "selesai",
+                            "title": data.nama,
                             "submitTugas": {
                               "id": data.submitTugas!.id,
                               "tanggal": data.submitTugas!.tanggal,
