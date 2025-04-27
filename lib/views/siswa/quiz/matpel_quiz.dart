@@ -51,11 +51,13 @@ class MatpelQuiz extends StatelessWidget {
                           itemBuilder: (context, index) {
                             var data = matapelajaranSimpleC
                                 .mataPelajaranSimpleM?.data[index];
-                            return TaskItem(
-                              id: data!.id.toString(),
-                              title: data.nama,
-                              guru: data.guru.nama,
-                              mataPelajaranId: data.id.toString(),
+                            return SizedBox(
+                              child: TaskItem(
+                                id: data!.id.toString(),
+                                title: data.nama,
+                                guru: data.guru.nama,
+                                mataPelajaranId: data.id.toString(),
+                              ),
                             );
                           },
                         ),
@@ -91,6 +93,7 @@ class TaskItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         Get.toNamed(AppRoutes.matpelQuizDetail, arguments: {
+          'id': id,
           'matpel': title,
         });
       },
