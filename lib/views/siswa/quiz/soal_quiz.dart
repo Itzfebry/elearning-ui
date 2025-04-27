@@ -1,10 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ui/routes/app_routes.dart';
+import 'package:ui/widgets/my_snackbar.dart';
 
-class SoalQuiz extends StatelessWidget {
+class SoalQuiz extends StatefulWidget {
   const SoalQuiz({super.key});
 
   @override
+  State<SoalQuiz> createState() => _SoalQuizState();
+}
+
+class _SoalQuizState extends State<SoalQuiz> {
+  int currentQuestion = 0;
+
+  final List<Map<String, dynamic>> questions = [
+    {
+      'question': 'Apa ibu kota Indonesia?',
+      'options': ['Jakarta', 'Surabaya', 'Bandung', 'Medan'],
+      'answerIndex': 0,
+    },
+    {
+      'question': 'Gunung tertinggi di Indonesia?',
+      'options': ['Semeru', 'Bromo', 'Jaya Wijaya', 'Rinjani'],
+      'answerIndex': 2,
+    },
+  ];
+  @override
   Widget build(BuildContext context) {
+    var current = questions[currentQuestion];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Soal Quiz"),
@@ -19,7 +43,7 @@ class SoalQuiz extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Kotak Soal (Teks)
+              // Kotak Soal
               Container(
                 margin: const EdgeInsets.all(20),
                 padding: const EdgeInsets.all(20),
@@ -29,10 +53,10 @@ class SoalQuiz extends StatelessWidget {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Center(
+                child: Center(
                   child: Text(
-                    'Apa ibu kota Indonesia?', // <-- Ini teks soal
-                    style: TextStyle(
+                    current['question'],
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -42,11 +66,14 @@ class SoalQuiz extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Pilihan Jawaban
-              buildJawaban('A. Jakarta'),
-              buildJawaban('B. Surabaya'),
-              buildJawaban('C. Bandung'),
-              buildJawaban('D. Medan'),
+              // Opsi Jawaban
+              ...List.generate(current['options'].length, (index) {
+                return buildJawaban(
+                  context,
+                  '${String.fromCharCode(65 + index)}. ${current['options'][index]}',
+                  index == current['answerIndex'],
+                );
+              }),
             ],
           ),
         ),
@@ -54,24 +81,104 @@ class SoalQuiz extends StatelessWidget {
     );
   }
 
-  // Widget untuk kotak jawaban
-  Widget buildJawaban(String text) {
+  Widget buildJawaban(BuildContext context, String label, bool isCorrect) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+      child: InkWell(
+        onTap: () {
+          showResultDialog(context, isCorrect, label);
+        },
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
+      ),
+    );
+  }
+
+  void showResultDialog(BuildContext context, bool isCorrect, String answer) {
+    bool isLastQuestion = currentQuestion == questions.length - 1;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor:
+            isCorrect ? Colors.green.shade100 : Colors.red.shade100,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        content: SizedBox(
+          height: 200,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                isCorrect ? 'Jawaban Benar ✅' : 'Jawaban Salah ❌',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                answer,
+                style: const TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                Get.back();
+
+                if (isLastQuestion) {
+                  snackbarSuccess("Quiz Selesai");
+                  Get.offAllNamed(AppRoutes.quizSelesai);
+                } else {
+                  setState(() {
+                    currentQuestion++;
+                  });
+                }
+              },
+              child: Text(isLastQuestion ? 'Selesai' : 'Next'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void showSelesai(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Quiz Selesai!'),
+        content: const Text('Selamat, kamu sudah menyelesaikan quiz ini.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context); // keluar dari halaman quiz
+            },
+            child: const Text('Kembali'),
+          ),
+        ],
       ),
     );
   }

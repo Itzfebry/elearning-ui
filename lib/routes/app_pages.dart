@@ -14,6 +14,7 @@ import 'package:ui/views/siswa/quiz/bindings/quiz_binding.dart';
 import 'package:ui/views/siswa/quiz/matpel_quiz.dart';
 import 'package:ui/views/siswa/quiz/matpel_quiz_detail.dart';
 import 'package:ui/views/siswa/quiz/soal_quiz.dart';
+import 'package:ui/views/siswa/quiz/soal_quiz_selesai.dart';
 
 import 'app_routes.dart';
 import 'export.dart';
@@ -83,6 +84,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.soalQuiz,
       page: () => const SoalQuiz(),
+      // binding: QuizBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.quizSelesai,
+      page: () => const SoalQuizSelesai(),
       // binding: QuizBinding(),
     ),
 
