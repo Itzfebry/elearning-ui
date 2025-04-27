@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ui/routes/app_routes.dart';
 import 'package:ui/views/siswa/quiz/controllers/quiz_controller.dart';
 import 'package:ui/widgets/my_text.dart';
 
@@ -30,7 +31,7 @@ class MatpelQuizDetail extends StatelessWidget {
                   } else if (quizC.isEmptyData.value) {
                     return const Center(
                       child: MyText(
-                          text: "Tidak Ada Mata Pelajaran",
+                          text: "Tidak Ada Quiz",
                           fontSize: 15,
                           color: Colors.black,
                           fontWeight: FontWeight.w700),
@@ -86,6 +87,7 @@ class TaskItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        Get.toNamed(AppRoutes.soalQuiz);
         // Get.toNamed(AppRoutes.matpelQuizDetail, arguments: {
         //   'matpel': title,
         // });

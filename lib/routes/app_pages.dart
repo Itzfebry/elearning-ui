@@ -13,6 +13,7 @@ import 'package:ui/views/siswa/quiz/bindings/matpel_quiz_binding.dart';
 import 'package:ui/views/siswa/quiz/bindings/quiz_binding.dart';
 import 'package:ui/views/siswa/quiz/matpel_quiz.dart';
 import 'package:ui/views/siswa/quiz/matpel_quiz_detail.dart';
+import 'package:ui/views/siswa/quiz/soal_quiz.dart';
 
 import 'app_routes.dart';
 import 'export.dart';
@@ -78,6 +79,11 @@ class AppPages {
       name: AppRoutes.matpelQuizDetail,
       page: () => MatpelQuizDetail(),
       binding: QuizBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.soalQuiz,
+      page: () => const SoalQuiz(),
+      // binding: QuizBinding(),
     ),
 
     // GURU
