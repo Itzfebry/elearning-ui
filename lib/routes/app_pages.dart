@@ -9,6 +9,9 @@ import 'package:ui/views/guru/tugas/detail.dart';
 import 'package:ui/views/guru/tugas/detail_submit_tugas.dart';
 import 'package:ui/views/guru/tugas/index.dart';
 import 'package:ui/views/guru/tugas/review_submit_tugas.dart';
+import 'package:ui/views/siswa/quiz/bindings/matpel_quiz_binding.dart';
+import 'package:ui/views/siswa/quiz/matpel_quiz.dart';
+import 'package:ui/views/siswa/quiz/matpel_quiz_detail.dart';
 
 import 'app_routes.dart';
 import 'export.dart';
@@ -64,6 +67,16 @@ class AppPages {
       name: AppRoutes.tugasCommitSiswa,
       page: () => const TugasCommit(),
       binding: SubmitTugasBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.matpelQuiz,
+      page: () => MatpelQuiz(),
+      binding: MatpelQuizBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.matpelQuizDetail,
+      page: () => const MatpelQuizDetail(),
+      // binding: MatpelQuizBinding(),
     ),
 
     // GURU

@@ -8,6 +8,8 @@ class AppRoutes {
   static const String tugasSiswa = '/tugas-siswa';
   static const String tugasDetailSiswa = '/tugas-detail-siswa';
   static const String tugasCommitSiswa = '/tugas-commit-siswa';
+  static const String matpelQuiz = '/matpel-quiz';
+  static const String matpelQuizDetail = '/matpel-quiz-detail';
   // Guru
   static const String guruDashboard = "/guru-dashboard";
   static const String guruMatpel = "/guru-Matpel";

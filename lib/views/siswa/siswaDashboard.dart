@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:ui/routes/app_routes.dart';
 import 'package:ui/views/siswa/controllers/siswa_controller.dart';
 import 'package:ui/views/siswa/profile.dart';
-import 'package:ui/views/siswa/quiz.dart';
 import 'package:ui/views/siswa/ranksiswa.dart';
 
 class SiswaDashboardPage extends StatelessWidget {
@@ -262,11 +261,7 @@ class SiswaDashboardPage extends StatelessWidget {
                             // "Quiz" Card
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const QuizSiswa()),
-                                );
+                                Get.toNamed(AppRoutes.matpelQuiz);
                               },
                               child: Container(
                                 width: screenWidth * 0.55,
