@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ui/routes/app_routes.dart';
+import 'package:ui/views/siswa/quiz/controllers/quiz_attempt_controller.dart';
 import 'package:ui/widgets/my_snackbar.dart';
 
 class SoalQuiz extends StatefulWidget {
@@ -12,6 +13,7 @@ class SoalQuiz extends StatefulWidget {
 
 class _SoalQuizState extends State<SoalQuiz> {
   int currentQuestion = 0;
+  QuizAttemptController quizAttemptC = Get.find<QuizAttemptController>();
 
   final List<Map<String, dynamic>> questions = [
     {
@@ -25,56 +27,62 @@ class _SoalQuizState extends State<SoalQuiz> {
       'answerIndex': 2,
     },
   ];
+
   @override
   Widget build(BuildContext context) {
     var current = questions[currentQuestion];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Soal Quiz"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.green.shade300,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Kotak Soal
-              Container(
-                margin: const EdgeInsets.all(20),
-                padding: const EdgeInsets.all(20),
-                height: 200,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Center(
-                  child: Text(
-                    current['question'],
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+    return WillPopScope(
+      onWillPop: () async {
+        return await _showExitConfirmationDialog(context);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Soal Quiz"),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.green.shade300,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Kotak Soal
+                Container(
+                  margin: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
+                  height: 200,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Center(
+                    child: Text(
+                      current['question'],
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-              // Opsi Jawaban
-              ...List.generate(current['options'].length, (index) {
-                return buildJawaban(
-                  context,
-                  '${String.fromCharCode(65 + index)}. ${current['options'][index]}',
-                  index == current['answerIndex'],
-                );
-              }),
-            ],
+                // Opsi Jawaban
+                ...List.generate(current['options'].length, (index) {
+                  return buildJawaban(
+                    context,
+                    '${String.fromCharCode(65 + index)}. ${current['options'][index]}',
+                    index == current['answerIndex'],
+                  );
+                }),
+              ],
+            ),
           ),
         ),
       ),
@@ -164,22 +172,34 @@ class _SoalQuizState extends State<SoalQuiz> {
     );
   }
 
-  void showSelesai(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Quiz Selesai!'),
-        content: const Text('Selamat, kamu sudah menyelesaikan quiz ini.'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context); // keluar dari halaman quiz
-            },
-            child: const Text('Kembali'),
-          ),
-        ],
-      ),
-    );
+  // Menampilkan konfirmasi saat pengguna mencoba keluar sebelum quiz selesai
+  Future<bool> _showExitConfirmationDialog(BuildContext context) async {
+    return await showDialog<bool>(
+          context: context,
+          barrierDismissible:
+              false, // Tidak bisa ditutup dengan mengetuk di luar dialog
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Konfirmasi'),
+              content: const Text(
+                  'Anda belum menyelesaikan quiz. Apakah Anda yakin ingin keluar?'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Batal'),
+                  onPressed: () {
+                    Navigator.of(context).pop(false); // Jangan keluar
+                  },
+                ),
+                TextButton(
+                  child: const Text('Keluar'),
+                  onPressed: () {
+                    Get.offAllNamed(AppRoutes.siswaDashboard);
+                  },
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
   }
 }

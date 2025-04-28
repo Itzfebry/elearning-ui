@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ui/widgets/my_text.dart';
 
 snackbarfailed(var msg) {
   return Get.snackbar(
@@ -25,6 +26,17 @@ snackbarSuccess(var msg) {
     messageText: Text(
       msg,
       style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+    ),
+  );
+}
+
+snackbarAlert(var title) {
+  return Get.showSnackbar(
+    GetSnackBar(
+      title: title,
+      message: 'asd',
+      // icon: const Icon(Icons.refresh),
+      duration: const Duration(seconds: 3),
     ),
   );
 }

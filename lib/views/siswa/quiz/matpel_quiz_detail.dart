@@ -87,7 +87,9 @@ class TaskItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.offAllNamed(AppRoutes.soalQuiz);
+        Get.offAllNamed(AppRoutes.soalQuiz, arguments: {
+          "quiz_id": id,
+        });
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 25),
