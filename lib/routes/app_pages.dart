@@ -19,6 +19,7 @@ import 'package:ui/views/siswa/quiz/soal_quiz.dart';
 import 'package:ui/views/siswa/quiz/soal_quiz_selesai.dart';
 import 'package:ui/views/siswa/ranking/bindings/matpel_rank_binding.dart';
 import 'package:ui/views/siswa/ranking/bindings/quiz_rank_binding.dart';
+import 'package:ui/views/siswa/ranking/bindings/ranking_binding.dart';
 import 'package:ui/views/siswa/ranking/index.dart';
 import 'package:ui/views/siswa/ranking/matpel_rank.dart';
 import 'package:ui/views/siswa/ranking/matpel_rank_detail.dart';
@@ -112,7 +113,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.rankSiswa,
       page: () => RankSiswa(),
-      // binding: QuizRankBinding(),
+      binding: RankingBinding(),
     ),
 
     // GURU

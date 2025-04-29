@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ui/views/siswa/ranking/controllers/ranking_controller.dart';
 import 'package:ui/widgets/my_text.dart';
 
 class RankSiswa extends StatelessWidget {
-  final List<Map<String, dynamic>> ranking = [
-    {"name": "Febry", "rank": 1, "score": 93},
-    {"name": "Udin", "rank": 2},
-    {"name": "Umar", "rank": 3},
-    {"name": "Dina", "rank": 4},
-    {"name": "Rafi", "rank": 5},
-  ];
+  // final List<Map<String, dynamic>> ranking = [
+  //   {"name": "Febry", "rank": 1, "score": 93},
+  //   {"name": "Udin", "rank": 2},
+  //   {"name": "Umar", "rank": 3},
+  //   {"name": "Dina", "rank": 4},
+  //   {"name": "Rafi", "rank": 5},
+  // ];
 
   RankSiswa({super.key});
 
@@ -26,10 +27,10 @@ class RankSiswa extends StatelessWidget {
     }
   }
 
+  RankingController rankingC = Get.find<RankingController>();
+
   @override
   Widget build(BuildContext context) {
-    final topUser = ranking.first;
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -53,50 +54,66 @@ class RankSiswa extends StatelessWidget {
                 color: Colors.black,
                 fontWeight: FontWeight.w700),
             const SizedBox(height: 50),
-            Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 20,
-              runSpacing: 20,
-              children: ranking.map((user) {
-                return Column(
-                  children: [
-                    Stack(
-                      alignment: Alignment.topRight,
+            Obx(
+              () {
+                if (rankingC.isLoading.value) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                var data = rankingC.data['data'];
+
+                if (rankingC.isEmpty.value) {
+                  return const Center(
+                    child: Text('Tidak ada data'),
+                  );
+                }
+
+                return ListView.builder(
+                  itemCount: rankingC.data['data'].length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Column(
                       children: [
-                        CircleAvatar(
-                          radius: 35,
-                          backgroundColor: Colors.teal[100],
-                          child: const Icon(Icons.emoji_emotions, size: 30),
-                        ),
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: CircleAvatar(
-                            radius: 10,
-                            backgroundColor: getMedalColor(user['rank']),
-                            child: Text(
-                              user['rank'].toString(),
-                              style: const TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                        Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            CircleAvatar(
+                              radius: 35,
+                              backgroundColor: Colors.teal[100],
+                              child: const Icon(Icons.emoji_emotions, size: 30),
+                            ),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: CircleAvatar(
+                                radius: 10,
+                                backgroundColor: getMedalColor(index + 1),
+                                child: Text(
+                                  "${index + 1}",
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
+                        const SizedBox(height: 5),
+                        Text(data[index]['siswa']['nama']),
                       ],
-                    ),
-                    const SizedBox(height: 5),
-                    Text(user['name']),
-                  ],
+                    );
+                  },
                 );
-              }).toList(),
+              },
             ),
             const SizedBox(height: 40),
-            Text(
-              'Hebat\n${topUser['name']}!!',
+            const Text(
+              'Anda',
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
@@ -108,14 +125,14 @@ class RankSiswa extends StatelessWidget {
                 color: Colors.teal[100],
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Text(
-                'SCORE\n${topUser['score']}',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              child: Obx(() => Text(
+                    'SCORE\n${rankingC.skorMe.value}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
             ),
           ],
         ),

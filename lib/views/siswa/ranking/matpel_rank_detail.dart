@@ -85,6 +85,7 @@ class TaskItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         Get.toNamed(AppRoutes.rankSiswa, arguments: {
+          'quiz_id': id,
           'matpel': Get.arguments['matpel'],
           'judul': title,
         });
