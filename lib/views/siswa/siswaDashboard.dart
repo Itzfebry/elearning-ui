@@ -3,8 +3,6 @@ import 'package:get/get.dart';
 import 'package:ui/routes/app_routes.dart';
 import 'package:ui/views/siswa/controllers/siswa_controller.dart';
 import 'package:ui/views/siswa/profile.dart';
-import 'package:ui/views/siswa/ranksiswa.dart';
-import 'package:ui/widgets/my_snackbar.dart';
 
 class SiswaDashboardPage extends StatelessWidget {
   const SiswaDashboardPage({super.key});
@@ -199,11 +197,7 @@ class SiswaDashboardPage extends StatelessWidget {
                                 // "#1 Ranking" Card
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => RankSiswa()),
-                                    );
+                                    Get.toNamed(AppRoutes.matpelRankQuiz);
                                   },
                                   child: Container(
                                     width: screenWidth * 0.42,

@@ -12,6 +12,11 @@ class AppRoutes {
   static const String matpelQuizDetail = '/matpel-quiz-detail';
   static const String soalQuiz = '/soal-quiz';
   static const String quizSelesai = '/quiz-selesai';
+
+  static const String matpelRankQuiz = '/matpel-quiz-rank';
+  static const String matpelQuizRankDetail = '/matpel-quiz-rank-detail';
+  static const String rankSiswa = '/rank-siswa';
+
   // Guru
   static const String guruDashboard = "/guru-dashboard";
   static const String guruMatpel = "/guru-Matpel";
