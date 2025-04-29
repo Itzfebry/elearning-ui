@@ -33,6 +33,7 @@ class Datum {
   String judul;
   String deskripsi;
   int totalSoal;
+  int totalSoalTampil;
   int matapelajaranId;
   DateTime createdAt;
   DateTime updatedAt;
@@ -42,6 +43,7 @@ class Datum {
     required this.judul,
     required this.deskripsi,
     required this.totalSoal,
+    required this.totalSoalTampil,
     required this.matapelajaranId,
     required this.createdAt,
     required this.updatedAt,
@@ -52,6 +54,7 @@ class Datum {
         judul: json["judul"],
         deskripsi: json["deskripsi"],
         totalSoal: json["total_soal"],
+        totalSoalTampil: json["total_soal_tampil"],
         matapelajaranId: json["matapelajaran_id"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
@@ -62,6 +65,7 @@ class Datum {
         "judul": judul,
         "deskripsi": deskripsi,
         "total_soal": totalSoal,
+        "total_soal_tampil": totalSoalTampil,
         "matapelajaran_id": matapelajaranId,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
