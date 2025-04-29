@@ -2,23 +2,19 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ui/constans/api_constans.dart';
-import 'package:ui/models/quiz_mode.dart';
+import 'package:ui/models/quiz_question_model.dart';
+import 'package:http/http.dart' as http;
 
-class QuizController extends GetxController {
+class QuizQuestionController extends GetxController {
   var isLoading = false.obs;
-  QuizModel? quizM;
-  var isEmptyData = true.obs;
+  QuizQuestionModel? quizQuestionM;
 
-  @override
-  void onInit() {
-    super.onInit();
-    getQuiz();
-  }
+  Future<void> getQuizQuestion(attemptId) async {
+    var url =
+        "${ApiConstants.baseUrlApi}/quiz-attempts/$attemptId/next-question";
 
-  Future<void> getQuiz() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
 
@@ -32,18 +28,13 @@ class QuizController extends GetxController {
     try {
       isLoading(true);
       final response = await http.get(
-        Uri.parse(
-            "${ApiConstants.quizEnpoint}?matapelajaran_id=${Get.arguments['id'].toString()}"),
+        Uri.parse(url),
         headers: headers,
       );
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
-        quizM = QuizModel.fromJson(json);
-        if (quizM!.data.isEmpty) {
-          isEmptyData(true);
-        } else {
-          isEmptyData(false);
-        }
+        log(json.toString());
+        quizQuestionM = QuizQuestionModel.fromJson(json);
       } else {
         log("Terjadi kesalahan get data: ${response.statusCode}");
       }

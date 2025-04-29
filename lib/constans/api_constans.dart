@@ -1,6 +1,8 @@
 import 'constansts_export.dart';
 
 class ApiConstants {
+  var idAttempt;
+
   static String? baseUrl = dotenv.env['URL'];
   static String? baseUrlApi = "${dotenv.env['HOST']}";
   static String loginEnpoint = "$baseUrlApi/login";
@@ -24,4 +26,5 @@ class ApiConstants {
 
   static String quizEnpoint = "$baseUrlApi/quiz";
   static String quizAttemptStartEnpoint = "$baseUrlApi/quiz-attempts/start";
+  static String quizAttemptFinishEnpoint = "$baseUrlApi/quiz-attempts/finish";
 }

@@ -2,25 +2,26 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 import 'package:ui/constans/api_constans.dart';
-import 'package:ui/models/quiz_mode.dart';
+import 'package:ui/models/quiz_attempt_model.dart';
 
-class QuizController extends GetxController {
+class QuizFinishController extends GetxController {
   var isLoading = false.obs;
-  QuizModel? quizM;
-  var isEmptyData = true.obs;
+  QuizAttemptModel? quizAttemptM;
 
   @override
   void onInit() {
     super.onInit();
-    getQuiz();
+    var quizId = Get.arguments['quiz_id'];
+    getQuizAttempt(quizId);
   }
 
-  Future<void> getQuiz() async {
+  Future<void> getQuizAttempt(quizId) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
+    await prefs.remove('attempt_id');
 
     if (token == null) {
       throw Exception("Token not found");
@@ -32,23 +33,17 @@ class QuizController extends GetxController {
     try {
       isLoading(true);
       final response = await http.get(
-        Uri.parse(
-            "${ApiConstants.quizEnpoint}?matapelajaran_id=${Get.arguments['id'].toString()}"),
+        Uri.parse("${ApiConstants.quizAttemptFinishEnpoint}?quiz_id=$quizId"),
         headers: headers,
       );
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
-        quizM = QuizModel.fromJson(json);
-        if (quizM!.data.isEmpty) {
-          isEmptyData(true);
-        } else {
-          isEmptyData(false);
-        }
+        quizAttemptM = QuizAttemptModel.fromJson(json);
       } else {
-        log("Terjadi kesalahan get data: ${response.statusCode}");
+        log("Terjadi kesalahan get data attempt: ${response.statusCode}");
       }
     } catch (e) {
-      log("Error get quiz simple: $e");
+      log("Error get quiz attempt simple: $e");
     } finally {
       isLoading(false);
     }

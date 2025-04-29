@@ -33,7 +33,7 @@ class Datum {
   String judul;
   String deskripsi;
   int totalSoal;
-  int totalSoalTampil;
+  String totalSoalTampil;
   int matapelajaranId;
   DateTime createdAt;
   DateTime updatedAt;

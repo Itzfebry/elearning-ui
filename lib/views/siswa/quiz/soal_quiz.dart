@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ui/routes/app_routes.dart';
 import 'package:ui/views/siswa/quiz/controllers/quiz_attempt_controller.dart';
+import 'package:ui/views/siswa/quiz/controllers/quiz_question_controller.dart';
 import 'package:ui/widgets/my_snackbar.dart';
 
 class SoalQuiz extends StatefulWidget {
@@ -14,24 +18,10 @@ class SoalQuiz extends StatefulWidget {
 class _SoalQuizState extends State<SoalQuiz> {
   int currentQuestion = 0;
   QuizAttemptController quizAttemptC = Get.find<QuizAttemptController>();
-
-  final List<Map<String, dynamic>> questions = [
-    {
-      'question': 'Apa ibu kota Indonesia?',
-      'options': ['Jakarta', 'Surabaya', 'Bandung', 'Medan'],
-      'answerIndex': 0,
-    },
-    {
-      'question': 'Gunung tertinggi di Indonesia?',
-      'options': ['Semeru', 'Bromo', 'Jaya Wijaya', 'Rinjani'],
-      'answerIndex': 2,
-    },
-  ];
+  QuizQuestionController quizQuestionC = Get.find<QuizQuestionController>();
 
   @override
   Widget build(BuildContext context) {
-    var current = questions[currentQuestion];
-
     return WillPopScope(
       onWillPop: () async {
         return await _showExitConfirmationDialog(context);
@@ -40,61 +30,129 @@ class _SoalQuizState extends State<SoalQuiz> {
         appBar: AppBar(
           title: const Text("Soal Quiz"),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.green.shade300,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Kotak Soal
-                Container(
-                  margin: const EdgeInsets.all(20),
-                  padding: const EdgeInsets.all(20),
-                  height: 200,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Center(
-                    child: Text(
-                      current['question'],
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+        body: Obx(() {
+          if (quizQuestionC.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          var data = quizQuestionC.quizQuestionM?.data;
+
+          if (data == null) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.green.shade300,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Kotak Soal
+                  Container(
+                    margin: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Soal :",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            data.pertanyaan,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                // Opsi Jawaban
-                ...List.generate(current['options'].length, (index) {
-                  return buildJawaban(
-                    context,
-                    '${String.fromCharCode(65 + index)}. ${current['options'][index]}',
-                    index == current['answerIndex'],
-                  );
-                }),
-              ],
+                  buildJawaban(context, data.id.toString(), "a", data.opsiA),
+                  buildJawaban(context, data.id.toString(), "b", data.opsiB),
+                  buildJawaban(context, data.id.toString(), "c", data.opsiC),
+                  buildJawaban(context, data.id.toString(), "d", data.opsiD),
+                ],
+              ),
             ),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
 
-  Widget buildJawaban(BuildContext context, String label, bool isCorrect) {
+  Widget buildJawaban(
+    BuildContext context,
+    String questionId,
+    String opsi,
+    String label,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
       child: InkWell(
-        onTap: () {
-          showResultDialog(context, isCorrect, label);
+        onTap: () async {
+          final prefs = await SharedPreferences.getInstance();
+          final attemptId = prefs.getString('attempt_id');
+          log({
+            "attempt_id": attemptId,
+            "question_id": questionId,
+            "opsi": opsi,
+          }.toString());
+
+          try {
+            quizAttemptC.postQuizAttemptAnswer(
+              quizAttemptId: attemptId.toString(),
+              questionId: questionId,
+              jawabanSiswa: opsi,
+            );
+            log("APAPAH BENAR: ${quizAttemptC.isCorrect.value}");
+            showResultDialog(
+              context,
+              quizAttemptC.isCorrect.value.toString(),
+              "${opsi.toUpperCase()}. $label",
+              quizAttemptC.isLastQuestion.value,
+              quizAttemptC.quizId.value.toString(),
+            );
+          } catch (e) {
+            Get.back();
+
+            showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                title: const Text("Gagal"),
+                content: const Text("Jawaban gagal dikirim. Coba lagi."),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text("OK"),
+                  ),
+                ],
+              ),
+            );
+          }
         },
         child: Container(
           width: double.infinity,
@@ -104,7 +162,7 @@ class _SoalQuizState extends State<SoalQuiz> {
             borderRadius: BorderRadius.circular(30),
           ),
           child: Text(
-            label,
+            "${opsi.toUpperCase()}. $label",
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -115,14 +173,39 @@ class _SoalQuizState extends State<SoalQuiz> {
     );
   }
 
-  void showResultDialog(BuildContext context, bool isCorrect, String answer) {
-    bool isLastQuestion = currentQuestion == questions.length - 1;
+  void showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const AlertDialog(
+        backgroundColor: Colors.white,
+        content: SizedBox(
+          width: 50,
+          height: 50,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void showResultDialog(
+    BuildContext context,
+    String isCorrect,
+    String answer,
+    bool isLastQuestion,
+    String quizId,
+  ) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         backgroundColor:
-            isCorrect ? Colors.green.shade100 : Colors.red.shade100,
+            isCorrect == "1" ? Colors.green.shade100 : Colors.red.shade100,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
@@ -132,7 +215,7 @@ class _SoalQuizState extends State<SoalQuiz> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                isCorrect ? 'Jawaban Benar ✅' : 'Jawaban Salah ❌',
+                isCorrect == "1" ? 'Jawaban Benar ✅' : 'Jawaban Salah ❌',
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -142,7 +225,7 @@ class _SoalQuizState extends State<SoalQuiz> {
               Text(
                 answer,
                 style: const TextStyle(
-                  fontSize: 40,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -152,16 +235,16 @@ class _SoalQuizState extends State<SoalQuiz> {
         actions: [
           Center(
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 Get.back();
-
                 if (isLastQuestion) {
                   snackbarSuccess("Quiz Selesai");
-                  Get.offAllNamed(AppRoutes.quizSelesai);
+                  Get.offAllNamed(AppRoutes.quizSelesai,
+                      arguments: {'quiz_id': quizId});
                 } else {
-                  setState(() {
-                    currentQuestion++;
-                  });
+                  final prefs = await SharedPreferences.getInstance();
+                  final attemptId = prefs.getString('attempt_id');
+                  await quizQuestionC.getQuizQuestion(attemptId);
                 }
               },
               child: Text(isLastQuestion ? 'Selesai' : 'Next'),

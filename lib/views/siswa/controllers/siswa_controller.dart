@@ -21,6 +21,9 @@ class SiswaController extends GetxController {
   Future<void> getMe() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
+    final attemptId = prefs.getString('attempt_id');
+    await prefs.remove('attempt_id');
+    log("Attempt ID: $attemptId");
 
     if (token == null) {
       throw Exception("Token not found");

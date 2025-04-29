@@ -115,8 +115,7 @@ class SiswaDashboardPage extends StatelessWidget {
                       alignment: Alignment.topRight,
                       child: InkWell(
                         onTap: () {
-                          // Get.toNamed(AppRoutes.notifikasiSiswa);
-                          snackbarAlert("title");
+                          Get.toNamed(AppRoutes.notifikasiSiswa);
                         },
                         child: CircleAvatar(
                           backgroundColor: Colors.green.shade100,
@@ -263,7 +262,10 @@ class SiswaDashboardPage extends StatelessWidget {
                             // "Quiz" Card
                             GestureDetector(
                               onTap: () {
-                                Get.toNamed(AppRoutes.matpelQuiz);
+                                // Get.toNamed(AppRoutes.matpelQuiz);
+                                Get.toNamed(AppRoutes.quizSelesai, arguments: {
+                                  'quiz_id': 1.toString(),
+                                });
                               },
                               child: Container(
                                 width: screenWidth * 0.55,

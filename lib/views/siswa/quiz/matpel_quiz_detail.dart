@@ -53,7 +53,7 @@ class MatpelQuizDetail extends StatelessWidget {
                               child: TaskItem(
                                 id: data!.id.toString(),
                                 title: data.judul,
-                                total: data.totalSoal.toString(),
+                                total: data.totalSoalTampil.toString(),
                               ),
                             ),
                           );

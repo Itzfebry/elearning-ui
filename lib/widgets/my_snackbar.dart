@@ -30,13 +30,13 @@ snackbarSuccess(var msg) {
   );
 }
 
-snackbarAlert(var title) {
+snackbarAlert(var title, var msg, Color color) {
   return Get.showSnackbar(
     GetSnackBar(
       title: title,
-      message: 'asd',
-      // icon: const Icon(Icons.refresh),
-      duration: const Duration(seconds: 3),
+      message: msg,
+      backgroundColor: color,
+      duration: const Duration(seconds: 8),
     ),
   );
 }
