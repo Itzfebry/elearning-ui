@@ -239,8 +239,10 @@ class _SoalQuizState extends State<SoalQuiz> {
                 Get.back();
                 if (isLastQuestion) {
                   snackbarSuccess("Quiz Selesai");
-                  Get.offAllNamed(AppRoutes.quizSelesai,
-                      arguments: {'quiz_id': quizId});
+                  Get.offAllNamed(
+                    AppRoutes.quizSelesai,
+                    arguments: {'quiz_id': quizId},
+                  );
                 } else {
                   final prefs = await SharedPreferences.getInstance();
                   final attemptId = prefs.getString('attempt_id');

@@ -262,10 +262,7 @@ class SiswaDashboardPage extends StatelessWidget {
                             // "Quiz" Card
                             GestureDetector(
                               onTap: () {
-                                // Get.toNamed(AppRoutes.matpelQuiz);
-                                Get.toNamed(AppRoutes.quizSelesai, arguments: {
-                                  'quiz_id': 1.toString(),
-                                });
+                                Get.toNamed(AppRoutes.matpelQuiz);
                               },
                               child: Container(
                                 width: screenWidth * 0.55,

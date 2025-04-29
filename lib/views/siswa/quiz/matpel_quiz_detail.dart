@@ -54,6 +54,7 @@ class MatpelQuizDetail extends StatelessWidget {
                                 id: data!.id.toString(),
                                 title: data.judul,
                                 total: data.totalSoalTampil.toString(),
+                                status: data.quizAttempt != null ? true : false,
                               ),
                             ),
                           );
@@ -75,21 +76,27 @@ class TaskItem extends StatelessWidget {
   final String id;
   final String title;
   final String total;
+  final bool status;
 
   const TaskItem({
     super.key,
     required this.id,
     required this.title,
     required this.total,
+    required this.status,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.offAllNamed(AppRoutes.soalQuiz, arguments: {
-          "quiz_id": id,
-        });
+        if (status) {
+          Get.toNamed(AppRoutes.quizSelesai, arguments: {'quiz_id': id});
+        } else {
+          Get.offAllNamed(AppRoutes.soalQuiz, arguments: {
+            "quiz_id": id,
+          });
+        }
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 25),
@@ -111,6 +118,14 @@ class TaskItem extends StatelessWidget {
             ),
             Text(
               "Total soal : $total",
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Poppins',
+              ),
+            ),
+            Text(
+              "Status : ${status ? "Sudah dikerjakan" : "Belum dikerjakan"}",
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,

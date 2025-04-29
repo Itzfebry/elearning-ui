@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final quizModel = quizModelFromJson(jsonString);
+
 import 'dart:convert';
 
 QuizModel quizModelFromJson(String str) => QuizModel.fromJson(json.decode(str));
@@ -37,6 +41,7 @@ class Datum {
   int matapelajaranId;
   DateTime createdAt;
   DateTime updatedAt;
+  QuizAttempt? quizAttempt;
 
   Datum({
     required this.id,
@@ -47,6 +52,7 @@ class Datum {
     required this.matapelajaranId,
     required this.createdAt,
     required this.updatedAt,
+    required this.quizAttempt,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
@@ -58,6 +64,9 @@ class Datum {
         matapelajaranId: json["matapelajaran_id"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
+        quizAttempt: json["quiz_attempt"] == null
+            ? null
+            : QuizAttempt.fromJson(json["quiz_attempt"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -67,6 +76,63 @@ class Datum {
         "total_soal": totalSoal,
         "total_soal_tampil": totalSoalTampil,
         "matapelajaran_id": matapelajaranId,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+        "quiz_attempt": quizAttempt?.toJson(),
+      };
+}
+
+class QuizAttempt {
+  int id;
+  int quizId;
+  String nisn;
+  String skor;
+  int levelAkhir;
+  int jumlahSoalDijawab;
+  int benarFase1;
+  int benarFase2;
+  int fase;
+  DateTime createdAt;
+  DateTime updatedAt;
+
+  QuizAttempt({
+    required this.id,
+    required this.quizId,
+    required this.nisn,
+    required this.skor,
+    required this.levelAkhir,
+    required this.jumlahSoalDijawab,
+    required this.benarFase1,
+    required this.benarFase2,
+    required this.fase,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory QuizAttempt.fromJson(Map<String, dynamic> json) => QuizAttempt(
+        id: json["id"],
+        quizId: json["quiz_id"],
+        nisn: json["nisn"],
+        skor: json["skor"],
+        levelAkhir: json["level_akhir"],
+        jumlahSoalDijawab: json["jumlah_soal_dijawab"],
+        benarFase1: json["benar_fase1"],
+        benarFase2: json["benar_fase2"],
+        fase: json["fase"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "quiz_id": quizId,
+        "nisn": nisn,
+        "skor": skor,
+        "level_akhir": levelAkhir,
+        "jumlah_soal_dijawab": jumlahSoalDijawab,
+        "benar_fase1": benarFase1,
+        "benar_fase2": benarFase2,
+        "fase": fase,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
       };
