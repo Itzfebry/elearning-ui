@@ -30,6 +30,7 @@ class AppRoutes {
 
   static const String mataPelajaranQuizGuru = "/matapelajaran-quiz-guru";
   static const String quizGuru = "/quiz-guru";
+  static const String quizDetailGuru = "/quiz-detail-guru";
 
   //
   static const String welcome = "/welcome";

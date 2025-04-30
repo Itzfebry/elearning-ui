@@ -1,7 +1,4 @@
 // ignore_for_file: must_be_immutable
-
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ui/routes/app_routes.dart';
@@ -45,7 +42,12 @@ class QuizGuru extends StatelessWidget {
                         var data = quizC.quizGuruM?.data[index];
                         return InkWell(
                           onTap: () {
-                            log("List Siswa");
+                            Get.toNamed(AppRoutes.quizDetailGuru, arguments: {
+                              'quiz_id': data.id.toString(),
+                              'kelas': Get.arguments['kelas'],
+                              'tahun_ajaran': Get.arguments['tahun_ajaran'],
+                              'judul': data.judul,
+                            });
                           },
                           child: Container(
                             width: Get.width,
