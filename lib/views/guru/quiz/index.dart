@@ -9,14 +9,14 @@ import 'package:ui/views/guru/mata_pelajaran/controllers/tahun_ajaran_controller
 import 'package:ui/views/guru/mata_pelajaran/filter_matpel.dart';
 import 'package:ui/widgets/my_date_format.dart';
 
-class MataPelajaranGuru extends StatefulWidget {
-  const MataPelajaranGuru({super.key});
+class MataPelajaranQuizGuru extends StatefulWidget {
+  const MataPelajaranQuizGuru({super.key});
 
   @override
-  State<MataPelajaranGuru> createState() => _MataPelajaranGuruState();
+  State<MataPelajaranQuizGuru> createState() => _MataPelajaranQuizGuruState();
 }
 
-class _MataPelajaranGuruState extends State<MataPelajaranGuru> {
+class _MataPelajaranQuizGuruState extends State<MataPelajaranQuizGuru> {
   MataPelajaranGuruController matpelGuruC =
       Get.find<MataPelajaranGuruController>();
 
@@ -26,7 +26,7 @@ class _MataPelajaranGuruState extends State<MataPelajaranGuru> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Mata Pelajaran")),
+      appBar: AppBar(title: const Text("Mata Pelajaran Quiz")),
       body: Column(
         children: [
           // Filter Dropdown
@@ -88,31 +88,6 @@ class _MataPelajaranGuruState extends State<MataPelajaranGuru> {
                             const SizedBox(height: 4),
                             Text("Guru: ${data.guru.nama}"),
                             const SizedBox(height: 8),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Text("${data.jumlahBuku} Materi",
-                                      style:
-                                          const TextStyle(color: Colors.red)),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text("${data.jumlahVideo} Video",
-                                      style:
-                                          const TextStyle(color: Colors.blue),
-                                      textAlign: TextAlign.center),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    "Diperbarui: \n${(data.materi.isNotEmpty ? data.materi.last.tanggal : data.createdAt).getSimpleDayAndDate()}",
-                                    textAlign: TextAlign.end,
-                                  ),
-                                )
-                              ],
-                            ),
                           ],
                         ),
                       ),

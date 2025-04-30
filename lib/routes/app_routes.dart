@@ -28,6 +28,8 @@ class AppRoutes {
   static const String reviewSubmitTugasSiswaOnGuru =
       "/review-submit-tugas-siswa-on-guru";
 
+  static const String mataPelajaranQuizGuru = "/matapelajaran-quiz-guru";
+
   //
   static const String welcome = "/welcome";
   static const String selection = "/selection";

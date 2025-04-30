@@ -67,7 +67,7 @@ class GuruDashboardPage extends StatelessWidget {
                             Get.toNamed(AppRoutes.tugasGuru);
                             break;
                           case 2:
-                            Get.toNamed(AppRoutes.guruMatpel);
+                            Get.toNamed(AppRoutes.mataPelajaranQuizGuru);
                             break;
                           case 3:
                             Get.toNamed(AppRoutes.profileguru);
