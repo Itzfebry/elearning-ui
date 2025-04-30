@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ui/routes/app_routes.dart';
@@ -67,8 +69,18 @@ class _MataPelajaranQuizGuruState extends State<MataPelajaranQuizGuru> {
                 itemBuilder: (context, index) {
                   final data = matpelGuruC.mataPelajaranM!.data[index];
                   return GestureDetector(
-                    onTap: () =>
-                        Get.toNamed(AppRoutes.materiSiswa, arguments: data.id),
+                    onTap: () {
+                      log(tahunAjaranC.selectedTahun.value.toString());
+                      Get.toNamed(
+                        AppRoutes.quizGuru,
+                        arguments: {
+                          'id': data.id,
+                          'matpel': data.nama,
+                          'kelas': kelasC.selectedKelas.value,
+                          'tahun_ajaran': tahunAjaranC.selectedTahun.value
+                        },
+                      );
+                    },
                     child: Card(
                       margin: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),

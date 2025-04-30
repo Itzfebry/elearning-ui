@@ -3,7 +3,9 @@ import 'package:ui/views/guru/mata_pelajaran/bindings/matpel_guru_binding.dart';
 import 'package:ui/views/guru/mata_pelajaran/index.dart';
 import 'package:ui/views/guru/profiles/index.dart';
 import 'package:ui/views/guru/quiz/bindings/matpel_quiz_guru_binding.dart';
+import 'package:ui/views/guru/quiz/bindings/quiz_guru_binding.dart';
 import 'package:ui/views/guru/quiz/index.dart';
+import 'package:ui/views/guru/quiz/quiz.dart';
 import 'package:ui/views/guru/tugas/bindings/detail_submit_tugas_siswa_binding.dart';
 import 'package:ui/views/guru/tugas/bindings/tugas_detail_guru_binding.dart';
 import 'package:ui/views/guru/tugas/bindings/tugas_guru_binding.dart';
@@ -153,6 +155,11 @@ class AppPages {
       name: AppRoutes.mataPelajaranQuizGuru,
       page: () => const MataPelajaranQuizGuru(),
       binding: MatpelQuizGuruBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.quizGuru,
+      page: () => QuizGuru(),
+      binding: QuizGuruBinding(),
     ),
   ];
 }
