@@ -15,6 +15,7 @@ import 'package:ui/views/guru/tugas/detail.dart';
 import 'package:ui/views/guru/tugas/detail_submit_tugas.dart';
 import 'package:ui/views/guru/tugas/index.dart';
 import 'package:ui/views/guru/tugas/review_submit_tugas.dart';
+import 'package:ui/views/siswa/bindings/notifikasi_binding.dart';
 import 'package:ui/views/siswa/quiz/bindings/matpel_quiz_binding.dart';
 import 'package:ui/views/siswa/quiz/bindings/quiz_binding.dart';
 import 'package:ui/views/siswa/quiz/bindings/quiz_finish_binding.dart';
@@ -50,9 +51,9 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.notifikasiSiswa,
-      page: () => const NotifSiswa(),
+      page: () => NotifSiswa(),
       middlewares: [AuthMiddleware()], // AuthMiddleware for siswaDashboard
-      // binding: AuthBinding(),
+      binding: NotifikasiBinding(),
     ),
     GetPage(
       name: AppRoutes.guruDashboard,

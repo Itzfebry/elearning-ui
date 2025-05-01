@@ -1,22 +1,22 @@
+import 'package:get/get.dart';
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ui/constans/api_constans.dart';
 
-class NotifikasiCountController extends GetxController {
-  var notifCount = 0.obs;
+class NotifikasiController extends GetxController {
   var isLoading = false.obs;
+  var dataNotif = [].obs;
 
   @override
   void onInit() {
     super.onInit();
-    getNotifCount();
+    getNotif();
   }
 
-  Future<void> getNotifCount() async {
+  Future<void> getNotif() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
 
@@ -30,13 +30,13 @@ class NotifikasiCountController extends GetxController {
     try {
       isLoading(true);
       final response = await http.get(
-        Uri.parse(ApiConstants.notifikasiCountEnpoit),
+        Uri.parse(ApiConstants.notifikasiEnpoit),
         headers: headers,
       );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        notifCount.value = data['unread_count'];
+        dataNotif.value = data['notifications'];
       } else {
         log("Terjadi kesalahan get notifikasi: ${response.statusCode}");
       }
