@@ -49,7 +49,10 @@ class SiswaDashboardPage extends StatelessWidget {
         title: "Notifikasi",
         icon: Icons.notifications_active_rounded,
         color: Colors.pink.shade200,
-        onTap: () => Get.toNamed(AppRoutes.notifikasiSiswa),
+        onTap: () => Get.toNamed(AppRoutes.notifikasiSiswa)?.then((_) {
+          siswaC.getMe();
+          notifC.getNotifCount();
+        }),
       ),
     ];
 
@@ -126,72 +129,80 @@ class SiswaDashboardPage extends StatelessWidget {
                       );
                     }
                     return Expanded(
-                      child: GridView.count(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
-                        children: menuItems.map((item) {
-                          return GestureDetector(
-                            onTap: item.onTap,
-                            child: Stack(
-                              fit: StackFit.expand,
-                              clipBehavior: Clip.none,
-                              children: [
-                                Positioned(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: item.color,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    padding: const EdgeInsets.all(16),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(item.icon,
-                                            size: 40, color: Colors.white),
-                                        const SizedBox(height: 12),
-                                        Text(
-                                          item.title,
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                if (item.title == "Notifikasi" &&
-                                    notifC.notifCount.value > 0)
+                      child: RefreshIndicator(
+                        onRefresh: () {
+                          notifC.getNotifCount();
+                          siswaC.getMe();
+                          return Future.value();
+                        },
+                        child: GridView.count(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                          children: menuItems.map((item) {
+                            return GestureDetector(
+                              onTap: item.onTap,
+                              child: Stack(
+                                fit: StackFit.expand,
+                                clipBehavior: Clip.none,
+                                children: [
                                   Positioned(
-                                    top: -7,
-                                    right: -5,
                                     child: Container(
-                                      width: 30,
-                                      height: 30,
                                       decoration: BoxDecoration(
-                                        color: Colors.red,
+                                        color: item.color,
                                         borderRadius: BorderRadius.circular(20),
                                       ),
-                                      child: Center(
-                                        child: MyText(
-                                          text: notifC.notifCount.value
-                                              .toString(),
-                                          textAlign: TextAlign.center,
-                                          fontSize: 13,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w900,
-                                        ),
+                                      padding: const EdgeInsets.all(16),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(item.icon,
+                                              size: 40, color: Colors.white),
+                                          const SizedBox(height: 12),
+                                          Text(
+                                            item.title,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
+                                  if (item.title == "Notifikasi" &&
+                                      notifC.notifCount.value > 0)
+                                    Positioned(
+                                      top: -7,
+                                      right: -5,
+                                      child: Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        child: Center(
+                                          child: MyText(
+                                            text: notifC.notifCount.value
+                                                .toString(),
+                                            textAlign: TextAlign.center,
+                                            fontSize: 13,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       ),
                     );
                   },

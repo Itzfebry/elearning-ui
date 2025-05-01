@@ -11,13 +11,19 @@ class NotifSiswa extends StatelessWidget {
   aksi(type) {
     switch (type) {
       case "Quiz":
-        Get.toNamed(AppRoutes.matpelQuiz);
+        Get.toNamed(AppRoutes.matpelQuiz)?.then((_) {
+          notifC.getNotif();
+        });
         break;
       case "Materi":
-        Get.toNamed(AppRoutes.kelasmatapelajarans);
+        Get.toNamed(AppRoutes.kelasmatapelajarans)?.then((_) {
+          notifC.getNotif();
+        });
         break;
       case "Tugas":
-        Get.toNamed(AppRoutes.tugasSiswa);
+        Get.toNamed(AppRoutes.tugasSiswa)?.then((_) {
+          notifC.getNotif();
+        });
         break;
       default:
     }
@@ -26,7 +32,11 @@ class NotifSiswa extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Notifikasi")),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text("Notifikasi"),
+        backgroundColor: Colors.white,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Obx(() {
@@ -41,6 +51,7 @@ class NotifSiswa extends StatelessWidget {
             itemBuilder: (context, index) {
               var data = notifC.dataNotif[index];
               return cards(
+                id: data['id'],
                 type: data['type'],
                 judul: data['judul'],
                 isActive: data['is_active'],
@@ -54,19 +65,30 @@ class NotifSiswa extends StatelessWidget {
   }
 
   Widget cards({
+    required String id,
     required String type,
     required String judul,
     required bool isActive,
     required String waktu,
   }) {
     return InkWell(
-      onTap: () => aksi(type),
+      onTap: () {
+        notifC.readNotif(id: id);
+        aksi(type);
+      },
       child: Container(
         margin: const EdgeInsets.only(top: 10),
         decoration: BoxDecoration(
-          color: const Color(0xFFBBDBD0),
-          borderRadius: BorderRadius.circular(15),
-        ),
+            color: isActive ? const Color(0xFFBBDBD0) : Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.grey,
+                spreadRadius: 0,
+                blurRadius: 2,
+                offset: Offset(0, 2),
+              )
+            ]),
         child: ListTile(
           leading: CircleAvatar(
             radius: 22,

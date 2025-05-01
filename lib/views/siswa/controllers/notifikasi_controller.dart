@@ -46,4 +46,35 @@ class NotifikasiController extends GetxController {
       isLoading(false);
     }
   }
+
+  Future<void> readNotif({required id}) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception("Token not found");
+    }
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      isLoading(true);
+      final response = await http.post(
+        Uri.parse("${ApiConstants.notifikasiEnpoit}/$id/baca"),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        log(data.toString());
+      } else {
+        log("Terjadi kesalahan Read notifikasi: ${response.statusCode}");
+      }
+    } catch (e) {
+      log("Error Read Notif: $e");
+    } finally {
+      isLoading(false);
+    }
+  }
 }
