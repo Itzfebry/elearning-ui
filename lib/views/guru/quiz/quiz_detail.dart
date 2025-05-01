@@ -59,6 +59,7 @@ class QuizDetailGuru extends StatelessWidget {
               return ListView.builder(
                 itemCount: quizDetailGuruC.data.length,
                 shrinkWrap: true,
+                padding: const EdgeInsets.only(bottom: 7),
                 itemBuilder: (context, index) {
                   var data = quizDetailGuruC.data[index];
                   return Padding(
@@ -80,11 +81,11 @@ class QuizDetailGuru extends StatelessWidget {
                             horizontal: 10, vertical: 5),
                         child: Row(
                           children: [
-                            const SizedBox(
+                            SizedBox(
                               width: 30,
                               child: CircleAvatar(
-                                child:
-                                    Text("1", style: TextStyle(fontSize: 14)),
+                                child: Text("${index + 1}",
+                                    style: const TextStyle(fontSize: 14)),
                               ),
                             ),
                             const SizedBox(width: 10),
