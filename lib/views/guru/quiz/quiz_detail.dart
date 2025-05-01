@@ -60,6 +60,7 @@ class QuizDetailGuru extends StatelessWidget {
                 itemCount: quizDetailGuruC.data.length,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
+                  var data = quizDetailGuruC.data[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Container(
@@ -74,30 +75,30 @@ class QuizDetailGuru extends StatelessWidget {
                               blurRadius: 2,
                             ),
                           ]),
-                      child: const Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
                         child: Row(
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               width: 30,
                               child: CircleAvatar(
                                 child:
                                     Text("1", style: TextStyle(fontSize: 14)),
                               ),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 MyText(
-                                  text: "Muhammad Rhomaedi",
+                                  text: data['siswa']['nama'],
                                   fontSize: 14,
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600,
                                 ),
                                 MyText(
-                                  text: "Skor : 300",
+                                  text: "Skor : ${data['skor']}",
                                   fontSize: 12,
                                   color: Colors.black,
                                   fontWeight: FontWeight.w800,
