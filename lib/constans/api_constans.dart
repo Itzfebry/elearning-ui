@@ -31,4 +31,8 @@ class ApiConstants {
   static String quizTopFiveEnpoint = "$baseUrlApi/quiz-top-five";
   static String quizGuruEnpoint = "$baseUrlApi/quiz-guru";
   static String quizDetailGuruEnpoint = "$baseUrlApi/get-quiz-attempt-guru";
+
+  // Notifikasi
+  static String notifikasiCountEnpoit = "$baseUrlApi/siswa/notifikasi/count";
+  static String notifikasiEnpoit = "$baseUrlApi/siswa/notifikasi";
 }
