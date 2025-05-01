@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -101,7 +102,8 @@ class MateriController extends GetxController {
         }
       }
 
-      final fullUrl = "http://192.168.1.10:8000/storage/$filePath";
+      final fullUrl = "${ApiConstants.baseUrl}/storage/$filePath";
+      log(fullUrl.toString());
 
       final response = await http.get(Uri.parse(fullUrl));
       if (response.statusCode == 200) {
@@ -117,7 +119,8 @@ class MateriController extends GetxController {
         final file = File('${downloadsDir.path}/$filename');
         await file.writeAsBytes(response.bodyBytes);
         log("File disimpan di: ${file.path}");
-        snackbarSuccess("File berhasil disimpan sebagai $filename");
+        snackbarAlert("Download...", "File berhasil disimpan sebagai $filename",
+            const Color(0xFF3C4D55));
       } else {
         log("Gagal download: ${response.statusCode}");
       }
