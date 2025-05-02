@@ -1,240 +1,162 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: must_be_immutable
 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ui/views/siswa/controllers/siswa_controller.dart';
 
 class ProfileSiswa extends StatelessWidget {
-  const ProfileSiswa({super.key});
+  ProfileSiswa({super.key});
+  SiswaController siswaC = Get.find<SiswaController>();
 
   @override
   Widget build(BuildContext context) {
+    final kelebihan = {
+      'Matematika': 85,
+      'Bahasa Inggris': 78,
+    };
+
+    final kekurangan = {
+      'Fisika': 45,
+      'Kimia': 50,
+    };
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Profile Siswa"),
+        title: const Text('Profil Siswa'),
+        centerTitle: true,
       ),
-      body: const ProfileWidget(),
-    );
-  }
-}
-
-class ProfileWidget extends StatelessWidget {
-  const ProfileWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(42, 116, 42, 27),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Obx(
+              () => Column(
                 children: [
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Profil',
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'Febry',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 32),
-                      Text(
-                        'Kelebihan',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 23),
-                      Text(
-                        'Matematika',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                  const CircleAvatar(
+                    radius: 50,
+                    child: Icon(Icons.person, size: 50),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      const CircleAvatar(
-                        radius: 38,
-                        backgroundImage: NetworkImage('https://cdn.builder.io/api/v1/image/assets/7269843b34254a84ac205c1bfd7d31c3/85a37fd6b502cfa6f311cf6cb4af2f561dfa7c5fcbfb1afdd620a50cbfe97ea1?apiKey=7269843b34254a84ac205c1bfd7d31c3&'),
-                      ),
-                      const SizedBox(height: 30),
-                      RichText(
-                        text: const TextSpan(
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                          children: [
-                            TextSpan(text: 'Tipe Belajar Kamu : '),
-                            TextSpan(
-                              text: 'Visual',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 28),
-                      const Text(
-                        '95%',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                  const SizedBox(height: 12),
+                  Text(
+                    siswaC.dataUser['user']['nama'],
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Kelas ${siswaC.dataUser['user']['kelas']}',
+                    style: const TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    siswaC.dataUser['user']['user']['email'].toString(),
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ],
               ),
-              const SizedBox(height: 17),
-              const ProgressBar(progress: 0.95),
-              const SizedBox(height: 10),
-              const SkillRow(skillName: 'Bahasa Inggris', percentage: '83%'),
-              const SizedBox(height: 12),
-              const ProgressBar(progress: 0.83),
-              const SizedBox(height: 24),
-              const Text(
-                'Catatan',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 15),
-              const NoteCard(
-                text: '"Kamu sudah sangat bagus dalam memahami bentuk-bentuk dasar geometri. Kerja Bagus!!\nRekomendasi : Lanjutkan Belajar Ruang 3 Dimensi"',
-                highlightedText: 'bentuk-bentuk dasar geometri.',
-              ),
-              const SizedBox(height: 29),
-              const Text(
-                'Kekurangan',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 20),
-              const SkillRow(skillName: 'Ilmu Pengetahuan Sosial', percentage: '44%'),
-              const SizedBox(height: 17),
-              const ProgressBar(progress: 0.44),
-              const SizedBox(height: 10),
-              const SkillRow(skillName: 'Pendidikan Agama Islam', percentage: '40%'),
-              const SizedBox(height: 12),
-              const ProgressBar(progress: 0.40),
-              const SizedBox(height: 22),
-              const NoteCard(
-                text: 'tingkatkan tentang materi sumber daya manusia dan ilmu tajwid. Pelajari Materi Ilmu Tajwid dan coba tulis di kertas',
-                highlightedText: 'sumber daya manusia dan ilmu tajwid.',
-              ),
-              const SizedBox(height: 34),
-              Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xFFCBCACA),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 22),
-                child: Column(
-                  children: [
-                    Image.network(
-                      'https://cdn.builder.io/api/v1/image/assets/7269843b34254a84ac205c1bfd7d31c3/0ec078c164d711057aced8e3139957cf4a9b9f980819b81536b073e0ee525332?apiKey=7269843b34254a84ac205c1bfd7d31c3&',
-                      fit: BoxFit.contain,
-                    ),
-                    const SizedBox(height: 5),
-                    Container(
-                      height: 2,
-                      color: Colors.black,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 7),
-              const Text(
-                '3 bulan',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ProgressBar extends StatelessWidget {
-  final double progress;
-
-  const ProgressBar({super.key, required this.progress});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 8,
-      decoration: BoxDecoration(
-        color: const Color(0xFFD7CDCD),
-        borderRadius: BorderRadius.circular(40),
-      ),
-      child: FractionallySizedBox(
-        widthFactor: progress,
-        child: Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFE4FF3F),
-            borderRadius: BorderRadius.circular(40),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class NoteCard extends StatelessWidget {
-  final String text;
-  final String highlightedText;
-
-  const NoteCard({super.key, required this.text, required this.highlightedText});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 19, vertical: 11),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFECBB),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: RichText(
-        text: TextSpan(
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-          children: [
-            TextSpan(text: text.substring(0, text.indexOf(highlightedText))),
-            TextSpan(
-              text: highlightedText,
-              style: const TextStyle(color: Colors.red),
             ),
-            TextSpan(text: text.substring(text.indexOf(highlightedText) + highlightedText.length)),
+            const Divider(height: 32, thickness: 1),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Kelebihan',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(height: 8),
+            ...kelebihan.entries.map(
+              (entry) => ProgressItem(
+                title: entry.key,
+                percentage: entry.value,
+                color: Colors.green,
+              ),
+            ),
+            const SizedBox(height: 24),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Kekurangan',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(height: 8),
+            ...kekurangan.entries.map(
+              (entry) => ProgressItem(
+                title: entry.key,
+                percentage: entry.value,
+                color: Colors.red,
+              ),
+            ),
+            const SizedBox(height: 32),
+            ElevatedButton.icon(
+              onPressed: () {
+                // Navigasi ke ubah password
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text("Fitur ubah password belum tersedia")),
+                );
+              },
+              icon: const Icon(
+                Icons.lock_reset,
+                color: Colors.black,
+              ),
+              label: const Text(
+                'Ubah Password',
+                style: TextStyle(color: Colors.black),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue.shade200,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
+                textStyle: const TextStyle(fontSize: 16),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text('Konfirmasi Logout'),
+                    content: const Text('Apakah Anda yakin ingin logout?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(ctx).pop(); // Tutup dialog
+                        },
+                        child: const Text('Batal'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(ctx).pop(); // Tutup dialog
+                          // Proses logout di sini
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Berhasil logout')),
+                          );
+                          // Arahkan ke halaman login atau root
+                          Navigator.of(context).pushReplacementNamed('/login');
+                        },
+                        child: const Text('Logout'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.logout,
+                color: Colors.black,
+              ),
+              label: const Text(
+                'Logout',
+                style: TextStyle(color: Colors.black),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red.shade300,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
+                textStyle: const TextStyle(fontSize: 16),
+              ),
+            ),
           ],
         ),
       ),
@@ -242,32 +164,38 @@ class NoteCard extends StatelessWidget {
   }
 }
 
-class SkillRow extends StatelessWidget {
-  final String skillName;
-  final String percentage;
+class ProgressItem extends StatelessWidget {
+  final String title;
+  final int percentage;
+  final Color color;
 
-  const SkillRow({super.key, required this.skillName, required this.percentage});
+  const ProgressItem({
+    super.key,
+    required this.title,
+    required this.percentage,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          skillName,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '$title ($percentage%)',
+            style: const TextStyle(fontSize: 16),
           ),
-        ),
-        Text(
-          percentage,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
+          const SizedBox(height: 4),
+          LinearProgressIndicator(
+            value: percentage / 100,
+            color: color,
+            backgroundColor: color.withOpacity(0.2),
+            minHeight: 8,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

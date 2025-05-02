@@ -37,7 +37,7 @@ class SiswaDashboardPage extends StatelessWidget {
         title: "Profil",
         icon: Icons.person_rounded,
         color: Colors.amber.shade200,
-        onTap: () => Get.to(const ProfileSiswa()),
+        onTap: () => Get.toNamed(AppRoutes.profileSiswa),
       ),
       _DashboardMenu(
         title: "Tugas",

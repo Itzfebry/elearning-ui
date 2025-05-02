@@ -16,6 +16,7 @@ import 'package:ui/views/guru/tugas/detail_submit_tugas.dart';
 import 'package:ui/views/guru/tugas/index.dart';
 import 'package:ui/views/guru/tugas/review_submit_tugas.dart';
 import 'package:ui/views/siswa/bindings/notifikasi_binding.dart';
+import 'package:ui/views/siswa/profile.dart';
 import 'package:ui/views/siswa/quiz/bindings/matpel_quiz_binding.dart';
 import 'package:ui/views/siswa/quiz/bindings/quiz_binding.dart';
 import 'package:ui/views/siswa/quiz/bindings/quiz_finish_binding.dart';
@@ -121,6 +122,11 @@ class AppPages {
       name: AppRoutes.rankSiswa,
       page: () => RankSiswa(),
       binding: RankingBinding(),
+    ),
+
+    GetPage(
+      name: AppRoutes.profileSiswa,
+      page: () => ProfileSiswa(),
     ),
 
     // GURU
