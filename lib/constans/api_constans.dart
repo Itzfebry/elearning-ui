@@ -35,4 +35,7 @@ class ApiConstants {
   // Notifikasi
   static String notifikasiCountEnpoit = "$baseUrlApi/siswa/notifikasi/count";
   static String notifikasiEnpoit = "$baseUrlApi/siswa/notifikasi";
+
+  // Ubah Password
+  static String ubahPasswordEnpoint = "$baseUrlApi/change-password";
 }

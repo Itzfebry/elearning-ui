@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ui/routes/app_routes.dart';
 import 'package:ui/views/siswa/controllers/siswa_controller.dart';
 
 class ProfileSiswa extends StatelessWidget {
@@ -90,11 +91,7 @@ class ProfileSiswa extends StatelessWidget {
             const SizedBox(height: 32),
             ElevatedButton.icon(
               onPressed: () {
-                // Navigasi ke ubah password
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text("Fitur ubah password belum tersedia")),
-                );
+                Get.toNamed(AppRoutes.ubahPassord);
               },
               icon: const Icon(
                 Icons.lock_reset,

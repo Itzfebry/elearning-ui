@@ -16,6 +16,7 @@ import 'package:ui/views/guru/tugas/detail_submit_tugas.dart';
 import 'package:ui/views/guru/tugas/index.dart';
 import 'package:ui/views/guru/tugas/review_submit_tugas.dart';
 import 'package:ui/views/siswa/bindings/notifikasi_binding.dart';
+import 'package:ui/views/siswa/bindings/ubah_password_binding.dart';
 import 'package:ui/views/siswa/profile.dart';
 import 'package:ui/views/siswa/quiz/bindings/matpel_quiz_binding.dart';
 import 'package:ui/views/siswa/quiz/bindings/quiz_binding.dart';
@@ -31,6 +32,7 @@ import 'package:ui/views/siswa/ranking/bindings/ranking_binding.dart';
 import 'package:ui/views/siswa/ranking/index.dart';
 import 'package:ui/views/siswa/ranking/matpel_rank.dart';
 import 'package:ui/views/siswa/ranking/matpel_rank_detail.dart';
+import 'package:ui/views/siswa/ubah_password.dart';
 
 import 'app_routes.dart';
 import 'export.dart';
@@ -127,6 +129,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.profileSiswa,
       page: () => ProfileSiswa(),
+    ),
+    GetPage(
+      name: AppRoutes.ubahPassord,
+      page: () => const UbahPasswordPage(),
+      binding: UbahPasswordBinding(),
     ),
 
     // GURU
