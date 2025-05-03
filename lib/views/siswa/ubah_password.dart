@@ -20,12 +20,6 @@ class _UbahPasswordPageState extends State<UbahPasswordPage> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      // Simulasi proses ubah password
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password berhasil diubah')),
-      );
-
-      // Kosongkan field
       ubahPasswordC.oldPasswordC.value.clear();
       ubahPasswordC.newPasswordC.value.clear();
       ubahPasswordC.confirmPasswordC.value.clear();
