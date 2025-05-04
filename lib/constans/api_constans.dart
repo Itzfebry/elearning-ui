@@ -38,4 +38,7 @@ class ApiConstants {
 
   // Ubah Password
   static String ubahPasswordEnpoint = "$baseUrlApi/change-password";
+
+  // Ubah Password
+  static String analysisSiswaEnpoint = "$baseUrlApi/analysis-siswa";
 }

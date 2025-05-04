@@ -10,7 +10,9 @@ import 'package:ui/widgets/my_snackbar.dart';
 
 class SiswaController extends GetxController {
   var isLoading = false.obs;
+  var isLoadingAnalysis = false.obs;
   var dataUser = <String, dynamic>{}.obs;
+  var dataAnalysis = <String, dynamic>{}.obs;
 
   @override
   void onInit() {
@@ -88,6 +90,38 @@ class SiswaController extends GetxController {
       }
     } catch (e) {
       log(e.toString());
+    }
+  }
+
+  Future<void> getAnalysis() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception("Token not found");
+    }
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      isLoadingAnalysis(true);
+      final response = await http.get(
+        Uri.parse(ApiConstants.analysisSiswaEnpoint),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        dataAnalysis.value = data;
+        log(dataAnalysis.toString());
+      } else {
+        log("Terjadi kesalahan get data analysis: ${response.statusCode}");
+      }
+    } catch (e) {
+      log("Error anlysis: $e");
+    } finally {
+      isLoadingAnalysis(false);
     }
   }
 }

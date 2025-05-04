@@ -35,10 +35,9 @@ class AuthController extends GetxController {
           headers: headers,
         );
 
-        final json = jsonDecode(response.body);
-        final user = json['data']['user'];
-
         if (response.statusCode == 200) {
+          final json = jsonDecode(response.body);
+          final user = json['data']['user'];
           await prefs?.setString('token', json['data']['token']);
           await prefs?.setString('nama', user['nama']);
           await prefs?.setString('role', user['user']['role']);
