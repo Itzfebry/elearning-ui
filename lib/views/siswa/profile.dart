@@ -125,13 +125,7 @@ class ProfileSiswa extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(ctx).pop(); // Tutup dialog
-                          // Proses logout di sini
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Berhasil logout')),
-                          );
-                          // Arahkan ke halaman login atau root
-                          Navigator.of(context).pushReplacementNamed('/login');
+                          siswaC.logout(role: "siswa");
                         },
                         child: const Text('Logout'),
                       ),

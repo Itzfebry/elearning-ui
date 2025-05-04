@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:ui/routes/app_routes.dart';
 import 'package:ui/views/siswa/controllers/notifikasi_count_controller.dart';
 import 'package:ui/views/siswa/controllers/siswa_controller.dart';
-import 'package:ui/views/siswa/profile.dart';
 import 'package:ui/widgets/my_text.dart';
 
 class SiswaDashboardPage extends StatelessWidget {
@@ -56,162 +55,162 @@ class SiswaDashboardPage extends StatelessWidget {
       ),
     ];
 
-    return WillPopScope(
-      onWillPop: () async {
-        final shouldLogout = await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Konfirmasi Logout'),
-            content: const Text('Apakah anda ingin Logout?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('Batal'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: const Text(
-                  'Logout',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-            ],
-          ),
-        );
-        if (shouldLogout == true) {
-          siswaC.logout(role: "siswa");
-        }
-        return false;
-      },
-      child: Scaffold(
-        backgroundColor: Colors.grey[100],
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Header
-                Obx(() {
-                  if (siswaC.isLoading.value) {
-                    return const CircularProgressIndicator();
-                  }
-                  var user = siswaC.dataUser['user'];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "E-Learning",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w600),
-                      ),
-                      Text(
-                        "Hi, ${user?['nama'] ?? 'Siswa'}",
-                        style: const TextStyle(
-                            fontSize: 28, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "Kelas : ${user?['kelas']}",
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  );
-                }),
-                const SizedBox(height: 30),
+    // return WillPopScope(
+    //   onWillPop: () async {
+    // return snackbarAlert("a", "Klik 2x untuk keluar", Colors.black);
+    //     final shouldLogout = await showDialog(
+    //       context: context,
+    //       builder: (context) => AlertDialog(
+    //         title: const Text('Konfirmasi Logout'),
+    //         content: const Text('Apakah anda ingin Logout?'),
+    //         actions: [
+    //           TextButton(
+    //             onPressed: () => Navigator.of(context).pop(false),
+    //             child: const Text('Batal'),
+    //           ),
+    //           TextButton(
+    //             onPressed: () => Navigator.of(context).pop(true),
+    //             child: const Text(
+    //               'Logout',
+    //               style: TextStyle(color: Colors.red),
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //     );
+    //     if (shouldLogout == true) {
+    //       siswaC.logout(role: "siswa");
+    //     }
+    //     return false;
+    // },
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header
+              Obx(() {
+                if (siswaC.isLoading.value) {
+                  return const CircularProgressIndicator();
+                }
+                var user = siswaC.dataUser['user'];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "E-Learning",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      "Hi, ${user?['nama'] ?? 'Siswa'}",
+                      style: const TextStyle(
+                          fontSize: 28, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "Kelas : ${user?['kelas']}",
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                );
+              }),
+              const SizedBox(height: 30),
 
-                // Menu Grid
-                Obx(
-                  () {
-                    if (notifC.isLoading.value) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    return Expanded(
-                      child: RefreshIndicator(
-                        onRefresh: () {
-                          notifC.getNotifCount();
-                          siswaC.getMe();
-                          return Future.value();
-                        },
-                        child: GridView.count(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
-                          children: menuItems.map((item) {
-                            return GestureDetector(
-                              onTap: item.onTap,
-                              child: Stack(
-                                fit: StackFit.expand,
-                                clipBehavior: Clip.none,
-                                children: [
+              // Menu Grid
+              Obx(
+                () {
+                  if (notifC.isLoading.value) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: () {
+                        notifC.getNotifCount();
+                        siswaC.getMe();
+                        return Future.value();
+                      },
+                      child: GridView.count(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        children: menuItems.map((item) {
+                          return GestureDetector(
+                            onTap: item.onTap,
+                            child: Stack(
+                              fit: StackFit.expand,
+                              clipBehavior: Clip.none,
+                              children: [
+                                Positioned(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: item.color,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    padding: const EdgeInsets.all(16),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(item.icon,
+                                            size: 40, color: Colors.white),
+                                        const SizedBox(height: 12),
+                                        Text(
+                                          item.title,
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                if (item.title == "Notifikasi" &&
+                                    notifC.notifCount.value > 0)
                                   Positioned(
+                                    top: -7,
+                                    right: -5,
                                     child: Container(
+                                      width: 30,
+                                      height: 30,
                                       decoration: BoxDecoration(
-                                        color: item.color,
+                                        color: Colors.red,
                                         borderRadius: BorderRadius.circular(20),
                                       ),
-                                      padding: const EdgeInsets.all(16),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(item.icon,
-                                              size: 40, color: Colors.white),
-                                          const SizedBox(height: 12),
-                                          Text(
-                                            item.title,
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ],
+                                      child: Center(
+                                        child: MyText(
+                                          text: notifC.notifCount.value
+                                              .toString(),
+                                          textAlign: TextAlign.center,
+                                          fontSize: 13,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w900,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                  if (item.title == "Notifikasi" &&
-                                      notifC.notifCount.value > 0)
-                                    Positioned(
-                                      top: -7,
-                                      right: -5,
-                                      child: Container(
-                                        width: 30,
-                                        height: 30,
-                                        decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        child: Center(
-                                          child: MyText(
-                                            text: notifC.notifCount.value
-                                                .toString(),
-                                            textAlign: TextAlign.center,
-                                            fontSize: 13,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w900,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
                       ),
-                    );
-                  },
-                ),
-              ],
-            ),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
         ),
       ),
+      // ),
     );
   }
 }
