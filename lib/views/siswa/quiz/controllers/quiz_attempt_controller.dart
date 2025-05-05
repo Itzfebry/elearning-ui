@@ -103,7 +103,7 @@ class QuizAttemptController extends GetxController {
         final json = jsonDecode(response.body);
         isCorrect.value = json['data']['correct'];
         isLastQuestion.value = json['data']['selesai'];
-        quizId.value = json['data']['quiz_id'];
+        quizId.value = json['data']['quiz_id'].toString();
         quizAnswerM = QuizAnswerModel.fromJson(json);
       } else {
         log("Terjadi kesalahan post answer quiz: ${response.statusCode}");

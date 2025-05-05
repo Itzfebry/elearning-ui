@@ -129,6 +129,7 @@ class _SoalQuizState extends State<SoalQuiz> {
               jawabanSiswa: opsi,
             );
             log("APAPAH BENAR: ${quizAttemptC.isCorrect.value}");
+            log("QUIZ ID: ${quizAttemptC.quizId.value}");
             showResultDialog(
               context,
               quizAttemptC.isCorrect.value.toString(),
