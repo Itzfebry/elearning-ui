@@ -59,52 +59,60 @@ class ProfileSiswa extends StatelessWidget {
                 var kelebihan = siswaC.dataAnalysis['kelebihan'];
                 var kekurangan = siswaC.dataAnalysis['kekurangan'];
 
-                if (siswaC.dataAnalysis['kelebihan'].isEmpty ||
-                    siswaC.dataAnalysis['kekurangan'].isEmpty) {
-                  return const Center(child: Text(""));
-                }
-                return Column(children: [
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Kelebihan',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: siswaC.dataAnalysis['kelebihan'].length,
-                    itemBuilder: (context, index) {
-                      return ProgressItem(
-                        title: kelebihan[index]['mapel'],
-                        percentage: kelebihan[index]['persentase'],
-                        color: Colors.green,
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 24),
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Kekurangan',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: siswaC.dataAnalysis['kekurangan'].length,
-                    itemBuilder: (context, index) {
-                      return ProgressItem(
-                        title: kekurangan[index]['mapel'],
-                        percentage: kekurangan[index]['persentase'],
-                        color: Colors.red,
-                      );
-                    },
-                  ),
-                ]);
+                return Column(
+                  children: [
+                    if (siswaC.kelebihanIsEmpty.value)
+                      const Text("")
+                    else
+                      Column(children: [
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Kelebihan',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: siswaC.dataAnalysis['kelebihan'].length,
+                          itemBuilder: (context, index) {
+                            return ProgressItem(
+                              title: kelebihan[index]['mapel'],
+                              percentage: kelebihan[index]['persentase'],
+                              color: Colors.green,
+                            );
+                          },
+                        ),
+                      ]),
+                    if (siswaC.kekuranganIsEmpty.value)
+                      const Text("")
+                    else
+                      Column(children: [
+                        const SizedBox(height: 24),
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Kekurangan',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: siswaC.dataAnalysis['kekurangan'].length,
+                          itemBuilder: (context, index) {
+                            return ProgressItem(
+                              title: kekurangan[index]['mapel'],
+                              percentage: kekurangan[index]['persentase'],
+                              color: Colors.red,
+                            );
+                          },
+                        ),
+                      ]),
+                  ],
+                );
               },
             ),
             const SizedBox(height: 32),

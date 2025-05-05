@@ -13,6 +13,8 @@ class SiswaController extends GetxController {
   var isLoadingAnalysis = false.obs;
   var dataUser = <String, dynamic>{}.obs;
   var dataAnalysis = <String, dynamic>{}.obs;
+  var kekuranganIsEmpty = true.obs;
+  var kelebihanIsEmpty = true.obs;
 
   @override
   void onInit() {
@@ -114,6 +116,16 @@ class SiswaController extends GetxController {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         dataAnalysis.value = data;
+        if (dataAnalysis['kelebihan'].length != 0) {
+          kelebihanIsEmpty(false);
+        } else {
+          kelebihanIsEmpty(true);
+        }
+        if (dataAnalysis['kekurangan'].length != 0) {
+          kekuranganIsEmpty(false);
+        } else {
+          kekuranganIsEmpty(true);
+        }
         log(dataAnalysis.toString());
       } else {
         log("Terjadi kesalahan get data analysis: ${response.statusCode}");
