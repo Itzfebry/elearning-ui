@@ -75,6 +75,7 @@ class RankSiswa extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return Column(
                       children: [
+                        const SizedBox(height: 5),
                         Stack(
                           alignment: Alignment.topRight,
                           children: [
@@ -102,6 +103,7 @@ class RankSiswa extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 5),
+                        Text(data[index]['skor']),
                         Text(data[index]['siswa']['nama']),
                       ],
                     );
