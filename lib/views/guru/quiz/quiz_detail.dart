@@ -93,13 +93,14 @@ class QuizDetailGuru extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 MyText(
-                                  text: data['siswa']['nama'],
+                                  text: data['nama'],
                                   fontSize: 14,
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600,
                                 ),
                                 MyText(
-                                  text: "Skor : ${data['skor']}",
+                                  text:
+                                      "Skor : ${data['skor']} | Nilai : ${data['persentase']} | KKM : ${data['kkm']}",
                                   fontSize: 12,
                                   color: Colors.black,
                                   fontWeight: FontWeight.w800,
