@@ -39,6 +39,7 @@ class QuizController extends GetxController {
       );
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
+        log(json.toString());
         quizM = QuizModel.fromJson(json);
         if (quizM!.data.isEmpty) {
           isEmptyData(true);
