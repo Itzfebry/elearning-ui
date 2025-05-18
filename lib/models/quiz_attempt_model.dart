@@ -38,9 +38,8 @@ class Data {
   String skor;
   int levelAkhir;
   int jumlahSoalDijawab;
-  int benarFase1;
-  int benarFase2;
   int fase;
+  String benar;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -51,9 +50,8 @@ class Data {
     required this.skor,
     required this.levelAkhir,
     required this.jumlahSoalDijawab,
-    required this.benarFase1,
-    required this.benarFase2,
     required this.fase,
+    required this.benar,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -65,9 +63,8 @@ class Data {
         skor: json["skor"],
         levelAkhir: json["level_akhir"],
         jumlahSoalDijawab: json["jumlah_soal_dijawab"],
-        benarFase1: json["benar_fase1"],
-        benarFase2: json["benar_fase2"],
         fase: json["fase"],
+        benar: json["benar"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
       );
@@ -79,9 +76,8 @@ class Data {
         "skor": skor,
         "level_akhir": levelAkhir,
         "jumlah_soal_dijawab": jumlahSoalDijawab,
-        "benar_fase1": benarFase1,
-        "benar_fase2": benarFase2,
         "fase": fase,
+        "benar": benar,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
       };

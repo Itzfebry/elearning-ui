@@ -13,37 +13,41 @@ import 'package:ui/widgets/my_snackbar.dart';
 class QuizAttemptController extends GetxController {
   var isLoadingAttempt = false.obs;
   var isLoadingAnswer = false.obs;
-  var isCorrect = 0.obs;
   var isLastQuestion = false.obs;
-  var quizId = "".obs;
+  var quizIdRx = "".obs;
+  var attemptId = "".obs;
+  var token = "".obs;
+  var nisn = "".obs;
   QuizAnswerModel? quizAnswerM;
   QuizQuestionController questionC = Get.find<QuizQuestionController>();
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+    final prefs = await SharedPreferences.getInstance();
+    token.value = prefs.getString('token') ?? "";
+    nisn.value = prefs.getString('nisn') ?? "";
     var quizId = Get.arguments['quiz_id'];
-    postQuizAttemptStart(quizId);
+    await postQuizAttemptStart(quizId);
+    attemptId.value = prefs.getString('attempt_id') ?? "";
   }
 
   Future<void> postQuizAttemptStart(var quizId) async {
     final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
-    final nisn = prefs.getString('nisn');
-
-    if (token == null) {
+    if (token.value == "") {
       throw Exception("Token not found");
     }
+
     final headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer $token',
+      'Authorization': 'Bearer ${token.value}',
     };
 
     try {
       isLoadingAttempt(true);
       Map body = {
         'quiz_id': quizId,
-        'nisn': nisn,
+        'nisn': nisn.value,
       };
       final response = await http.post(
         Uri.parse(ApiConstants.quizAttemptStartEnpoint),
@@ -53,7 +57,12 @@ class QuizAttemptController extends GetxController {
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
 
-        await prefs.setString('attempt_id', json['attempt_id'].toString());
+        if (json.containsKey('attempt_id')) {
+          await prefs.setString('attempt_id', json['attempt_id'].toString());
+          questionC.getQuizQuestion(json['attempt_id']);
+        } else {
+          log("JSON tidak memiliki 'attempt_id'");
+        }
 
         snackbarAlert(json['message'] ?? "Quiz",
             "Tidak boleh keluar dari quiz ini!.", Colors.green);
@@ -75,15 +84,12 @@ class QuizAttemptController extends GetxController {
     required String questionId,
     required String jawabanSiswa,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
-
-    if (token == null) {
+    if (token.value == "") {
       throw Exception("Token not found");
     }
     final headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer $token',
+      'Authorization': 'Bearer ${token.value}',
     };
 
     try {
@@ -101,10 +107,10 @@ class QuizAttemptController extends GetxController {
       );
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
-        isCorrect.value = json['data']['correct'];
         isLastQuestion.value = json['data']['selesai'];
-        quizId.value = json['data']['quiz_id'].toString();
+        quizIdRx.value = json['data']['quiz_id'].toString();
         quizAnswerM = QuizAnswerModel.fromJson(json);
+        log("DATA API = ${json['data']}");
       } else {
         log("Terjadi kesalahan post answer quiz: ${response.statusCode}");
       }

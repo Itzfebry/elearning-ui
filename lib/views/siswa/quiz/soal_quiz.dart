@@ -114,28 +114,26 @@ class _SoalQuizState extends State<SoalQuiz> {
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
       child: InkWell(
         onTap: () async {
-          final prefs = await SharedPreferences.getInstance();
-          final attemptId = prefs.getString('attempt_id');
           log({
-            "attempt_id": attemptId,
+            "attempt_id": quizAttemptC.attemptId.value,
             "question_id": questionId,
             "opsi": opsi,
           }.toString());
 
           try {
-            quizAttemptC.postQuizAttemptAnswer(
-              quizAttemptId: attemptId.toString(),
+            await quizAttemptC.postQuizAttemptAnswer(
+              quizAttemptId: quizAttemptC.attemptId.value.toString(),
               questionId: questionId,
               jawabanSiswa: opsi,
             );
-            log("APAPAH BENAR: ${quizAttemptC.isCorrect.value}");
-            log("QUIZ ID: ${quizAttemptC.quizId.value}");
+            log("APAPAH BENAR: ${quizAttemptC.quizAnswerM!.data.correct}");
+            log("QUIZ ID: ${quizAttemptC.quizIdRx.value}");
             showResultDialog(
               context,
-              quizAttemptC.isCorrect.value.toString(),
+              quizAttemptC.quizAnswerM?.data.correct.toString() ?? "0",
               "${opsi.toUpperCase()}. $label",
               quizAttemptC.isLastQuestion.value,
-              quizAttemptC.quizId.value.toString(),
+              quizAttemptC.quizIdRx.value.toString(),
             );
           } catch (e) {
             Get.back();
