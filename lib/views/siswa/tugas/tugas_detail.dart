@@ -106,28 +106,30 @@ class _TugasDetailState extends State<TugasDetail> {
     );
   }
 
-  Obx tugasBelum() {
-    return Obx(() {
-      if (tugasC.isLoading.value) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      } else if (tugasC.tugasM?.data.isEmpty ?? true) {
-        return emptyData();
-      } else {
-        return ListView.builder(
-          padding: const EdgeInsets.all(16),
-          shrinkWrap: true,
-          itemCount: tugasC.tugasM?.data.length ?? 0,
-          itemBuilder: (context, index) {
-            var data = tugasC.tugasM?.data[index];
-            return data?.submitTugas != null
-                ? emptyData()
-                : Card(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    child: ListTile(
+  Widget tugasBelum() {
+    return Obx(
+      () {
+        if (tugasC.isLoading.value) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (tugasC.tugasM?.data.isEmpty ?? true) {
+          return emptyData();
+        }
+        return Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.all(16),
+            shrinkWrap: true,
+            itemCount: tugasC.tugasM?.data.length ?? 0,
+            itemBuilder: (context, index) {
+              var data = tugasC.tugasM?.data[index];
+              return data?.submitTugas != null
+                  ? emptyData()
+                  : Card(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      child: ListTile(
                         title: Text(
                           data!.nama,
                           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -176,21 +178,25 @@ class _TugasDetailState extends State<TugasDetail> {
                                 "title": data.nama,
                                 "submitTugas": null
                               },
-                            )?.then((value) {
-                              if (value == true) {
-                                // Panggil ulang controller atau refresh data di halaman ini
-                                tugasC.getTugas(
-                                    id: Get.arguments.toString(),
-                                    type: "belum");
-                              }
-                            });
+                            )?.then(
+                              (value) {
+                                if (value == true) {
+                                  // Panggil ulang controller atau refresh data di halaman ini
+                                  tugasC.getTugas(
+                                      id: Get.arguments.toString(),
+                                      type: "belum");
+                                }
+                              },
+                            );
                           }
-                        }),
-                  );
-          },
+                        },
+                      ),
+                    );
+            },
+          ),
         );
-      }
-    });
+      },
+    );
   }
 
   Center emptyData() {
@@ -207,27 +213,29 @@ class _TugasDetailState extends State<TugasDetail> {
   }
 
   Obx tugasSelesai() {
-    return Obx(() {
-      if (tugasC.isLoading.value) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      } else if (tugasC.tugasM?.data.isEmpty ?? true) {
-        return emptyData();
-      } else {
-        return ListView.builder(
-          padding: const EdgeInsets.all(16),
-          shrinkWrap: true,
-          itemCount: tugasC.tugasM?.data.length ?? 0,
-          itemBuilder: (context, index) {
-            var data = tugasC.tugasM?.data[index];
-            return data?.submitTugas == null
-                ? emptyData()
-                : Card(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    child: ListTile(
+    return Obx(
+      () {
+        if (tugasC.isLoading.value) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (tugasC.tugasM?.data.isEmpty ?? true) {
+          return emptyData();
+        }
+        return Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.all(16),
+            shrinkWrap: true,
+            itemCount: tugasC.tugasM?.data.length ?? 0,
+            itemBuilder: (context, index) {
+              var data = tugasC.tugasM?.data[index];
+              return data?.submitTugas == null
+                  ? emptyData()
+                  : Card(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      child: ListTile(
                         title: Text(
                           data!.nama,
                           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -269,24 +277,29 @@ class _TugasDetailState extends State<TugasDetail> {
                           ),
                         ),
                         onTap: () async {
-                          Get.toNamed(AppRoutes.tugasCommitSiswa, arguments: {
-                            "id": data.submitTugas!.id,
-                            "tipe_tugas": "selesai",
-                            "title": data.nama,
-                            "submitTugas": {
+                          Get.toNamed(
+                            AppRoutes.tugasCommitSiswa,
+                            arguments: {
                               "id": data.submitTugas!.id,
-                              "tanggal": data.submitTugas!.tanggal,
-                              "nisn": data.submitTugas!.nisn,
-                              "tugas_id": data.submitTugas!.tugasId,
-                              "text": data.submitTugas?.text,
-                              "file": data.submitTugas?.file,
-                            }
-                          });
-                        }),
-                  );
-          },
+                              "tipe_tugas": "selesai",
+                              "title": data.nama,
+                              "submitTugas": {
+                                "id": data.submitTugas!.id,
+                                "tanggal": data.submitTugas!.tanggal,
+                                "nisn": data.submitTugas!.nisn,
+                                "tugas_id": data.submitTugas!.tugasId,
+                                "text": data.submitTugas?.text,
+                                "file": data.submitTugas?.file,
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    );
+            },
+          ),
         );
-      }
-    });
+      },
+    );
   }
 }
