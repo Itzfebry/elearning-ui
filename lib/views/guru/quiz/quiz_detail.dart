@@ -80,32 +80,63 @@ class QuizDetailGuru extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 5),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(
-                              width: 30,
-                              child: CircleAvatar(
-                                child: Text("${index + 1}",
-                                    style: const TextStyle(fontSize: 14)),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
                               children: [
-                                MyText(
-                                  text: data['nama'],
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
+                                SizedBox(
+                                  width: 30,
+                                  child: CircleAvatar(
+                                    child: Text("${index + 1}",
+                                        style: const TextStyle(fontSize: 14)),
+                                  ),
                                 ),
-                                MyText(
-                                  text:
-                                      "Skor : ${data['skor']} | Nilai : ${data['persentase']} | KKM : ${data['kkm']}",
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w800,
+                                const SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: Get.width * 0.6,
+                                      child: MyText(
+                                        maxLines: 1,
+                                        text: data['nama'] +
+                                            "asd;kas;dklasd as;dlkas;l dk;lk",
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    MyText(
+                                      text:
+                                          "Skor : ${data['skor']} | Nilai : ${data['persentase']} | KKM : ${data['kkm']}",
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ],
                                 ),
                               ],
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: data['persentase'] < data['kkm']
+                                    ? Colors.red
+                                    : Colors.green,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 4, vertical: 1),
+                                child: MyText(
+                                  text: data['persentase'] < data['kkm']
+                                      ? "Remidi"
+                                      : "Lulus",
+                                  fontSize: 10,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
                           ],
                         ),
