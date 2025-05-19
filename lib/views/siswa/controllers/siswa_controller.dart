@@ -75,17 +75,19 @@ class SiswaController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        if (role == "siswa") {
-          Get.offAllNamed(AppRoutes.login, arguments: "siswa");
-        } else {
-          Get.offAllNamed(AppRoutes.login, arguments: "guru");
-        }
         await prefs.remove('nama');
         await prefs.remove('token');
         await prefs.remove('role');
         await prefs.remove('nisn');
         await prefs.remove('nip');
         await prefs.clear();
+
+        if (role == "siswa") {
+          Get.offAllNamed(AppRoutes.login, arguments: "siswa");
+        } else {
+          Get.offAllNamed(AppRoutes.login, arguments: "guru");
+        }
+
         snackbarSuccess("Berhasil Logout");
       } else {
         log(response.body.toString());

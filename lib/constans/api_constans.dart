@@ -41,4 +41,6 @@ class ApiConstants {
 
   // Ubah Password
   static String analysisSiswaEnpoint = "$baseUrlApi/analysis-siswa";
+
+  static String checkToken = "$baseUrlApi/check-token";
 }

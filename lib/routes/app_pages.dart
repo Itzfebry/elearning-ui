@@ -49,13 +49,13 @@ class AppPages {
     GetPage(
       name: AppRoutes.siswaDashboard,
       page: () => const SiswaDashboardPage(),
-      middlewares: [AuthMiddleware()], // AuthMiddleware for siswaDashboard
+      middlewares: [AuthMiddleware()],
       binding: SiswaBinding(),
     ),
     GetPage(
       name: AppRoutes.notifikasiSiswa,
       page: () => NotifSiswa(),
-      middlewares: [AuthMiddleware()], // AuthMiddleware for siswaDashboard
+      middlewares: [AuthMiddleware()],
       binding: NotifikasiBinding(),
     ),
     GetPage(

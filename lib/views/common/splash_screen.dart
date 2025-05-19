@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ui/routes/app_routes.dart';
+import 'package:ui/views/auth/controllers/check_token_controller.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,6 +14,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final checkTokenC = Get.put(CheckTokenController());
   @override
   void initState() {
     super.initState();
@@ -23,6 +27,24 @@ class _SplashScreenState extends State<SplashScreen> {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     final role = prefs.getString('role');
+
+    int statusToken = await checkTokenC.checkToken();
+
+    if (statusToken == 401) {
+      log("Menjalankan Logout");
+      await prefs.remove('nama');
+      await prefs.remove('token');
+      await prefs.remove('role');
+      await prefs.remove('nisn');
+      await prefs.remove('nip');
+      await prefs.clear();
+
+      if (role == "siswa") {
+        Get.offAllNamed(AppRoutes.login, arguments: "siswa");
+      } else if (role == "guru") {
+        Get.offAllNamed(AppRoutes.login, arguments: "guru");
+      }
+    }
 
     if (token != null && token.isNotEmpty) {
       // Jika token ada, arahkan ke dashboard sesuai role
