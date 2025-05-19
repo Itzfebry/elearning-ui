@@ -42,6 +42,9 @@ class Data {
   String benar;
   DateTime createdAt;
   DateTime updatedAt;
+  String jumlahSoal;
+  String jawabanBenar;
+  String jawabanSalah;
 
   Data({
     required this.id,
@@ -54,6 +57,9 @@ class Data {
     required this.benar,
     required this.createdAt,
     required this.updatedAt,
+    required this.jumlahSoal,
+    required this.jawabanBenar,
+    required this.jawabanSalah,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -67,6 +73,9 @@ class Data {
         benar: json["benar"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
+        jumlahSoal: json["jumlah_soal"],
+        jawabanBenar: json["jawaban_benar"],
+        jawabanSalah: json["jawaban_salah"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -80,5 +89,8 @@ class Data {
         "benar": benar,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
+        "jumlah_soal": jumlahSoal,
+        "jawaban_benar": jawabanBenar,
+        "jawaban_salah": jawabanSalah,
       };
 }

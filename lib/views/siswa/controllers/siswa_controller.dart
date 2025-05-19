@@ -27,7 +27,7 @@ class SiswaController extends GetxController {
     final token = prefs.getString('token');
     // final attemptId = prefs.getString('attempt_id');
     await prefs.remove('attempt_id');
-    log("TOKEN : $token");
+    // log("TOKEN : $token");
     // log("Attempt ID: $attemptId");
 
     if (token == null) {
