@@ -29,6 +29,9 @@ class AuthController extends GetxController {
       if (loginC.text == "" || passwordC.text == "") {
         snackbarfailed("Inputan login tidak boleh kosong!");
       } else {
+        // Tambahkan log URL endpoint untuk debugging
+        ApiConstants.debugApiUrls();
+        debugPrint("Login endpoint: ${ApiConstants.loginEnpoint}");
         final response = await http.post(
           Uri.parse(ApiConstants.loginEnpoint),
           body: jsonEncode(body),
@@ -37,6 +40,12 @@ class AuthController extends GetxController {
 
         if (response.statusCode == 200) {
           final json = jsonDecode(response.body);
+          // Cek struktur JSON sebelum akses
+          if (json['data'] == null || json['data']['user'] == null) {
+            debugPrint("Struktur JSON tidak sesuai: ${response.body}");
+            snackbarfailed("Login gagal, data user tidak ditemukan!");
+            return;
+          }
           final user = json['data']['user'];
           await prefs?.setString('token', json['data']['token']);
           await prefs?.setString('nama', user['nama']);
@@ -51,11 +60,13 @@ class AuthController extends GetxController {
           }
           snackbarSuccess("Login Berhasil");
         } else {
+          debugPrint("Login gagal: ${response.body}");
           snackbarfailed("Login Gagal, inputan atau sandi salah!");
         }
       }
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("Login Exception: $e");
+      snackbarfailed("Terjadi error: $e");
     } finally {
       isLoading(false);
     }

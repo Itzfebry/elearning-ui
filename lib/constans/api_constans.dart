@@ -5,6 +5,16 @@ class ApiConstants {
 
   static String? baseUrl = dotenv.env['URL'];
   static String? baseUrlApi = "${dotenv.env['HOST']}";
+  // Tambahkan log untuk debugging konfigurasi URL
+  static void debugApiUrls() {
+    // ignore: avoid_print
+    print("ApiConstants.baseUrl: $baseUrl");
+    // ignore: avoid_print
+    print("ApiConstants.baseUrlApi: $baseUrlApi");
+    // ignore: avoid_print
+    print("ApiConstants.loginEnpoint: $loginEnpoint");
+  }
+
   static String loginEnpoint = "$baseUrlApi/login";
   static String logoutEnpoint = "$baseUrlApi/logout";
 

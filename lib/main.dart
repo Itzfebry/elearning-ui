@@ -7,8 +7,11 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:ui/routes/app_pages.dart';
 import 'package:ui/routes/app_routes.dart';
 import 'package:ui/views/auth/bindings/auth_binding.dart';
+import 'debug_ssl_override.dart';
+import 'dart:io';
 
 Future<void> main() async {
+  HttpOverrides.global = DebugHttpOverrides();
   await initializeDateFormatting('id_ID', null).then((_) async {
     WidgetsFlutterBinding.ensureInitialized();
     await dotenv.load(fileName: ".env");
