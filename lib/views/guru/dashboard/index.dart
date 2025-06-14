@@ -311,9 +311,9 @@ class _GuruDashboardPageState extends State<GuruDashboardPage>
                       ),
                     ],
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
                       const SizedBox(height: 40),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -328,7 +328,7 @@ class _GuruDashboardPageState extends State<GuruDashboardPage>
                                 fontWeight: FontWeight.w500,
                               ),
                               const SizedBox(height: 5),
-                              Obx(() {
+              Obx(() {
                                 if (dashboardC.isLoading.value) {
                                   return const MyText(
                                     text: "Loading...",
@@ -398,9 +398,9 @@ class _GuruDashboardPageState extends State<GuruDashboardPage>
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
+            ],
+          ),
+        ),
               ],
             ),
           ),

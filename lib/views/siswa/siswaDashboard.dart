@@ -1,9 +1,173 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:math' as math;
+import 'dart:math' show Random;
 import 'package:ui/routes/app_routes.dart';
 import 'package:ui/views/siswa/controllers/notifikasi_count_controller.dart';
 import 'package:ui/views/siswa/controllers/siswa_controller.dart';
 import 'package:ui/widgets/my_text.dart';
+
+class AnimatedBackground extends StatefulWidget {
+  const AnimatedBackground({super.key});
+
+  @override
+  State<AnimatedBackground> createState() => _AnimatedBackgroundState();
+}
+
+class _AnimatedBackgroundState extends State<AnimatedBackground>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  final List<Shape> _shapes = [];
+  final int _numberOfShapes = 7;
+  final Random _random = Random();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 10),
+    )..repeat();
+
+    // Initialize shapes with random angles and distances
+    for (int i = 0; i < _numberOfShapes; i++) {
+      _shapes.add(Shape(
+        angle: _random.nextDouble() * math.pi * 2,
+        distance: 150 + _random.nextDouble() * 250,
+        baseSize: 150 + _random.nextDouble() * 200,
+        speed: 0.2 + _random.nextDouble() * 0.3,
+        type: _random.nextBool() ? ShapeType.curve : ShapeType.triangle,
+        opacity: 0.1,
+        opacitySpeed:
+            0.2 + _random.nextDouble() * 0.5, // More varied opacity speed
+        sizeSpeed: 0.3 + _random.nextDouble() * 0.4, // Size pulsing speed
+        angleSpeed:
+            0.1 + _random.nextDouble() * 0.4, // More varied rotation speed
+      ));
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return CustomPaint(
+          painter: BackgroundPainter(
+            shapes: _shapes,
+            animation: _controller.value,
+          ),
+          child: Container(),
+        );
+      },
+    );
+  }
+}
+
+class Shape {
+  double angle;
+  double distance;
+  double size;
+  final double baseSize;
+  final double speed;
+  final ShapeType type;
+  double opacity;
+  double opacitySpeed;
+  double sizeSpeed;
+  double angleSpeed;
+
+  Shape({
+    required this.angle,
+    required this.distance,
+    required this.baseSize,
+    required this.speed,
+    required this.type,
+    required this.opacity,
+    required this.opacitySpeed,
+    required this.sizeSpeed,
+    required this.angleSpeed,
+  }) : size = baseSize;
+}
+
+enum ShapeType {
+  curve,
+  triangle,
+}
+
+class BackgroundPainter extends CustomPainter {
+  final List<Shape> shapes;
+  final double animation;
+
+  BackgroundPainter({
+    required this.shapes,
+    required this.animation,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final centerX = size.width / 2;
+    final centerY = size.height / 2;
+
+    for (var shape in shapes) {
+      // Update opacity with sine wave for smooth fading
+      shape.opacity =
+          0.1 + (math.sin(animation * math.pi * 2 * shape.opacitySpeed) * 0.15);
+
+      // Update size with sine wave for pulsing effect
+      shape.size = shape.baseSize *
+          (0.8 + (math.sin(animation * math.pi * 2 * shape.sizeSpeed) * 0.3));
+
+      // Update angle for rotation with varying speed
+      shape.angle += shape.angleSpeed * 0.02;
+
+      final paint = Paint()
+        ..color = Colors.green.withOpacity(shape.opacity)
+        ..style = PaintingStyle.fill;
+
+      // Calculate position based on angle and distance from center
+      final x = centerX + math.cos(shape.angle) * shape.distance;
+      final y = centerY + math.sin(shape.angle) * shape.distance;
+
+      // Draw shape based on type
+      final path = Path();
+      if (shape.type == ShapeType.curve) {
+        path
+          ..moveTo(x, y)
+          ..quadraticBezierTo(
+            x + shape.size * 0.5,
+            y - shape.size * 0.5,
+            x + shape.size,
+            y,
+          )
+          ..quadraticBezierTo(
+            x + shape.size * 1.5,
+            y + shape.size * 0.5,
+            x,
+            y,
+          );
+      } else {
+        // Triangle
+        final triangleSize = shape.size * 1.2;
+        path
+          ..moveTo(x, y - triangleSize)
+          ..lineTo(x + triangleSize, y + triangleSize * 0.5)
+          ..lineTo(x - triangleSize, y + triangleSize * 0.5)
+          ..close();
+      }
+
+      canvas.drawPath(path, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
 
 class SiswaDashboardPage extends StatelessWidget {
   const SiswaDashboardPage({super.key});
@@ -85,132 +249,139 @@ class SiswaDashboardPage extends StatelessWidget {
     // },
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header
-              Obx(() {
-                if (siswaC.isLoading.value) {
-                  return const CircularProgressIndicator();
-                }
-                var user = siswaC.dataUser['user'];
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "E-Learning",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      "Hi, ${user?['nama'] ?? 'Siswa'}",
-                      style: const TextStyle(
-                          fontSize: 28, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "Kelas : ${user?['kelas']}",
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                );
-              }),
-              const SizedBox(height: 30),
-
-              // Menu Grid
-              Obx(
-                () {
-                  if (notifC.isLoading.value) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
+      body: Stack(
+        children: [
+          const AnimatedBackground(),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header
+                  Obx(() {
+                    if (siswaC.isLoading.value) {
+                      return const CircularProgressIndicator();
+                    }
+                    var user = siswaC.dataUser['user'];
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "E-Learning",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w600),
+                        ),
+                        Text(
+                          "Hi, ${user?['nama'] ?? 'Siswa'}",
+                          style: const TextStyle(
+                              fontSize: 28, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "Kelas : ${user?['kelas']}",
+                          style: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     );
-                  }
-                  return Expanded(
-                    child: RefreshIndicator(
-                      onRefresh: () {
-                        notifC.getNotifCount();
-                        siswaC.getMe();
-                        return Future.value();
-                      },
-                      child: GridView.count(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
-                        children: menuItems.map((item) {
-                          return GestureDetector(
-                            onTap: item.onTap,
-                            child: Stack(
-                              fit: StackFit.expand,
-                              clipBehavior: Clip.none,
-                              children: [
-                                Positioned(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: item.color,
-                                      borderRadius: BorderRadius.circular(20),
+                  }),
+                  const SizedBox(height: 30),
+
+                  // Menu Grid
+                  Obx(
+                    () {
+                      if (notifC.isLoading.value) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return Expanded(
+                        child: RefreshIndicator(
+                          onRefresh: () {
+                            notifC.getNotifCount();
+                            siswaC.getMe();
+                            return Future.value();
+                          },
+                          child: GridView.count(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                            children: menuItems.map((item) {
+                              return GestureDetector(
+                                onTap: item.onTap,
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Positioned(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: item.color,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        padding: const EdgeInsets.all(16),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(item.icon,
+                                                size: 40, color: Colors.white),
+                                            const SizedBox(height: 12),
+                                            Text(
+                                              item.title,
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                    padding: const EdgeInsets.all(16),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(item.icon,
-                                            size: 40, color: Colors.white),
-                                        const SizedBox(height: 12),
-                                        Text(
-                                          item.title,
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600,
+                                    if (item.title == "Notifikasi" &&
+                                        notifC.notifCount.value > 0)
+                                      Positioned(
+                                        top: -7,
+                                        right: -5,
+                                        child: Container(
+                                          width: 30,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          child: Center(
+                                            child: MyText(
+                                              text: notifC.notifCount.value
+                                                  .toString(),
+                                              textAlign: TextAlign.center,
+                                              fontSize: 13,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w900,
+                                            ),
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
+                                      ),
+                                  ],
                                 ),
-                                if (item.title == "Notifikasi" &&
-                                    notifC.notifCount.value > 0)
-                                  Positioned(
-                                    top: -7,
-                                    right: -5,
-                                    child: Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Center(
-                                        child: MyText(
-                                          text: notifC.notifCount.value
-                                              .toString(),
-                                          textAlign: TextAlign.center,
-                                          fontSize: 13,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w900,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  );
-                },
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+          // ),
+        ],
       ),
-      // ),
     );
   }
 }
