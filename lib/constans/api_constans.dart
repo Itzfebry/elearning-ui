@@ -53,4 +53,6 @@ class ApiConstants {
   static String analysisSiswaEnpoint = "$baseUrlApi/analysis-siswa";
 
   static String checkToken = "$baseUrlApi/check-token";
+
+  static String dashboardGuruEndpoint = "$baseUrl/dashboard/guru";
 }

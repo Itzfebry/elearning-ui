@@ -92,6 +92,7 @@ class SubmitTugas {
   int tugasId;
   String? text;
   String? file;
+  int? nilai;
   DateTime createdAt;
   DateTime updatedAt;
   Tugas tugas;
@@ -103,6 +104,7 @@ class SubmitTugas {
     required this.tugasId,
     required this.text,
     required this.file,
+    this.nilai,
     required this.createdAt,
     required this.updatedAt,
     required this.tugas,
@@ -115,6 +117,7 @@ class SubmitTugas {
         tugasId: json["tugas_id"],
         text: json["text"],
         file: json["file"],
+        nilai: json["nilai"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         tugas: Tugas.fromJson(json["tugas"]),
@@ -128,6 +131,7 @@ class SubmitTugas {
         "tugas_id": tugasId,
         "text": text,
         "file": file,
+        "nilai": nilai,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
         "tugas": tugas.toJson(),

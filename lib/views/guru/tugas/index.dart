@@ -14,39 +14,72 @@ class TugasGuruPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Tugas")),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Obx(
-                  () {
-                    if (matapelajaranSimpleC.isLoading.value) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (matapelajaranSimpleC
-                            .mataPelajaranSimpleM?.data.isEmpty ??
-                        true) {
-                      return const Center(
-                        child: MyText(
-                            text: "Tidak Ada Mata Pelajaran",
-                            fontSize: 15,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700),
-                      );
-                    } else {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFBBDBD0),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 30),
-                        child: ListView.builder(
+      appBar: AppBar(
+        title: const MyText(
+          text: "Tugas",
+          fontSize: 20,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+        backgroundColor: const Color(0xFF57E389),
+        elevation: 0,
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          color: Color(0xFF57E389),
+        ),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const MyText(
+                    text: "Pilih Mata Pelajaran",
+                    fontSize: 16,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  const SizedBox(height: 20),
+                  Expanded(
+                    child: Obx(
+                      () {
+                        if (matapelajaranSimpleC.isLoading.value) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (matapelajaranSimpleC
+                                .mataPelajaranSimpleM?.data.isEmpty ??
+                            true) {
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.assignment,
+                                  size: 64,
+                                  color: Colors.grey[400],
+                                ),
+                                const SizedBox(height: 16),
+                                const MyText(
+                                  text: "Tidak Ada Mata Pelajaran",
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                        return ListView.builder(
                           itemCount: matapelajaranSimpleC
                                   .mataPelajaranSimpleM?.data.length ??
                               0,
@@ -60,13 +93,13 @@ class TugasGuruPage extends StatelessWidget {
                               mataPelajaranId: data.id.toString(),
                             );
                           },
-                        ),
-                      );
-                    }
-                  },
-                ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -97,32 +130,62 @@ class TaskItem extends StatelessWidget {
         });
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 25),
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
-          color: const Color(0xFF67DEAC),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Poppins',
-              ),
-            ),
-            Text(
-              "Guru : $guru",
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Poppins',
-              ),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
             ),
           ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF57E389).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.assignment,
+                  color: Color(0xFF57E389),
+                  size: 30,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    MyText(
+                      text: title,
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    const SizedBox(height: 4),
+                    MyText(
+                      text: "Guru: $guru",
+                      fontSize: 14,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.chevron_right,
+                color: Colors.grey,
+              ),
+            ],
+          ),
         ),
       ),
     );

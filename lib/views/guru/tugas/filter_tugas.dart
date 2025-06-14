@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:ui/views/guru/mata_pelajaran/controllers/kelas_controller.dart';
 import 'package:ui/views/guru/mata_pelajaran/controllers/tahun_ajaran_controller.dart';
 import 'package:ui/views/guru/tugas/controllers/tugas_detail_guru_controller.dart';
+import 'package:ui/widgets/my_text.dart';
 
 class FilterTugas extends StatelessWidget {
   const FilterTugas({
@@ -20,14 +21,33 @@ class FilterTugas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const MyText(
+            text: "Filter Tugas",
+            fontSize: 16,
+            color: Colors.grey,
+            fontWeight: FontWeight.w500,
+          ),
+          const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
-                flex: 2,
                 child: Obx(() {
                   if (kelasC.isLoading.value) {
                     return const Center(child: CircularProgressIndicator());
@@ -38,20 +58,34 @@ class FilterTugas extends StatelessWidget {
                     return const Text('Tidak ada data kelas');
                   }
 
-                  return SizedBox(
-                    height: 55,
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        labelText: 'Kelas',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                        isDense: true,
                       ),
+                      icon: const Icon(Icons.arrow_drop_down,
+                          color: Colors.grey, size: 20),
+                      dropdownColor: Colors.white,
+                      isExpanded: true,
                       value: kelasC.selectedKelas.value,
                       items: kelasC.kelasM!.data.map((kelas) {
                         return DropdownMenuItem<String>(
                           value: kelas.nama,
-                          child: Text(kelas.nama),
+                          child: Text(
+                            kelas.nama,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black87,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         );
                       }).toList(),
                       onChanged: (value) {
@@ -61,9 +95,8 @@ class FilterTugas extends StatelessWidget {
                   );
                 }),
               ),
-              const SizedBox(width: 5),
+              const SizedBox(width: 12),
               Expanded(
-                flex: 2,
                 child: Obx(() {
                   if (tahunAjaranC.isLoading.value) {
                     return const Center(child: CircularProgressIndicator());
@@ -74,20 +107,34 @@ class FilterTugas extends StatelessWidget {
                     return const Text('Tidak ada data Tahun');
                   }
 
-                  return SizedBox(
-                    height: 55,
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        labelText: 'Tahun Ajaran',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                        isDense: true,
                       ),
+                      icon: const Icon(Icons.arrow_drop_down,
+                          color: Colors.grey, size: 20),
+                      dropdownColor: Colors.white,
+                      isExpanded: true,
                       value: tahunAjaranC.selectedTahun.value,
                       items: tahunAjaranC.tahunAjaranM!.data.map((tahun) {
                         return DropdownMenuItem<String>(
                           value: tahun.tahun,
-                          child: Text(tahun.tahun),
+                          child: Text(
+                            tahun.tahun,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black87,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         );
                       }).toList(),
                       onChanged: (value) {
@@ -97,12 +144,12 @@ class FilterTugas extends StatelessWidget {
                   );
                 }),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 12),
               Material(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(10),
+                color: const Color(0xFF57E389),
+                borderRadius: BorderRadius.circular(12),
                 child: InkWell(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(12),
                   onTap: () async {
                     await tugasSubmitDetailGuruC.getTugas(
                       id: idMatpel,
@@ -111,50 +158,21 @@ class FilterTugas extends StatelessWidget {
                     );
                   },
                   child: Container(
-                    width: 55,
-                    height: 55,
+                    width: 48,
+                    height: 48,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
-                      Icons.tune, // Ikon yang mirip seperti di gambar
+                      Icons.filter_list,
                       color: Colors.white,
+                      size: 24,
                     ),
                   ),
                 ),
               ),
             ],
           ),
-          // const SizedBox(height: 15),
-          // Row(
-          //   children: [
-          // Expanded(
-          //   flex: 3,
-          //   child: SizedBox(
-          //     height: 55,
-          //     child: DropdownButtonFormField<String>(
-          //       decoration: InputDecoration(
-          //         labelText: 'Tipe Tugas',
-          //         border: OutlineInputBorder(
-          //           borderRadius: BorderRadius.circular(10),
-          //         ),
-          //       ),
-          //       value: tugasSubmitDetailGuruC.selectedTypeTugas.value,
-          //       items: ["belum", "selesai"].map((type) {
-          //         return DropdownMenuItem<String>(
-          //           value: type,
-          //           child: Text(type),
-          //         );
-          //       }).toList(),
-          //       onChanged: (value) {
-          //         tugasSubmitDetailGuruC.selectedTypeTugas.value = value;
-          //       },
-          //     ),
-          //   ),
-          // ),
-
-          //   ],
-          // )
         ],
       ),
     );

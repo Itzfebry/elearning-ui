@@ -61,37 +61,24 @@ class DetailTugasGuru extends StatelessWidget {
                   itemCount: tugasDetailGuruC.tugasM?.data.length ?? 0,
                   itemBuilder: (context, index) {
                     var data = tugasDetailGuruC.tugasM!.data[index];
-                    return Card(
+                    return Container(
                       margin: const EdgeInsets.only(bottom: 16),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      child: ListTile(
-                          title: Text(
-                            data.nama,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
                           ),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                MyText(
-                                  text: data.tanggal.simpleDateRevers(),
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                MyText(
-                                  text:
-                                      "Tenggat : ${data.tenggat.simpleDateRevers()}",
-                                  fontSize: 14,
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.w600,
-                                )
-                              ],
-                            ),
-                          ),
+                        ],
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(15),
                           onTap: () async {
                             Get.toNamed(
                               AppRoutes.detailSubmitTugasDetailGuru,
@@ -102,7 +89,86 @@ class DetailTugasGuru extends StatelessWidget {
                                     tahunAjaranC.selectedTahun.value,
                               },
                             );
-                          }),
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFF57E389)
+                                            .withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: const Icon(
+                                        Icons.assignment,
+                                        color: Color(0xFF57E389),
+                                        size: 24,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          MyText(
+                                            text: data.nama,
+                                            fontSize: 16,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          const SizedBox(height: 4),
+                                          MyText(
+                                            text:
+                                                "Dibuat: ${data.tanggal.simpleDateRevers()}",
+                                            fontSize: 12,
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(
+                                        Icons.timer_outlined,
+                                        color: Colors.red,
+                                        size: 16,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      MyText(
+                                        text:
+                                            "Tenggat: ${data.tenggat.simpleDateRevers()}",
+                                        fontSize: 12,
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                     );
                   },
                 );
