@@ -73,8 +73,14 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset("assets/images/skoda.png",
-                width: 100), // Tambahkan logo
+            Image.asset(
+              "assets/images/skoda.png",
+              width: 100,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.error_outline,
+                    size: 100, color: Colors.red);
+              },
+            ),
             const SizedBox(height: 20),
             const CircularProgressIndicator(
                 color: Colors.white), // Animasi loading

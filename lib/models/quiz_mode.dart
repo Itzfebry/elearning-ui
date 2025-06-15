@@ -38,6 +38,7 @@ class Datum {
   String deskripsi;
   int totalSoal;
   String totalSoalTampil;
+  int? waktu;
   int matapelajaranId;
   DateTime createdAt;
   DateTime updatedAt;
@@ -49,6 +50,7 @@ class Datum {
     required this.deskripsi,
     required this.totalSoal,
     required this.totalSoalTampil,
+    this.waktu,
     required this.matapelajaranId,
     required this.createdAt,
     required this.updatedAt,
@@ -56,14 +58,29 @@ class Datum {
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        id: json["id"],
-        judul: json["judul"],
-        deskripsi: json["deskripsi"],
-        totalSoal: json["total_soal"],
-        totalSoalTampil: json["total_soal_tampil"],
-        matapelajaranId: json["matapelajaran_id"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        id: json["id"] is int
+            ? json["id"]
+            : int.tryParse(json["id"].toString()) ?? 0,
+        judul: json["judul"]?.toString() ?? "",
+        deskripsi: json["deskripsi"]?.toString() ?? "",
+        totalSoal: json["total_soal"] is int
+            ? json["total_soal"]
+            : int.tryParse(json["total_soal"].toString()) ?? 0,
+        totalSoalTampil: json["total_soal_tampil"]?.toString() ?? "0",
+        waktu: json["waktu"] is int
+            ? json["waktu"]
+            : (json["waktu"] == null
+                ? null
+                : int.tryParse(json["waktu"].toString())),
+        matapelajaranId: json["matapelajaran_id"] is int
+            ? json["matapelajaran_id"]
+            : int.tryParse(json["matapelajaran_id"].toString()) ?? 0,
+        createdAt: json["created_at"] != null
+            ? DateTime.tryParse(json["created_at"].toString()) ?? DateTime.now()
+            : DateTime.now(),
+        updatedAt: json["updated_at"] != null
+            ? DateTime.tryParse(json["updated_at"].toString()) ?? DateTime.now()
+            : DateTime.now(),
         quizAttempt: json["quiz_attempt"] == null
             ? null
             : QuizAttempt.fromJson(json["quiz_attempt"]),
@@ -75,6 +92,7 @@ class Datum {
         "deskripsi": deskripsi,
         "total_soal": totalSoal,
         "total_soal_tampil": totalSoalTampil,
+        "waktu": waktu,
         "matapelajaran_id": matapelajaranId,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
@@ -91,6 +109,8 @@ class QuizAttempt {
   int jumlahSoalDijawab;
   int fase;
   String benar;
+  DateTime? waktuMulai;
+  DateTime? waktuSelesai;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -103,21 +123,43 @@ class QuizAttempt {
     required this.jumlahSoalDijawab,
     required this.fase,
     required this.benar,
+    this.waktuMulai,
+    this.waktuSelesai,
     required this.createdAt,
     required this.updatedAt,
   });
 
   factory QuizAttempt.fromJson(Map<String, dynamic> json) => QuizAttempt(
-        id: json["id"],
-        quizId: json["quiz_id"],
-        nisn: json["nisn"],
-        skor: json["skor"],
-        levelAkhir: json["level_akhir"],
-        jumlahSoalDijawab: json["jumlah_soal_dijawab"],
-        fase: json["fase"],
-        benar: json["benar"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        id: json["id"] is int
+            ? json["id"]
+            : int.tryParse(json["id"].toString()) ?? 0,
+        quizId: json["quiz_id"] is int
+            ? json["quiz_id"]
+            : int.tryParse(json["quiz_id"].toString()) ?? 0,
+        nisn: json["nisn"]?.toString() ?? "",
+        skor: json["skor"]?.toString() ?? "0",
+        levelAkhir: json["level_akhir"] is int
+            ? json["level_akhir"]
+            : int.tryParse(json["level_akhir"].toString()) ?? 1,
+        jumlahSoalDijawab: json["jumlah_soal_dijawab"] is int
+            ? json["jumlah_soal_dijawab"]
+            : int.tryParse(json["jumlah_soal_dijawab"].toString()) ?? 0,
+        fase: json["fase"] is int
+            ? json["fase"]
+            : int.tryParse(json["fase"].toString()) ?? 1,
+        benar: json["benar"]?.toString() ?? "{}",
+        waktuMulai: json["waktu_mulai"] != null
+            ? DateTime.tryParse(json["waktu_mulai"].toString())
+            : null,
+        waktuSelesai: json["waktu_selesai"] != null
+            ? DateTime.tryParse(json["waktu_selesai"].toString())
+            : null,
+        createdAt: json["created_at"] != null
+            ? DateTime.tryParse(json["created_at"].toString()) ?? DateTime.now()
+            : DateTime.now(),
+        updatedAt: json["updated_at"] != null
+            ? DateTime.tryParse(json["updated_at"].toString()) ?? DateTime.now()
+            : DateTime.now(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -129,6 +171,8 @@ class QuizAttempt {
         "jumlah_soal_dijawab": jumlahSoalDijawab,
         "fase": fase,
         "benar": benar,
+        "waktu_mulai": waktuMulai?.toIso8601String(),
+        "waktu_selesai": waktuSelesai?.toIso8601String(),
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
       };

@@ -38,6 +38,7 @@ class Data {
   int newLevel;
   int skorSementara;
   bool selesai;
+  int? waktuTersisa;
 
   Data({
     required this.quizId,
@@ -46,15 +47,33 @@ class Data {
     required this.newLevel,
     required this.skorSementara,
     required this.selesai,
+    this.waktuTersisa,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        quizId: json["quiz_id"],
-        correct: json["correct"],
-        fase: json["fase"],
-        newLevel: json["new_level"],
-        skorSementara: json["skor_sementara"],
-        selesai: json["selesai"],
+        quizId: json["quiz_id"] is int
+            ? json["quiz_id"]
+            : int.tryParse(json["quiz_id"].toString()) ?? 0,
+        correct: json["correct"] is int
+            ? json["correct"]
+            : int.tryParse(json["correct"].toString()) ?? 0,
+        fase: json["fase"] is int
+            ? json["fase"]
+            : int.tryParse(json["fase"].toString()) ?? 1,
+        newLevel: json["new_level"] is int
+            ? json["new_level"]
+            : int.tryParse(json["new_level"].toString()) ?? 1,
+        skorSementara: json["skor_sementara"] is int
+            ? json["skor_sementara"]
+            : int.tryParse(json["skor_sementara"].toString()) ?? 0,
+        selesai: json["selesai"] is bool
+            ? json["selesai"]
+            : json["selesai"] == 1 ||
+                json["selesai"] == "1" ||
+                json["selesai"] == true,
+        waktuTersisa: json["waktu_tersisa"] is int
+            ? json["waktu_tersisa"]
+            : int.tryParse(json["waktu_tersisa"].toString()),
       );
 
   Map<String, dynamic> toJson() => {
@@ -64,5 +83,6 @@ class Data {
         "new_level": newLevel,
         "skor_sementara": skorSementara,
         "selesai": selesai,
+        "waktu_tersisa": waktuTersisa,
       };
 }

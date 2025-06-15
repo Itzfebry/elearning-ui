@@ -18,7 +18,7 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   final List<Shape> _shapes = [];
-  final int _numberOfShapes = 7;
+  final int _numberOfShapes = 4;
   final Random _random = Random();
 
   @override
@@ -26,7 +26,7 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 10),
+      duration: const Duration(seconds: 15),
     )..repeat();
 
     // Initialize shapes with random angles and distances
@@ -35,14 +35,12 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
         angle: _random.nextDouble() * math.pi * 2,
         distance: 150 + _random.nextDouble() * 250,
         baseSize: 150 + _random.nextDouble() * 200,
-        speed: 0.2 + _random.nextDouble() * 0.3,
+        speed: 0.1 + _random.nextDouble() * 0.2,
         type: _random.nextBool() ? ShapeType.curve : ShapeType.triangle,
         opacity: 0.1,
-        opacitySpeed:
-            0.2 + _random.nextDouble() * 0.5, // More varied opacity speed
-        sizeSpeed: 0.3 + _random.nextDouble() * 0.4, // Size pulsing speed
-        angleSpeed:
-            0.1 + _random.nextDouble() * 0.4, // More varied rotation speed
+        opacitySpeed: 0.1 + _random.nextDouble() * 0.3,
+        sizeSpeed: 0.2 + _random.nextDouble() * 0.3,
+        angleSpeed: 0.05 + _random.nextDouble() * 0.2,
       ));
     }
   }
@@ -111,57 +109,71 @@ class BackgroundPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (size.isEmpty) return;
+
     final centerX = size.width / 2;
     final centerY = size.height / 2;
 
     for (var shape in shapes) {
-      // Update opacity with sine wave for smooth fading
-      shape.opacity =
-          0.1 + (math.sin(animation * math.pi * 2 * shape.opacitySpeed) * 0.15);
+      try {
+        // Update opacity with sine wave for smooth fading
+        shape.opacity = 0.1 +
+            (math.sin(animation * math.pi * 2 * shape.opacitySpeed) * 0.15);
+        shape.opacity =
+            shape.opacity.clamp(0.0, 1.0); // Ensure opacity is between 0 and 1
 
-      // Update size with sine wave for pulsing effect
-      shape.size = shape.baseSize *
-          (0.8 + (math.sin(animation * math.pi * 2 * shape.sizeSpeed) * 0.3));
+        // Update size with sine wave for pulsing effect
+        shape.size = shape.baseSize *
+            (0.8 + (math.sin(animation * math.pi * 2 * shape.sizeSpeed) * 0.3));
+        shape.size =
+            shape.size.clamp(1.0, double.infinity); // Ensure size is positive
 
-      // Update angle for rotation with varying speed
-      shape.angle += shape.angleSpeed * 0.02;
+        // Update angle for rotation with varying speed
+        shape.angle += shape.angleSpeed * 0.02;
 
-      final paint = Paint()
-        ..color = Colors.green.withOpacity(shape.opacity)
-        ..style = PaintingStyle.fill;
+        final paint = Paint()
+          ..color = Colors.green.withOpacity(shape.opacity)
+          ..style = PaintingStyle.fill
+          ..isAntiAlias = true;
 
-      // Calculate position based on angle and distance from center
-      final x = centerX + math.cos(shape.angle) * shape.distance;
-      final y = centerY + math.sin(shape.angle) * shape.distance;
+        // Calculate position based on angle and distance from center
+        final x = centerX + math.cos(shape.angle) * shape.distance;
+        final y = centerY + math.sin(shape.angle) * shape.distance;
 
-      // Draw shape based on type
-      final path = Path();
-      if (shape.type == ShapeType.curve) {
-        path
-          ..moveTo(x, y)
-          ..quadraticBezierTo(
-            x + shape.size * 0.5,
-            y - shape.size * 0.5,
-            x + shape.size,
-            y,
-          )
-          ..quadraticBezierTo(
-            x + shape.size * 1.5,
-            y + shape.size * 0.5,
-            x,
-            y,
-          );
-      } else {
-        // Triangle
-        final triangleSize = shape.size * 1.2;
-        path
-          ..moveTo(x, y - triangleSize)
-          ..lineTo(x + triangleSize, y + triangleSize * 0.5)
-          ..lineTo(x - triangleSize, y + triangleSize * 0.5)
-          ..close();
+        // Ensure coordinates are within bounds
+        if (x.isFinite && y.isFinite) {
+          // Draw shape based on type
+          final path = Path();
+          if (shape.type == ShapeType.curve) {
+            path
+              ..moveTo(x, y)
+              ..quadraticBezierTo(
+                x + shape.size * 0.5,
+                y - shape.size * 0.5,
+                x + shape.size,
+                y,
+              )
+              ..quadraticBezierTo(
+                x + shape.size * 1.5,
+                y + shape.size * 0.5,
+                x,
+                y,
+              );
+          } else {
+            // Triangle
+            final triangleSize = shape.size * 1.2;
+            path
+              ..moveTo(x, y - triangleSize)
+              ..lineTo(x + triangleSize, y + triangleSize * 0.5)
+              ..lineTo(x - triangleSize, y + triangleSize * 0.5)
+              ..close();
+          }
+
+          canvas.drawPath(path, paint);
+        }
+      } catch (e) {
+        debugPrint('Error painting shape: $e');
       }
-
-      canvas.drawPath(path, paint);
     }
   }
 

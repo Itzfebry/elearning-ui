@@ -14,6 +14,8 @@ class SoalQuizSelesai extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Quiz Selesai"),
+        backgroundColor: Colors.green.shade600,
+        foregroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -26,7 +28,7 @@ class SoalQuizSelesai extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Skor
+              // Container utama untuk hasil quiz
               Container(
                 margin: const EdgeInsets.all(20),
                 padding: const EdgeInsets.all(20),
@@ -34,21 +36,62 @@ class SoalQuizSelesai extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
                 ),
                 child: Obx(
                   () {
                     if (quizFinishC.isLoading.value) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
                     }
 
                     var data = quizFinishC.quizAttemptM?.data;
 
                     if (data == null) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(
+                        child: Text(
+                          'Data tidak tersedia',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
                     }
+
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        // Header dengan icon
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.emoji_events,
+                              size: 32,
+                              color: Colors.amber.shade600,
+                            ),
+                            const SizedBox(width: 10),
+                            const Text(
+                              'HASIL QUIZ',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Statistik pengerjaan
                         Container(
                           width: Get.width,
                           decoration: BoxDecoration(
@@ -56,68 +99,109 @@ class SoalQuizSelesai extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(16.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Text(
-                                  'Jumlah Soal',
+                                  'Statistik Pengerjaan',
                                   style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
                                   ),
                                 ),
+                                const SizedBox(height: 12),
                                 Text(
-                                  data.jumlahSoal.toString(),
+                                  'Total Soal: ${data.jumlahSoal}',
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
                                   ),
                                 ),
+                                const SizedBox(height: 12),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFF9CFFBA),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 5,
-                                          vertical: 2,
+                                    Expanded(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFF9CFFBA),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
                                         ),
-                                        child: Text(
-                                          "Benar : ${data.jawabanBenar}",
-                                          style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 8,
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            const Icon(
+                                              Icons.check_circle,
+                                              color: Colors.green,
+                                              size: 24,
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              "${data.jawabanBenar}",
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.green,
+                                              ),
+                                            ),
+                                            const Text(
+                                              "Benar",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.green,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
-                                    const Text(
-                                      '  |  ',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFFF8D85),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Padding(
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFFF8D85),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 5, vertical: 2),
-                                        child: Text(
-                                          "Salah : ${data.jawabanSalah}",
-                                          style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                          horizontal: 8,
+                                          vertical: 8,
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            const Icon(
+                                              Icons.cancel,
+                                              color: Colors.red,
+                                              size: 24,
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              "${data.jawabanSalah}",
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                            const Text(
+                                              "Salah",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -128,20 +212,49 @@ class SoalQuizSelesai extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        const Text(
-                          'SKOR ANDA',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+
+                        // Skor utama
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Color(0xFF667EEA),
+                                Color(0xFF764BA2),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF667EEA).withOpacity(0.3),
+                                blurRadius: 20,
+                                offset: const Offset(0, 10),
+                              ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          // '9/10',
-                          data.skor.toString(),
-                          style: const TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
+                          child: Column(
+                            children: [
+                              const Text(
+                                'Skor Anda',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 16,
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Obx(() => Text(
+                                    quizFinishC.skorMe.value,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  )),
+                            ],
                           ),
                         ),
                       ],
@@ -149,38 +262,6 @@ class SoalQuizSelesai extends StatelessWidget {
                   },
                 ),
               ),
-
-              // const SizedBox(height: 20),
-
-              // // Rekomendasi Materi
-              // const Text(
-              //   'Rekomendasi Materi !',
-              //   style: TextStyle(
-              //     fontSize: 20,
-              //     fontWeight: FontWeight.bold,
-              //   ),
-              // ),
-              // const SizedBox(height: 20),
-
-              // Container(
-              //   padding:
-              //       const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-              //   margin: const EdgeInsets.symmetric(horizontal: 20),
-              //   decoration: BoxDecoration(
-              //     color: Colors.white,
-              //     borderRadius: BorderRadius.circular(20),
-              //     border: Border.all(color: Colors.blue, width: 2),
-              //   ),
-              //   child: const Center(
-              //     child: Text(
-              //       'Anatomi Tubuh',
-              //       style: TextStyle(
-              //         fontSize: 20,
-              //         fontWeight: FontWeight.bold,
-              //       ),
-              //     ),
-              //   ),
-              // ),
 
               const SizedBox(height: 40),
 

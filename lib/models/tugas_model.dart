@@ -3,6 +3,7 @@
 //     final tugasModel = tugasModelFromJson(jsonString);
 
 import 'dart:convert';
+import 'dart:developer';
 
 TugasModel tugasModelFromJson(String str) =>
     TugasModel.fromJson(json.decode(str));
@@ -20,11 +21,19 @@ class TugasModel {
     required this.data,
   });
 
-  factory TugasModel.fromJson(Map<String, dynamic> json) => TugasModel(
-        status: json["status"],
-        message: json["message"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+  factory TugasModel.fromJson(Map<String, dynamic> json) {
+    try {
+      return TugasModel(
+        status: json["status"] ?? false,
+        message: json["message"] ?? "No message",
+        data: json["data"] != null
+            ? List<Datum>.from(json["data"].map((x) => Datum.fromJson(x)))
+            : <Datum>[],
       );
+    } catch (e) {
+      throw Exception("Error parsing TugasModel: $e");
+    }
+  }
 
   Map<String, dynamic> toJson() => {
         "status": status,
@@ -62,22 +71,71 @@ class Datum {
     required this.submitTugas,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        id: json["id"],
-        tanggal: DateTime.parse(json["tanggal"]),
-        tenggat: DateTime.parse(json["tenggat"]),
-        guruNip: json["guru_nip"],
-        nama: json["nama"],
-        matapelajaranId: json["matapelajaran_id"],
-        kelas: json["kelas"],
-        tahunAjaran: json["tahun_ajaran"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-        mataPelajaran: MataPelajaran.fromJson(json["mata_pelajaran"]),
-        submitTugas: json["submit_tugas"] == null
-            ? null
-            : SubmitTugas.fromJson(json["submit_tugas"]),
+  factory Datum.fromJson(Map<String, dynamic> json) {
+    try {
+      log("Parsing Datum with id: ${json['id']}");
+      log("submit_tugas type: ${json['submit_tugas']?.runtimeType}");
+      log("submit_tugas value: ${json['submit_tugas']}");
+
+      SubmitTugas? submitTugas;
+      if (json["submit_tugas"] == null) {
+        submitTugas = null;
+        log("submit_tugas is null");
+      } else if (json["submit_tugas"] is List) {
+        var submitList = json["submit_tugas"] as List;
+        log("submit_tugas is List with length: ${submitList.length}");
+        if (submitList.isNotEmpty) {
+          submitTugas = SubmitTugas.fromJson(submitList[0]);
+          log("Created SubmitTugas from first item in list");
+        } else {
+          submitTugas = null;
+          log("submit_tugas list is empty");
+        }
+      } else if (json["submit_tugas"] is Map<String, dynamic>) {
+        submitTugas = SubmitTugas.fromJson(json["submit_tugas"]);
+        log("Created SubmitTugas from Map");
+      } else {
+        submitTugas = null;
+        log("submit_tugas is neither List nor Map, type: ${json['submit_tugas'].runtimeType}");
+      }
+
+      return Datum(
+        id: json["id"] ?? 0,
+        tanggal: json["tanggal"] != null
+            ? DateTime.parse(json["tanggal"].toString())
+            : DateTime.now(),
+        tenggat: json["tenggat"] != null
+            ? DateTime.parse(json["tenggat"].toString())
+            : DateTime.now(),
+        guruNip: json["guru_nip"] ?? "",
+        nama: json["nama"] ?? "",
+        matapelajaranId: json["matapelajaran_id"] ?? 0,
+        kelas: json["kelas"] ?? "",
+        tahunAjaran: json["tahun_ajaran"] ?? "",
+        createdAt: json["created_at"] != null
+            ? DateTime.parse(json["created_at"].toString())
+            : DateTime.now(),
+        updatedAt: json["updated_at"] != null
+            ? DateTime.parse(json["updated_at"].toString())
+            : DateTime.now(),
+        mataPelajaran: json["mata_pelajaran"] != null
+            ? MataPelajaran.fromJson(json["mata_pelajaran"])
+            : MataPelajaran(
+                id: 0,
+                nama: "",
+                guruNip: "",
+                kelas: "",
+                tahunAjaran: "",
+                createdAt: DateTime.now(),
+                updatedAt: DateTime.now(),
+              ),
+        submitTugas: submitTugas,
       );
+    } catch (e) {
+      log("Error parsing Datum: $e");
+      throw Exception("Error parsing Datum: $e");
+    }
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -116,15 +174,25 @@ class MataPelajaran {
     required this.updatedAt,
   });
 
-  factory MataPelajaran.fromJson(Map<String, dynamic> json) => MataPelajaran(
-        id: json["id"],
-        nama: json["nama"],
-        guruNip: json["guru_nip"],
-        kelas: json["kelas"],
-        tahunAjaran: json["tahun_ajaran"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+  factory MataPelajaran.fromJson(Map<String, dynamic> json) {
+    try {
+      return MataPelajaran(
+        id: json["id"] ?? 0,
+        nama: json["nama"] ?? "",
+        guruNip: json["guru_nip"] ?? "",
+        kelas: json["kelas"] ?? "",
+        tahunAjaran: json["tahun_ajaran"] ?? "",
+        createdAt: json["created_at"] != null
+            ? DateTime.parse(json["created_at"].toString())
+            : DateTime.now(),
+        updatedAt: json["updated_at"] != null
+            ? DateTime.parse(json["updated_at"].toString())
+            : DateTime.now(),
       );
+    } catch (e) {
+      throw Exception("Error parsing MataPelajaran: $e");
+    }
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -158,16 +226,28 @@ class SubmitTugas {
     required this.updatedAt,
   });
 
-  factory SubmitTugas.fromJson(Map<String, dynamic> json) => SubmitTugas(
-        id: json["id"],
-        tanggal: DateTime.parse(json["tanggal"]),
-        nisn: json["nisn"],
-        tugasId: json["tugas_id"],
+  factory SubmitTugas.fromJson(Map<String, dynamic> json) {
+    try {
+      return SubmitTugas(
+        id: json["id"] ?? 0,
+        tanggal: json["tanggal"] != null
+            ? DateTime.parse(json["tanggal"].toString())
+            : DateTime.now(),
+        nisn: json["nisn"] ?? "",
+        tugasId: json["tugas_id"] ?? 0,
         text: json["text"],
         file: json["file"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] != null
+            ? DateTime.parse(json["created_at"].toString())
+            : DateTime.now(),
+        updatedAt: json["updated_at"] != null
+            ? DateTime.parse(json["updated_at"].toString())
+            : DateTime.now(),
       );
+    } catch (e) {
+      throw Exception("Error parsing SubmitTugas: $e");
+    }
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,

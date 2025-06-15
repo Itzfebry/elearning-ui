@@ -14,25 +14,38 @@ class ProfileSiswa extends StatelessWidget {
     siswaC.getAnalysis();
     final size = MediaQuery.of(context).size;
     final isTablet = size.width > 600;
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
-    // Gradien warna untuk ProfileHeader
-    final List<Color> gradientColors = isDarkMode 
-      ? [const Color.fromARGB(255, 221, 241, 221), const Color.fromARGB(255, 244, 244, 244)]
-      : [const Color.fromARGB(255, 209, 250, 209), const Color.fromARGB(255, 68, 154, 118)];
-    
-    // Warna untuk tombol
-    final Color buttonColor1 = isDarkMode ? const Color.fromARGB(255, 111, 158, 205) : Colors.blue.shade400;
-    final Color buttonColor2 = isDarkMode ? Colors.red.shade700 : Colors.red.shade400;
-    final Color textColor = isDarkMode ? Colors.white : Colors.black87;
 
     return Scaffold(
-      backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.grey.shade100,
+      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text('Profil Siswa'),
+        title: const Text(
+          'Profil Siswa',
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 20,
+            color: Colors.white,
+            fontFamily: 'Poppins',
+          ),
+        ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: gradientColors[0],
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF667EEA),
+                Color(0xFF764BA2),
+              ],
+            ),
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () => Get.back(),
+        ),
       ),
       body: RefreshIndicator(
         onRefresh: () async {
@@ -43,29 +56,21 @@ class ProfileSiswa extends StatelessWidget {
           child: Column(
             children: [
               // Header profil dengan gradient
-              _buildProfileHeader(gradientColors, isDarkMode, isTablet),
-              
+              _buildProfileHeader(isTablet),
+
               // Konten utama
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: isTablet ? size.width * 0.1 : 16,
-                  vertical: 16
-                ),
+                    horizontal: isTablet ? size.width * 0.1 : 20, vertical: 20),
                 child: Column(
                   children: [
                     // Card untuk konten analisis
-                    _buildAnalysisCard(context, isDarkMode, isTablet),
-                    
+                    _buildAnalysisCard(context, isTablet),
+
                     SizedBox(height: isTablet ? 32 : 24),
-                    
+
                     // Tombol-tombol aksi
-                    _buildActionButtons(
-                      context, 
-                      buttonColor1, 
-                      buttonColor2, 
-                      textColor, 
-                      isTablet
-                    ),
+                    _buildActionButtons(context, isTablet),
                   ],
                 ),
               ),
@@ -76,102 +81,117 @@ class ProfileSiswa extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileHeader(
-    List<Color> gradientColors, 
-    bool isDarkMode, 
-    bool isTablet
-  ) {
+  Widget _buildProfileHeader(bool isTablet) {
     return Container(
       padding: EdgeInsets.symmetric(
-        vertical: isTablet ? 40 : 24, 
-        horizontal: isTablet ? 40 : 16
-      ),
-      decoration: BoxDecoration(
+          vertical: isTablet ? 40 : 30, horizontal: isTablet ? 40 : 20),
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: gradientColors,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF667EEA),
+            Color(0xFF764BA2),
+          ],
         ),
-        borderRadius: const BorderRadius.only(
+        borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(30),
           bottomRight: Radius.circular(30),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black26,
-            blurRadius: 10,
-            offset: const Offset(0, 5),
+            color: Color(0xFF667EEA),
+            blurRadius: 20,
+            offset: Offset(0, 10),
           ),
         ],
       ),
       child: Obx(
         () => Column(
           children: [
-            Hero(
-              tag: 'profile_avatar',
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 3,
-                  ),
+            // Avatar dengan animasi
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.white,
+                  width: 3,
                 ),
-                child: CircleAvatar(
-                  radius: isTablet ? 70 : 50,
-                  backgroundColor: isDarkMode ? Colors.grey.shade800 : Colors.white,
-                  child: Icon(
-                    Icons.person, 
-                    size: isTablet ? 70 : 50,
-                    color: isDarkMode ? Colors.white70 : Colors.grey.shade700,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 15,
+                    offset: const Offset(0, 8),
                   ),
+                ],
+              ),
+              child: CircleAvatar(
+                radius: isTablet ? 70 : 60,
+                backgroundColor: Colors.white,
+                child: Icon(
+                  Icons.person,
+                  size: isTablet ? 70 : 60,
+                  color: const Color(0xFF667EEA),
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             Text(
               siswaC.dataUser['user']['nama'],
               style: TextStyle(
-                fontSize: isTablet ? 26 : 22,
-                fontWeight: FontWeight.bold,
+                fontSize: isTablet ? 28 : 24,
+                fontWeight: FontWeight.w700,
                 color: Colors.white,
+                fontFamily: 'Poppins',
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 8),
             Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12, 
-                vertical: 4
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.white24,
-                borderRadius: BorderRadius.circular(16),
+                color: Colors.white.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.3),
+                  width: 1,
+                ),
               ),
               child: Text(
                 'Kelas ${siswaC.dataUser['user']['kelas']}',
                 style: TextStyle(
                   fontSize: isTablet ? 18 : 16,
                   color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins',
                 ),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.email_outlined,
-                  color: Colors.white70,
-                  size: 18,
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.email_outlined,
+                    color: Colors.white,
+                    size: 18,
+                  ),
                 ),
-                const SizedBox(width: 6),
+                const SizedBox(width: 12),
                 Text(
                   siswaC.dataUser['user']['user']['email'].toString(),
                   style: TextStyle(
                     fontSize: isTablet ? 16 : 14,
-                    color: Colors.white70,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ],
@@ -182,13 +202,21 @@ class ProfileSiswa extends StatelessWidget {
     );
   }
 
-  Widget _buildAnalysisCard(BuildContext context, bool isDarkMode, bool isTablet) {
-    return Card(
-      elevation: 8,
-      shadowColor: Colors.black26,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+  Widget _buildAnalysisCard(BuildContext context, bool isTablet) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
       child: Padding(
-        padding: EdgeInsets.all(isTablet ? 24 : 16),
+        padding: EdgeInsets.all(isTablet ? 24 : 20),
         child: Obx(
           () {
             if (siswaC.isLoadingAnalysis.value) {
@@ -198,19 +226,40 @@ class ProfileSiswa extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CircularProgressIndicator(
-                      color: isDarkMode ? Colors.blue.shade300 : Colors.blue,
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Color(0xFF6366F1),
+                        ),
+                        strokeWidth: 3,
+                      ),
                     ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Mengambil data analisis...',
-                      style: TextStyle(color: isDarkMode ? Colors.grey.shade300 : Colors.grey.shade700),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Memuat data analisis...',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                        fontFamily: 'Poppins',
+                      ),
                     )
                   ],
                 ),
               );
             }
-            
+
             var kelebihan = siswaC.dataAnalysis['kelebihan'];
             var kekurangan = siswaC.dataAnalysis['kekurangan'];
 
@@ -222,23 +271,31 @@ class ProfileSiswa extends StatelessWidget {
                   Column(children: [
                     Row(
                       children: [
-                        Icon(
-                          Icons.trending_up,
-                          color: Colors.green,
-                          size: isTablet ? 28 : 24,
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF10B981).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(
+                            Icons.quiz,
+                            color: Color(0xFF10B981),
+                            size: 24,
+                          ),
                         ),
-                        const SizedBox(width: 10),
-                        Text(
-                          'Kelebihan',
+                        const SizedBox(width: 12),
+                        const Text(
+                          'Rata rata Kuis',
                           style: TextStyle(
-                            fontSize: isTablet ? 22 : 18,
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode ? Colors.white : Colors.black87,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                            fontFamily: 'Poppins',
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 16),
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -247,15 +304,13 @@ class ProfileSiswa extends StatelessWidget {
                         return AnimatedProgressItem(
                           title: kelebihan[index]['mapel'],
                           percentage: kelebihan[index]['persentase'],
-                          color: Colors.green,
-                          isDarkMode: isDarkMode,
+                          color: const Color(0xFF10B981),
                           isTablet: isTablet,
                           animationDelay: (index * 200),
                         );
                       },
                     ),
                   ]),
-                  
                 if (siswaC.kekuranganIsEmpty.value)
                   const SizedBox()
                 else
@@ -263,23 +318,31 @@ class ProfileSiswa extends StatelessWidget {
                     const SizedBox(height: 24),
                     Row(
                       children: [
-                        Icon(
-                          Icons.trending_down,
-                          color: Colors.red,
-                          size: isTablet ? 28 : 24,
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFEF4444).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(
+                            Icons.trending_down,
+                            color: Color(0xFFEF4444),
+                            size: 24,
+                          ),
                         ),
-                        const SizedBox(width: 10),
-                        Text(
-                          'Kekurangan',
+                        const SizedBox(width: 12),
+                        const Text(
+                          'Perlu Perbaikan',
                           style: TextStyle(
-                            fontSize: isTablet ? 22 : 18,
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode ? Colors.white : Colors.black87,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                            fontFamily: 'Poppins',
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 16),
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -288,32 +351,50 @@ class ProfileSiswa extends StatelessWidget {
                         return AnimatedProgressItem(
                           title: kekurangan[index]['mapel'],
                           percentage: kekurangan[index]['persentase'],
-                          color: Colors.red,
-                          isDarkMode: isDarkMode,
+                          color: const Color(0xFFEF4444),
                           isTablet: isTablet,
                           animationDelay: (index * 200) + 500,
                         );
                       },
                     ),
                   ]),
-                
-                if (siswaC.kelebihanIsEmpty.value && siswaC.kekuranganIsEmpty.value)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 40),
+                if (siswaC.kelebihanIsEmpty.value &&
+                    siswaC.kekuranganIsEmpty.value)
+                  Container(
+                    padding: const EdgeInsets.all(40),
                     child: Column(
                       children: [
-                        Icon(
-                          Icons.analytics_outlined,
-                          size: 60,
-                          color: isDarkMode ? Colors.grey.shade400 : Colors.grey.shade600,
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF6366F1).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: const Icon(
+                            Icons.analytics_outlined,
+                            size: 60,
+                            color: Color(0xFF6366F1),
+                          ),
                         ),
-                        const SizedBox(height: 16),
-                        Text(
+                        const SizedBox(height: 20),
+                        const Text(
                           'Belum ada data analisis',
                           style: TextStyle(
                             fontSize: 18,
-                            color: isDarkMode ? Colors.grey.shade400 : Colors.grey.shade600,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey,
+                            fontFamily: 'Poppins',
                           ),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Data akan muncul setelah mengerjakan kuis',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                            fontFamily: 'Poppins',
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
@@ -326,100 +407,166 @@ class ProfileSiswa extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButtons(
-    BuildContext context, 
-    Color buttonColor1, 
-    Color buttonColor2, 
-    Color textColor,
-    bool isTablet
-  ) {
+  Widget _buildActionButtons(BuildContext context, bool isTablet) {
     return Column(
       children: [
         // Tombol Ubah Password
-        ElevatedButton.icon(
-          onPressed: () {
+        GestureDetector(
+          onTap: () {
             Get.toNamed(AppRoutes.ubahPassord);
           },
-          icon: const Icon(Icons.lock_reset),
-          label: Text(
-            'Ubah Password',
-            style: TextStyle(
-              fontSize: isTablet ? 18 : 16,
-              fontWeight: FontWeight.w600,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 18),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF6366F1).withOpacity(0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
             ),
-          ),
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white,
-            backgroundColor: buttonColor1,
-            padding: EdgeInsets.symmetric(
-              vertical: isTablet ? 18 : 16, 
-              horizontal: isTablet ? 32 : 24
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.lock_reset,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  'Ubah Password',
+                  style: TextStyle(
+                    fontSize: isTablet ? 18 : 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ],
             ),
-            minimumSize: Size(isTablet ? 300 : double.infinity, 0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            elevation: 4,
           ),
         ),
-        
+
         SizedBox(height: isTablet ? 20 : 16),
-        
+
         // Tombol Logout
-        ElevatedButton.icon(
-          onPressed: () {
+        GestureDetector(
+          onTap: () {
             showDialog(
               context: context,
               builder: (ctx) => AlertDialog(
-                title: const Text('Konfirmasi Logout'),
-                content: const Text('Apakah Anda yakin ingin logout?'),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                title: const Text(
+                  'Konfirmasi Logout',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+                content: const Text(
+                  'Apakah Anda yakin ingin logout?',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                  ),
                 ),
                 actions: [
                   TextButton(
                     onPressed: () {
-                      Navigator.of(ctx).pop(); // Tutup dialog
+                      Navigator.of(ctx).pop();
                     },
-                    child: const Text('Batal'),
+                    child: const Text(
+                      'Batal',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
                   ),
                   ElevatedButton(
                     onPressed: () {
                       siswaC.logout(role: "siswa");
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: buttonColor2,
+                      backgroundColor: const Color(0xFFEF4444),
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(15),
                       ),
                     ),
-                    child: const Text('Logout'),
+                    child: const Text(
+                      'Logout',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
                   ),
                 ],
               ),
             );
           },
-          icon: const Icon(Icons.logout),
-          label: Text(
-            'Logout',
-            style: TextStyle(
-              fontSize: isTablet ? 18 : 16,
-              fontWeight: FontWeight.w600,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 18),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFFEF4444), Color(0xFFDC2626)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFFEF4444).withOpacity(0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
             ),
-          ),
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white,
-            backgroundColor: buttonColor2,
-            padding: EdgeInsets.symmetric(
-              vertical: isTablet ? 18 : 16, 
-              horizontal: isTablet ? 32 : 24
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  'Logout',
+                  style: TextStyle(
+                    fontSize: isTablet ? 18 : 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ],
             ),
-            minimumSize: Size(isTablet ? 300 : double.infinity, 0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            elevation: 4,
           ),
         ),
       ],
@@ -432,7 +579,6 @@ class AnimatedProgressItem extends StatefulWidget {
   final String title;
   final int percentage;
   final Color color;
-  final bool isDarkMode;
   final bool isTablet;
   final int animationDelay;
 
@@ -441,7 +587,6 @@ class AnimatedProgressItem extends StatefulWidget {
     required this.title,
     required this.percentage,
     required this.color,
-    required this.isDarkMode,
     required this.isTablet,
     this.animationDelay = 0,
   });
@@ -485,43 +630,71 @@ class _AnimatedProgressItemState extends State<AnimatedProgressItem>
   @override
   Widget build(BuildContext context) {
     final textStyle = TextStyle(
-      fontSize: widget.isTablet ? 18 : 16,
+      fontSize: widget.isTablet ? 16 : 14,
       fontWeight: FontWeight.w500,
-      color: widget.isDarkMode ? Colors.white : Colors.black87,
+      color: Colors.black87,
+      fontFamily: 'Poppins',
     );
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(
+          color: widget.color.withOpacity(0.1),
+          width: 1,
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(widget.title, style: textStyle),
+              Expanded(
+                child: Text(
+                  widget.title,
+                  style: textStyle.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
               AnimatedBuilder(
                 animation: _animation,
                 builder: (context, child) {
-                  return Text(
-                    '${(_animation.value * 100).toInt()}%',
-                    style: textStyle.copyWith(
-                      color: widget.color,
-                      fontWeight: FontWeight.bold,
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: widget.color.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      '${(_animation.value * 100).toInt()}%',
+                      style: textStyle.copyWith(
+                        color: widget.color,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 12,
+                      ),
                     ),
                   );
                 },
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           AnimatedBuilder(
             animation: _animation,
             builder: (context, child) {
               return ClipRRect(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
                 child: LinearProgressIndicator(
                   value: _animation.value,
-                  backgroundColor: widget.color.withOpacity(0.2),
+                  backgroundColor: widget.color.withOpacity(0.1),
                   color: widget.color,
                   minHeight: widget.isTablet ? 12 : 10,
                 ),

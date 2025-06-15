@@ -37,6 +37,7 @@ class ApiConstants {
   static String quizEnpoint = "$baseUrlApi/quiz";
   static String quizAttemptStartEnpoint = "$baseUrlApi/quiz-attempts/start";
   static String quizAttemptFinishEnpoint = "$baseUrlApi/quiz-attempts/finish";
+  static String quizAutoFinishEnpoint = "$baseUrlApi/quiz-attempts/auto-finish";
 
   static String quizTopFiveEnpoint = "$baseUrlApi/quiz-top-five";
   static String quizGuruEnpoint = "$baseUrlApi/quiz-guru";

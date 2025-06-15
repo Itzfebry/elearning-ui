@@ -39,12 +39,40 @@ class RankingController extends GetxController {
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         skorMe.value = json['skor_me']['skor'];
+
+        // Mengurutkan data berdasarkan skor tertinggi
+        if (json['data'] != null && json['data'] is List) {
+          List<dynamic> sortedData = List.from(json['data']);
+
+          // Log data sebelum pengurutan
+          log("Data sebelum pengurutan:");
+          for (int i = 0; i < sortedData.length; i++) {
+            log("${i + 1}. ${sortedData[i]['siswa']['nama']} - Skor: ${sortedData[i]['skor']}");
+          }
+
+          sortedData.sort((a, b) {
+            int skorA = int.tryParse(a['skor'].toString()) ?? 0;
+            int skorB = int.tryParse(b['skor'].toString()) ?? 0;
+            return skorB.compareTo(skorA); // Urutkan dari tertinggi ke terendah
+          });
+
+          // Log data setelah pengurutan
+          log("Data setelah pengurutan (skor tertinggi):");
+          for (int i = 0; i < sortedData.length; i++) {
+            log("${i + 1}. ${sortedData[i]['siswa']['nama']} - Skor: ${sortedData[i]['skor']}");
+          }
+
+          json['data'] = sortedData;
+        }
+
         data.value = json;
         if (json['data'].length == 0) {
           isEmpty(true);
         } else {
           isEmpty(false);
         }
+
+        log("Data ranking berhasil diurutkan berdasarkan skor tertinggi");
       } else {
         log("Terjadi kesalahan get data: ${response.statusCode}");
       }
@@ -53,5 +81,11 @@ class RankingController extends GetxController {
     } finally {
       isLoading(false);
     }
+  }
+
+  // Method untuk refresh data
+  Future<void> refreshData() async {
+    var quizId = Get.arguments['quiz_id'];
+    await getQuiz(quizId);
   }
 }

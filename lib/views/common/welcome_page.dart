@@ -9,8 +9,9 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          image: const DecorationImage(
             image: AssetImage("assets/images/welcomescreen.png"),
             fit: BoxFit.cover,
           ),
@@ -38,14 +39,16 @@ class WelcomePage extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  Get.offAllNamed(AppRoutes.selection); // Tidak bisa kembali ke Welcome setelah pindah
+                  Get.offAllNamed(AppRoutes
+                      .selection); // Tidak bisa kembali ke Welcome setelah pindah
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.teal,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 ),
                 child: const Text(
                   "Masuk",

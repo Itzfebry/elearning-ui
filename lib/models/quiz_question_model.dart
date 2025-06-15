@@ -9,25 +9,25 @@ String quizQuestionModelToJson(QuizQuestionModel data) =>
 class QuizQuestionModel {
   bool status;
   String message;
-  Data data;
+  Data? data;
 
   QuizQuestionModel({
     required this.status,
     required this.message,
-    required this.data,
+    this.data,
   });
 
   factory QuizQuestionModel.fromJson(Map<String, dynamic> json) =>
       QuizQuestionModel(
-        status: json["status"],
-        message: json["message"],
-        data: Data.fromJson(json["data"]),
+        status: json["status"] ?? false,
+        message: json["message"] ?? "",
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data.toJson(),
+        "data": data?.toJson(),
       };
 }
 
@@ -41,6 +41,8 @@ class Data {
   String opsiD;
   String jawabanBenar;
   int level;
+  int? waktuTersisa;
+  DateTime? waktuMulai;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -54,22 +56,40 @@ class Data {
     required this.opsiD,
     required this.jawabanBenar,
     required this.level,
+    this.waktuTersisa,
+    this.waktuMulai,
     required this.createdAt,
     required this.updatedAt,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        id: json["id"],
-        quizId: json["quiz_id"],
-        pertanyaan: json["pertanyaan"],
-        opsiA: json["opsi_a"],
-        opsiB: json["opsi_b"],
-        opsiC: json["opsi_c"],
-        opsiD: json["opsi_d"],
-        jawabanBenar: json["jawaban_benar"],
-        level: json["level"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        id: json["id"] is int
+            ? json["id"]
+            : int.tryParse(json["id"].toString()) ?? 0,
+        quizId: json["quiz_id"] is int
+            ? json["quiz_id"]
+            : int.tryParse(json["quiz_id"].toString()) ?? 0,
+        pertanyaan: json["pertanyaan"]?.toString() ?? "",
+        opsiA: json["opsi_a"]?.toString() ?? "",
+        opsiB: json["opsi_b"]?.toString() ?? "",
+        opsiC: json["opsi_c"]?.toString() ?? "",
+        opsiD: json["opsi_d"]?.toString() ?? "",
+        jawabanBenar: json["jawaban_benar"]?.toString() ?? "",
+        level: json["level"] is int
+            ? json["level"]
+            : int.tryParse(json["level"].toString()) ?? 0,
+        waktuTersisa: json["waktu_tersisa"] == null
+            ? null
+            : int.tryParse(json["waktu_tersisa"].toString()),
+        waktuMulai: json["waktu_mulai"] != null
+            ? DateTime.tryParse(json["waktu_mulai"].toString())
+            : null,
+        createdAt: json["created_at"] != null
+            ? DateTime.tryParse(json["created_at"].toString()) ?? DateTime.now()
+            : DateTime.now(),
+        updatedAt: json["updated_at"] != null
+            ? DateTime.tryParse(json["updated_at"].toString()) ?? DateTime.now()
+            : DateTime.now(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -82,6 +102,8 @@ class Data {
         "opsi_d": opsiD,
         "jawaban_benar": jawabanBenar,
         "level": level,
+        "waktu_tersisa": waktuTersisa,
+        "waktu_mulai": waktuMulai?.toIso8601String(),
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
       };
