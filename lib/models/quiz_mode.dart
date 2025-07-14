@@ -68,10 +68,17 @@ class Datum {
             : int.tryParse(json["total_soal"].toString()) ?? 0,
         totalSoalTampil: json["total_soal_tampil"]?.toString() ?? "0",
         waktu: json["waktu"] is int
-            ? json["waktu"]
+            ? (json["waktu"] > 0 && json["waktu"] <= 1440
+                ? json["waktu"]
+                : null)
             : (json["waktu"] == null
                 ? null
-                : int.tryParse(json["waktu"].toString())),
+                : (() {
+                    int? parsed = int.tryParse(json["waktu"].toString());
+                    return (parsed != null && parsed > 0 && parsed <= 1440)
+                        ? parsed
+                        : null;
+                  })()),
         matapelajaranId: json["matapelajaran_id"] is int
             ? json["matapelajaran_id"]
             : int.tryParse(json["matapelajaran_id"].toString()) ?? 0,

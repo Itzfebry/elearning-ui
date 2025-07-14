@@ -7,6 +7,7 @@ import 'package:ui/constans/api_constans.dart';
 import 'package:ui/views/siswa/tugas/controllers/submit_tugas_controller.dart';
 import 'package:ui/widgets/my_text.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:ui/widgets/my_date_format.dart';
 
 class TugasCommit extends StatefulWidget {
   const TugasCommit({super.key});
@@ -221,9 +222,38 @@ class _TugasCommitState extends State<TugasCommit>
                       fontFamily: 'Poppins',
                     ),
                   ),
+                  const SizedBox(height: 8),
+                  Text(
+                    Get.arguments['deskripsi'] ?? 'Tidak ada deskripsi tugas.',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                      color: Colors.white70,
+                      fontFamily: 'Poppins',
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
                 ],
               ),
             ),
+
+            if (Get.arguments['submitTugas'] != null &&
+                Get.arguments['submitTugas']['created_at'] != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                child: Row(
+                  children: [
+                    const Icon(Icons.access_time, size: 16, color: Colors.grey),
+                    const SizedBox(width: 4),
+                    Text(
+                      DateTime.parse(Get.arguments['submitTugas']['created_at'])
+                          .fullDateTime(),
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
 
             const SizedBox(height: 24),
 

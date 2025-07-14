@@ -294,7 +294,7 @@ class _QuizSubjectCardState extends State<QuizSubjectCard>
       onTapUp: (_) {
         _animationController.reverse();
         Get.toNamed(AppRoutes.matpelQuizDetail, arguments: {
-          'id': widget.mataPelajaranId,
+          'matpel_id': widget.mataPelajaranId,
           'matpel': widget.title,
         });
       },

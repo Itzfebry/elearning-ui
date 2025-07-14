@@ -8,24 +8,22 @@ import 'package:http/http.dart' as http;
 
 class RankingController extends GetxController {
   var isLoading = false.obs;
-  var skorMe = "".obs;
-  var data = {}.obs;
+  var leaderboard = [].obs;
+  var myScore = ''.obs;
+  var myScoreTime = ''.obs;
   var isEmpty = true.obs;
 
   @override
   void onInit() {
     super.onInit();
     var quizId = Get.arguments['quiz_id'];
-    getQuiz(quizId);
+    getLeaderboard(quizId);
+    getMyScore(quizId);
   }
 
-  Future<void> getQuiz(quizId) async {
+  Future<void> getLeaderboard(String quizId) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-
-    if (token == null) {
-      throw Exception("Token not found");
-    }
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
@@ -33,59 +31,64 @@ class RankingController extends GetxController {
     try {
       isLoading(true);
       final response = await http.get(
-        Uri.parse("${ApiConstants.quizTopFiveEnpoint}?quiz_id=$quizId"),
+        Uri.parse('${ApiConstants.baseUrlApi}/quiz/$quizId/ranking'),
         headers: headers,
       );
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
-        skorMe.value = json['skor_me']['skor'];
-
-        // Mengurutkan data berdasarkan skor tertinggi
-        if (json['data'] != null && json['data'] is List) {
-          List<dynamic> sortedData = List.from(json['data']);
-
-          // Log data sebelum pengurutan
-          log("Data sebelum pengurutan:");
-          for (int i = 0; i < sortedData.length; i++) {
-            log("${i + 1}. ${sortedData[i]['siswa']['nama']} - Skor: ${sortedData[i]['skor']}");
-          }
-
-          sortedData.sort((a, b) {
-            int skorA = int.tryParse(a['skor'].toString()) ?? 0;
-            int skorB = int.tryParse(b['skor'].toString()) ?? 0;
-            return skorB.compareTo(skorA); // Urutkan dari tertinggi ke terendah
-          });
-
-          // Log data setelah pengurutan
-          log("Data setelah pengurutan (skor tertinggi):");
-          for (int i = 0; i < sortedData.length; i++) {
-            log("${i + 1}. ${sortedData[i]['siswa']['nama']} - Skor: ${sortedData[i]['skor']}");
-          }
-
-          json['data'] = sortedData;
-        }
-
-        data.value = json;
-        if (json['data'].length == 0) {
-          isEmpty(true);
+        if (json['success'] == true && json['ranking'] is List) {
+          leaderboard.value = json['ranking'];
+          isEmpty.value = leaderboard.isEmpty;
         } else {
-          isEmpty(false);
+          leaderboard.value = [];
+          isEmpty.value = true;
         }
-
-        log("Data ranking berhasil diurutkan berdasarkan skor tertinggi");
       } else {
-        log("Terjadi kesalahan get data: ${response.statusCode}");
+        leaderboard.value = [];
+        isEmpty.value = true;
       }
     } catch (e) {
-      log("Error get quiz simple: $e");
+      leaderboard.value = [];
+      isEmpty.value = true;
     } finally {
       isLoading(false);
     }
   }
 
-  // Method untuk refresh data
+  Future<void> getMyScore(String quizId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiConstants.baseUrlApi}/quiz/$quizId/skor-saya'),
+        headers: headers,
+      );
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
+        if (json['success'] == true) {
+          myScore.value = json['skor'].toString();
+          myScoreTime.value = json['waktu_selesai'] ?? '';
+        } else {
+          myScore.value = '-';
+          myScoreTime.value = '';
+        }
+      } else {
+        myScore.value = '-';
+        myScoreTime.value = '';
+      }
+    } catch (e) {
+      myScore.value = '-';
+      myScoreTime.value = '';
+    }
+  }
+
   Future<void> refreshData() async {
     var quizId = Get.arguments['quiz_id'];
-    await getQuiz(quizId);
+    await getLeaderboard(quizId);
+    await getMyScore(quizId);
   }
 }

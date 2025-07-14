@@ -12,6 +12,9 @@ class MatpelQuizDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("QuizDetail build called");
+    print("Arguments received: " + Get.arguments.toString());
+    print("Arguments type: " + Get.arguments.runtimeType.toString());
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
@@ -250,6 +253,9 @@ class _TaskItemState extends State<TaskItem>
   @override
   void initState() {
     super.initState();
+    print("QuizDetail initState called");
+    print("Arguments received: " + Get.arguments.toString());
+    print("Arguments type: " + Get.arguments.runtimeType.toString());
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 150),
       vsync: this,
@@ -309,9 +315,10 @@ class _TaskItemState extends State<TaskItem>
           // Show options for completed quiz
           _showQuizOptions(context);
         } else {
-          // Start quiz
+          // Start quiz, kirim juga waktu_quiz
           Get.offAllNamed(AppRoutes.soalQuiz, arguments: {
             "quiz_id": widget.id,
+            "waktu_quiz": widget.waktu,
           });
         }
       },

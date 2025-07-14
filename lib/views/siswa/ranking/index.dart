@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ui/views/siswa/ranking/controllers/ranking_controller.dart';
 import 'package:ui/widgets/my_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RankSiswa extends StatelessWidget {
   // final List<Map<String, dynamic>> ranking = [
@@ -242,203 +243,232 @@ class RankSiswa extends StatelessWidget {
                       );
                     }
 
-                    var data = rankingC.data['data'];
-                    return ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: data.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 15),
+                    var data = rankingC.leaderboard;
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: const EdgeInsets.only(bottom: 15),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Colors.white,
+                                      getMedalColor(index + 1)
+                                          .withOpacity(0.05),
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: getMedalColor(index + 1)
+                                          .withOpacity(0.1),
+                                      blurRadius: 20,
+                                      offset: const Offset(0, 10),
+                                    ),
+                                  ],
+                                  border: Border.all(
+                                    color: getMedalColor(index + 1)
+                                        .withOpacity(0.1),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(15),
+                                  child: Row(
+                                    children: [
+                                      // Rank Badge
+                                      Container(
+                                        width: 50,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [
+                                              getMedalColor(index + 1),
+                                              getMedalColor(index + 1)
+                                                  .withOpacity(0.7),
+                                            ],
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: getMedalColor(index + 1)
+                                                  .withOpacity(0.3),
+                                              blurRadius: 10,
+                                              offset: const Offset(0, 5),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            getMedalEmoji(index + 1),
+                                            style:
+                                                const TextStyle(fontSize: 24),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 15),
+                                      // Student Info
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              data[index]['nama'],
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: 'Poppins',
+                                                color: Color(0xFF2D3748),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              "Peringkat " +
+                                                  (index + 1).toString(),
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: getMedalColor(index + 1),
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      // Score
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 15,
+                                          vertical: 8,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [
+                                              getMedalColor(index + 1),
+                                              getMedalColor(index + 1)
+                                                  .withOpacity(0.7),
+                                            ],
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: getMedalColor(index + 1)
+                                                  .withOpacity(0.3),
+                                              blurRadius: 10,
+                                              offset: const Offset(0, 5),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            const Text(
+                                              "Skor",
+                                              style: TextStyle(
+                                                color: Colors.white70,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            ),
+                                            const SizedBox(height: 2),
+                                            Text(
+                                              "${data[index]['skor']}",
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w700,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        // Skor Pribadi - tampilan profesional
+                        Container(
+                          margin: const EdgeInsets.only(top: 8),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 24, horizontal: 24),
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                Colors.white,
-                                getMedalColor(index + 1).withOpacity(0.05),
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(24),
                             boxShadow: [
                               BoxShadow(
-                                color:
-                                    getMedalColor(index + 1).withOpacity(0.1),
-                                blurRadius: 20,
-                                offset: const Offset(0, 10),
+                                color: Colors.blue.withOpacity(0.08),
+                                blurRadius: 16,
+                                offset: const Offset(0, 8),
                               ),
                             ],
                             border: Border.all(
-                              color: getMedalColor(index + 1).withOpacity(0.1),
-                              width: 1,
-                            ),
+                                color:
+                                    const Color(0xFF667EEA).withOpacity(0.12)),
                           ),
-                          child: Container(
-                            padding: const EdgeInsets.all(15),
-                            child: Row(
-                              children: [
-                                // Rank Badge
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                      colors: [
-                                        getMedalColor(index + 1),
-                                        getMedalColor(index + 1)
-                                            .withOpacity(0.7),
-                                      ],
-                                    ),
-                                    borderRadius: BorderRadius.circular(15),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: getMedalColor(index + 1)
-                                            .withOpacity(0.3),
-                                        blurRadius: 10,
-                                        offset: const Offset(0, 5),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      getMedalEmoji(index + 1),
-                                      style: const TextStyle(fontSize: 24),
-                                    ),
-                                  ),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color(0xFF667EEA).withOpacity(0.12),
+                                  borderRadius: BorderRadius.circular(16),
                                 ),
-                                const SizedBox(width: 15),
-                                // Student Info
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        data[index]['siswa']['nama'],
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                          fontFamily: 'Poppins',
-                                          color: Color(0xFF2D3748),
-                                        ),
+                                child: const Icon(Icons.person,
+                                    color: Color(0xFF667EEA), size: 36),
+                              ),
+                              const SizedBox(width: 18),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Skor Anda',
+                                      style: TextStyle(
+                                        color: Color(0xFF667EEA),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Poppins',
                                       ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        "Peringkat ${index + 1}",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: getMedalColor(index + 1),
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                // Score
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 15,
-                                    vertical: 8,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                      colors: [
-                                        getMedalColor(index + 1),
-                                        getMedalColor(index + 1)
-                                            .withOpacity(0.7),
-                                      ],
                                     ),
-                                    borderRadius: BorderRadius.circular(15),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: getMedalColor(index + 1)
-                                            .withOpacity(0.3),
-                                        blurRadius: 10,
-                                        offset: const Offset(0, 5),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      const Text(
-                                        "Skor",
-                                        style: TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
-                                      const SizedBox(height: 2),
-                                      Text(
-                                        "${data[index]['skor']}",
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w700,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    const SizedBox(height: 6),
+                                    Obx(() => Text(
+                                          rankingC.myScore.value,
+                                          style: const TextStyle(
+                                            color: Color(0xFF222B45),
+                                            fontSize: 36,
+                                            fontWeight: FontWeight.w900,
+                                            fontFamily: 'Poppins',
+                                            letterSpacing: 1.2,
+                                          ),
+                                        )),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        );
-                      },
+                        ),
+                      ],
                     );
                   }),
-                ),
-
-                // Your Score Section
-                const SizedBox(height: 20),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color(0xFF667EEA),
-                        Color(0xFF764BA2),
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF667EEA).withOpacity(0.3),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      const Text(
-                        'Skor Anda',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 16,
-                          fontFamily: 'Poppins',
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Obx(() => Text(
-                            rankingC.skorMe.value,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'Poppins',
-                            ),
-                          )),
-                    ],
-                  ),
                 ),
               ],
             ),

@@ -345,7 +345,7 @@ class _TaskItemState extends State<TaskItem>
       onTapUp: (_) {
         _animationController.reverse();
         Get.toNamed(AppRoutes.matpelQuizRankDetail, arguments: {
-          'id': widget.id,
+          'matpel_id': widget.id,
           'matpel': widget.title,
         });
       },

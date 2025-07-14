@@ -27,11 +27,15 @@ class QuizAttemptController extends GetxController {
   QuizQuestionController questionC = Get.find<QuizQuestionController>();
   var remainingTime = Duration.zero.obs;
   var isTimerRunning = false.obs;
+  var isQuizFinished = false.obs;
 
   // Menambahkan tracking jawaban yang telah dijawab
   var answeredQuestions =
       <String, String>{}.obs; // questionId -> selectedAnswer
   var currentQuestionId = "".obs;
+
+  // Menambahkan tracking semua question IDs untuk auto-finish
+  List<String> allQuestionIds = [];
 
   @override
   void onInit() async {
@@ -60,26 +64,59 @@ class QuizAttemptController extends GetxController {
   // Method untuk memulai timer
   void startTimer() {
     timer?.cancel(); // Cancel existing timer
+    isTimerRunning.value = true;
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (waktuTersisa.value > 0) {
         waktuTersisa.value--;
       } else {
         timer.cancel();
+        isTimerRunning.value = false;
         // Waktu habis, auto finish quiz
         autoFinishQuiz();
       }
     });
   }
 
+  // Method untuk initialize timer dengan validasi yang lebih robust
+  void initializeTimer() {
+    // Validasi waktu quiz
+    if (waktuQuiz.value > 0 && waktuQuiz.value <= 1440) {
+      // Max 24 jam
+      waktuTersisa.value = waktuQuiz.value * 60;
+      startTimer();
+      log("Timer initialized with ${waktuQuiz.value} minutes (${waktuTersisa.value} seconds)");
+    } else if (waktuQuiz.value > 1440) {
+      // Jika waktu terlalu besar, reset ke unlimited
+      waktuQuiz.value = 0;
+      waktuTersisa.value = 0;
+      log("Quiz time too large, reset to unlimited");
+    } else {
+      log("No time limit for this quiz");
+    }
+  }
+
   // Method untuk auto finish quiz ketika waktu habis
   Future<void> autoFinishQuiz() async {
     try {
+      // Kirim jawaban kosong untuk semua soal yang belum dijawab
+      for (String qid in allQuestionIds) {
+        if (!answeredQuestions.containsKey(qid)) {
+          // Kirim jawaban kosong
+          await postQuizAttemptAnswer(
+            quizAttemptId: attemptId.value,
+            questionId: qid,
+            jawabanSiswa: "",
+          );
+        }
+      }
+
       final headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${token.value}',
       };
 
       log("Auto finishing quiz for attempt ID: ${attemptId.value}");
+      log("[DEBUG] Auto finish URL: ${ApiConstants.quizAutoFinishEnpoint}/${attemptId.value}");
 
       final response = await http.post(
         Uri.parse("${ApiConstants.quizAutoFinishEnpoint}/${attemptId.value}"),
@@ -88,6 +125,9 @@ class QuizAttemptController extends GetxController {
 
       log("Auto finish response status: ${response.statusCode}");
       log("Auto finish response body: ${response.body}");
+      if (response.statusCode != 200) {
+        log("[DEBUG] Gagal auto-finish quiz. Status: ${response.statusCode}, Body: ${response.body}, Attempt ID: ${attemptId.value}");
+      }
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
@@ -153,6 +193,19 @@ class QuizAttemptController extends GetxController {
     }
   }
 
+  // Method untuk menyimpan semua question IDs
+  void saveAllQuestionIds(List<String> questionIds) {
+    allQuestionIds = List.from(questionIds);
+    log("Saved ${allQuestionIds.length} question IDs for auto-finish");
+  }
+
+  // Method untuk menghentikan timer quiz
+  void stopQuizTimer() {
+    timer?.cancel();
+    isTimerRunning.value = false;
+    log("Quiz timer stopped manually");
+  }
+
   Future<void> postQuizAttemptStart(var quizId) async {
     final prefs = await SharedPreferences.getInstance();
     if (token.value == "") {
@@ -204,9 +257,6 @@ class QuizAttemptController extends GetxController {
           waktuTersisa.value = 0;
           waktuQuiz.value = 0;
           waktuMulai.value = DateTime.now();
-
-          // Get quiz questions for new attempt
-          questionC.getQuizQuestion(json['attempt_id']);
         } else {
           log("JSON tidak memiliki 'attempt_id'");
           Get.dialog(
@@ -230,11 +280,20 @@ class QuizAttemptController extends GetxController {
         // Set waktu quiz dan mulai timer
         if (json.containsKey('waktu_quiz') && json['waktu_quiz'] != null) {
           waktuQuiz.value = json['waktu_quiz'];
-          waktuTersisa.value = waktuQuiz.value * 60; // Konversi ke detik
-          startTimer();
+          initializeTimer(); // Use the new initializeTimer method
           log("Timer started with ${waktuQuiz.value} minutes");
         } else {
-          log("No time limit for this quiz");
+          // Jika backend tidak mengirim waktu_quiz, ambil dari argumen
+          final waktuQuizArg = Get.arguments['waktu_quiz'];
+          if (waktuQuizArg != null &&
+              waktuQuizArg != "null" &&
+              int.tryParse(waktuQuizArg.toString()) != null) {
+            waktuQuiz.value = int.parse(waktuQuizArg.toString());
+            initializeTimer(); // Use the new initializeTimer method
+            log("Timer started with ${waktuQuiz.value} minutes (from arg)");
+          } else {
+            log("No time limit for this quiz");
+          }
         }
 
         // Set waktu mulai
@@ -242,6 +301,12 @@ class QuizAttemptController extends GetxController {
           waktuMulai.value = DateTime.parse(json['waktu_mulai']);
           log("Start time set: ${waktuMulai.value}");
         }
+
+        // Log response backend
+        log("[DEBUG] Start quiz response body: ${jsonEncode(json)}");
+
+        // Baru panggil getQuizQuestion setelah timer di-set
+        questionC.getQuizQuestion(json['attempt_id']);
 
         snackbarAlert(json['message'] ?? "Quiz",
             "Tidak boleh keluar dari quiz ini!.", Colors.green);
@@ -404,7 +469,15 @@ class QuizAttemptController extends GetxController {
 
           // Update waktu tersisa dari response
           if (json['data']['waktu_tersisa'] != null) {
-            waktuTersisa.value = json['data']['waktu_tersisa'];
+            int serverTime = json['data']['waktu_tersisa'];
+            // Validasi waktu dari server
+            if (serverTime >= 0 && serverTime <= 86400) {
+              // Max 24 jam dalam detik
+              waktuTersisa.value = serverTime;
+              log("Updated remaining time from server: $serverTime seconds");
+            } else {
+              log("Invalid server time received: $serverTime, keeping local timer");
+            }
           }
 
           // Log the parsed data

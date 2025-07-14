@@ -65,10 +65,14 @@ class _SoalQuizState extends State<SoalQuiz> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Obx(() {
-                    final minutes = quizAttemptC.waktuTersisa.value ~/ 60;
-                    final seconds = quizAttemptC.waktuTersisa.value % 60;
-                    final isWarning = quizAttemptC.waktuTersisa.value <= 300;
-                    final isCritical = quizAttemptC.waktuTersisa.value <= 60;
+                    // Handle negative time and ensure valid display
+                    final displayTime = quizAttemptC.waktuTersisa.value < 0
+                        ? 0
+                        : quizAttemptC.waktuTersisa.value;
+                    final minutes = displayTime ~/ 60;
+                    final seconds = displayTime % 60;
+                    final isWarning = displayTime <= 300;
+                    final isCritical = displayTime <= 60;
 
                     return Row(
                       mainAxisSize: MainAxisSize.min,
@@ -104,6 +108,16 @@ class _SoalQuizState extends State<SoalQuiz> {
           ],
         ),
         body: Obx(() {
+          if (quizAttemptC.isQuizFinished.value) {
+            log('Redirecting to hasil quiz: isQuizFinished=true');
+            Future.microtask(() {
+              if (Get.currentRoute != AppRoutes.quizSelesai) {
+                Get.offAllNamed(AppRoutes.quizSelesai,
+                    arguments: {'quiz_id': quizAttemptC.quizIdRx.value});
+              }
+            });
+            return const Center(child: CircularProgressIndicator());
+          }
           if (quizQuestionC.isLoading.value) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -247,6 +261,9 @@ class _SoalQuizState extends State<SoalQuiz> {
     String label,
   ) {
     return Obx(() {
+      if (quizAttemptC.isQuizFinished.value) {
+        return const SizedBox.shrink();
+      }
       bool isAnswered = quizAttemptC.isQuestionAnswered(questionId);
       String? selectedAnswer = quizAttemptC.getSelectedAnswer(questionId);
       bool isThisOptionSelected = selectedAnswer == opsi;

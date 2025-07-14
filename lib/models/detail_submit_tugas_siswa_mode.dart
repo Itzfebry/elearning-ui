@@ -125,8 +125,7 @@ class SubmitTugas {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "tanggal":
-            "${tanggal.year.toString().padLeft(4, '0')}-${tanggal.month.toString().padLeft(2, '0')}-${tanggal.day.toString().padLeft(2, '0')}",
+        "tanggal": tanggal.toIso8601String(),
         "nisn": nisn,
         "tugas_id": tugasId,
         "text": text,
@@ -149,6 +148,7 @@ class Tugas {
   String tahunAjaran;
   DateTime createdAt;
   DateTime updatedAt;
+  String? deskripsi;
 
   Tugas({
     required this.id,
@@ -161,6 +161,7 @@ class Tugas {
     required this.tahunAjaran,
     required this.createdAt,
     required this.updatedAt,
+    this.deskripsi,
   });
 
   factory Tugas.fromJson(Map<String, dynamic> json) => Tugas(
@@ -174,6 +175,7 @@ class Tugas {
         tahunAjaran: json["tahun_ajaran"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
+        deskripsi: json["deskripsi"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -189,5 +191,6 @@ class Tugas {
         "tahun_ajaran": tahunAjaran,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
+        "deskripsi": deskripsi,
       };
 }

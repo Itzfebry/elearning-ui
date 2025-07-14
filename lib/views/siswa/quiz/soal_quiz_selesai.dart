@@ -66,6 +66,14 @@ class SoalQuizSelesai extends StatelessWidget {
                       );
                     }
 
+                    // Validasi agar benar + salah = total soal
+                    int totalSoal = int.tryParse(data.jumlahSoal) ?? 0;
+                    int jawabanBenar = int.tryParse(data.jawabanBenar) ?? 0;
+                    int jawabanSalah = int.tryParse(data.jawabanSalah) ?? 0;
+                    if (jawabanBenar + jawabanSalah != totalSoal) {
+                      jawabanSalah = totalSoal - jawabanBenar;
+                    }
+
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -114,9 +122,9 @@ class SoalQuizSelesai extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 12),
                                 Text(
-                                  'Total Soal: ${data.jumlahSoal}',
+                                  'Total Soal Quiz: ${data.jumlahSoal}',
                                   style: const TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black87,
                                   ),
@@ -146,7 +154,7 @@ class SoalQuizSelesai extends StatelessWidget {
                                             ),
                                             const SizedBox(height: 4),
                                             Text(
-                                              "${data.jawabanBenar}",
+                                              "${jawabanBenar}",
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
@@ -186,7 +194,7 @@ class SoalQuizSelesai extends StatelessWidget {
                                             ),
                                             const SizedBox(height: 4),
                                             Text(
-                                              "${data.jawabanSalah}",
+                                              "${jawabanSalah}",
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
@@ -245,15 +253,14 @@ class SoalQuizSelesai extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              Obx(() => Text(
-                                    quizFinishC.skorMe.value,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.w700,
-                                      fontFamily: 'Poppins',
-                                    ),
-                                  )),
+                              Text(
+                                data.skor,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ],
                           ),
                         ),

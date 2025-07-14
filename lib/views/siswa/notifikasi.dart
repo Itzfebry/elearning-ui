@@ -8,24 +8,39 @@ class NotifSiswa extends StatelessWidget {
   NotifSiswa({super.key});
   final notifC = Get.find<NotifikasiController>();
 
-  aksi(type) {
-    switch (type) {
-      case "Quiz":
-        Get.toNamed(AppRoutes.matpelQuiz)?.then((_) {
-          notifC.getNotif();
-        });
-        break;
-      case "Materi":
-        Get.toNamed(AppRoutes.kelasmatapelajarans)?.then((_) {
-          notifC.getNotif();
-        });
-        break;
-      case "Tugas":
-        Get.toNamed(AppRoutes.tugasSiswa)?.then((_) {
-          notifC.getNotif();
-        });
-        break;
-      default:
+  aksi(type, {String? matapelajaranId, String? matapelajaranNama}) {
+    // Jika id atau nama matapelajaran kosong/null, fallback ke daftar sesuai kategori
+    if (matapelajaranId != null &&
+        matapelajaranId.isNotEmpty &&
+        matapelajaranNama != null &&
+        matapelajaranNama.isNotEmpty) {
+      switch (type) {
+        case "Tugas":
+          Get.toNamed(AppRoutes.tugasDetailSiswa, arguments: matapelajaranId);
+          return;
+        case "Quiz":
+          Get.toNamed(AppRoutes.matpelQuizDetail, arguments: {
+            'matpel_id': matapelajaranId,
+            'matpel': matapelajaranNama,
+          });
+          return;
+        case "Materi":
+          Get.toNamed(AppRoutes.materiSiswa, arguments: matapelajaranId);
+          return;
+      }
+    } else {
+      // Fallback jika id/nama matapelajaran kosong/null
+      switch (type) {
+        case "Tugas":
+          Get.toNamed(AppRoutes.tugasSiswa);
+          return;
+        case "Quiz":
+          Get.toNamed(AppRoutes.matpelQuiz);
+          return;
+        case "Materi":
+          Get.toNamed(AppRoutes.materiSiswa);
+          return;
+      }
     }
   }
 
@@ -56,21 +71,24 @@ class NotifSiswa extends StatelessWidget {
               ),
             );
           }
-          
+
           if (notifC.dataNotif.isEmpty) {
             return _buildEmptyState();
           }
-          
+
           return ListView.builder(
             itemCount: notifC.dataNotif.length,
             itemBuilder: (context, index) {
               var data = notifC.dataNotif[index];
+              print('NOTIF DATA: ' + data.toString()); // Log data notifikasi
               return _buildNotificationCard(
-                id: data['id'],
-                type: data['type'],
-                judul: data['judul'],
-                isActive: data['is_active'],
-                waktu: data['created_at'],
+                id: (data['id'] ?? '').toString(),
+                type: data['type'] ?? '',
+                judul: data['judul'] ?? '',
+                isActive: data['is_active'] ?? false,
+                waktu: data['created_at'] ?? '',
+                matapelajaranId: data['matapelajaran_id']?.toString() ?? '',
+                matapelajaranNama: data['matapelajaran_nama']?.toString() ?? '',
                 index: index,
               );
             },
@@ -118,6 +136,8 @@ class NotifSiswa extends StatelessWidget {
     required String judul,
     required bool isActive,
     required String waktu,
+    String matapelajaranId = '',
+    String matapelajaranNama = '',
     required int index,
   }) {
     // Animation delay based on index
@@ -140,7 +160,9 @@ class NotifSiswa extends StatelessWidget {
           child: InkWell(
             onTap: () {
               notifC.readNotif(id: id);
-              aksi(type);
+              aksi(type,
+                  matapelajaranId: matapelajaranId,
+                  matapelajaranNama: matapelajaranNama);
             },
             borderRadius: BorderRadius.circular(16),
             child: Container(
@@ -148,8 +170,9 @@ class NotifSiswa extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                border: isActive 
-                    ? Border.all(color: _getTypeColor(type).withOpacity(0.3), width: 2)
+                border: isActive
+                    ? Border.all(
+                        color: _getTypeColor(type).withOpacity(0.3), width: 2)
                     : null,
                 boxShadow: [
                   BoxShadow(
@@ -176,7 +199,7 @@ class NotifSiswa extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  
+
                   // Content
                   Expanded(
                     child: Column(
@@ -216,20 +239,32 @@ class NotifSiswa extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 8),
-                        
+
                         // Title
                         Text(
                           judul,
                           style: TextStyle(
                             fontSize: 16,
-                            fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
+                            fontWeight:
+                                isActive ? FontWeight.w700 : FontWeight.w600,
                             color: const Color(0xFF1E293B),
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
+                        if (matapelajaranNama != null &&
+                            matapelajaranNama.isNotEmpty) ...[
+                          const SizedBox(height: 2),
+                          Text(
+                            matapelajaranNama,
+                            style: const TextStyle(
+                                fontSize: 12, color: Colors.grey),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                         const SizedBox(height: 4),
-                        
+
                         // Time
                         Row(
                           children: [
@@ -252,7 +287,7 @@ class NotifSiswa extends StatelessWidget {
                       ],
                     ),
                   ),
-                  
+
                   // Arrow Icon
                   Icon(
                     Icons.chevron_right,
@@ -300,7 +335,7 @@ class NotifSiswa extends StatelessWidget {
       final DateTime dateTime = DateTime.parse(waktu);
       final DateTime now = DateTime.now();
       final Duration difference = now.difference(dateTime);
-      
+
       if (difference.inDays > 0) {
         return '${difference.inDays} hari lalu';
       } else if (difference.inHours > 0) {

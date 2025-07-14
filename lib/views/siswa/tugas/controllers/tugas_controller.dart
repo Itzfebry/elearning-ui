@@ -78,6 +78,15 @@ class TugasController extends GetxController {
               tugasM = TugasModel.fromJson(json);
               log("Tugas model created successfully");
               log("Data length: ${tugasM?.data.length ?? 0}");
+
+              // Log deskripsi untuk setiap tugas
+              if (tugasM?.data.isNotEmpty == true) {
+                for (int i = 0; i < tugasM!.data.length; i++) {
+                  var tugas = tugasM!.data[i];
+                  log("Tugas ${i + 1} - ID: ${tugas.id}, Nama: ${tugas.nama}");
+                  log("Tugas ${i + 1} - Deskripsi: ${tugas.deskripsi ?? 'null'}");
+                }
+              }
             } catch (parseError) {
               log("Error parsing TugasModel: $parseError");
               log("JSON structure: $json");

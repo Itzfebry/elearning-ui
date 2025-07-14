@@ -155,11 +155,12 @@ class _MateriViewState extends State<MateriView>
                           selectedSemester = value!;
                         });
                         materiC.getMateriBuku(
-                            idMatpel: Get.arguments, semester: selectedSemester);
+                            idMatpel: Get.arguments,
+                            semester: selectedSemester);
                       },
                     ),
                   ),
-                  
+
                   // Materials List
                   if (materiC.isLoadingBuku.value)
                     const Expanded(
@@ -220,14 +221,17 @@ class _MateriViewState extends State<MateriView>
                                 Container(
                                   padding: const EdgeInsets.all(16),
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       // Document Icon
                                       Container(
                                         padding: const EdgeInsets.all(12),
                                         decoration: BoxDecoration(
-                                          color: AppTheme.primaryGreenLight.withOpacity(0.1),
-                                          borderRadius: BorderRadius.circular(10),
+                                          color: AppTheme.primaryGreenLight
+                                              .withOpacity(0.1),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                         child: const Icon(
                                           Icons.description,
@@ -239,7 +243,8 @@ class _MateriViewState extends State<MateriView>
                                       // Material Title and Date
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               materi[index].judulMateri,
@@ -255,14 +260,18 @@ class _MateriViewState extends State<MateriView>
                                                 const Icon(
                                                   Icons.calendar_month,
                                                   size: 14,
-                                                  color: AppTheme.neutralDarkGrey,
+                                                  color:
+                                                      AppTheme.neutralDarkGrey,
                                                 ),
                                                 const SizedBox(width: 4),
                                                 Text(
-                                                  materi[index].tanggal.simpleDateRevers(),
+                                                  materi[index]
+                                                      .tanggal
+                                                      .fullDateTime(),
                                                   style: const TextStyle(
                                                     fontSize: 12,
-                                                    color: AppTheme.neutralDarkGrey,
+                                                    color: AppTheme
+                                                        .neutralDarkGrey,
                                                   ),
                                                 ),
                                               ],
@@ -273,11 +282,12 @@ class _MateriViewState extends State<MateriView>
                                     ],
                                   ),
                                 ),
-                                
+
                                 // Download Button
                                 Container(
                                   width: double.infinity,
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 12),
                                   decoration: const BoxDecoration(
                                     color: Color(0xFFF5F7FA),
                                     borderRadius: BorderRadius.only(
@@ -296,7 +306,8 @@ class _MateriViewState extends State<MateriView>
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: AppTheme.primaryGreen,
                                       foregroundColor: AppTheme.neutralWhite,
-                                      padding: const EdgeInsets.symmetric(vertical: 12),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(8),
                                       ),
@@ -304,7 +315,8 @@ class _MateriViewState extends State<MateriView>
                                     icon: const Icon(Icons.download, size: 18),
                                     label: const Text(
                                       "Download Materi",
-                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ),
@@ -380,7 +392,7 @@ class _MateriViewState extends State<MateriView>
                       },
                     ),
                   ),
-                  
+
                   // Video List
                   if (materiC.isLoadingVideo.value)
                     const Expanded(
@@ -421,8 +433,10 @@ class _MateriViewState extends State<MateriView>
                         itemCount: materiC.materiVideo?.data.length ?? 0,
                         itemBuilder: (context, index) {
                           final video = materiC.materiVideo!.data[index];
-                          final videoId = Uri.parse(video.path).queryParameters['v'];
-                          final thumbnailUrl = 'https://img.youtube.com/vi/$videoId/0.jpg';
+                          final videoId =
+                              Uri.parse(video.path).queryParameters['v'];
+                          final thumbnailUrl =
+                              'https://img.youtube.com/vi/$videoId/0.jpg';
 
                           return Container(
                             margin: const EdgeInsets.only(bottom: 20),
@@ -474,7 +488,8 @@ class _MateriViewState extends State<MateriView>
                                                 shape: BoxShape.circle,
                                                 boxShadow: [
                                                   BoxShadow(
-                                                    color: Colors.black.withOpacity(0.3),
+                                                    color: Colors.black
+                                                        .withOpacity(0.3),
                                                     blurRadius: 10,
                                                     offset: const Offset(0, 4),
                                                   ),
@@ -492,12 +507,13 @@ class _MateriViewState extends State<MateriView>
                                     ],
                                   ),
                                 ),
-                                
+
                                 // Video Title and Description
                                 Padding(
                                   padding: const EdgeInsets.all(16),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         video.judulMateri,
@@ -507,22 +523,31 @@ class _MateriViewState extends State<MateriView>
                                           color: AppTheme.neutralBlack,
                                         ),
                                       ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        video.deskripsi,
-                                        style: const TextStyle(
-                                          color: AppTheme.neutralDarkGrey,
-                                          height: 1.4,
-                                        ),
+                                      const SizedBox(height: 6),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.calendar_today,
+                                              size: 14,
+                                              color: AppTheme.neutralDarkGrey),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            video.tanggal.fullDateTime(),
+                                            style: const TextStyle(
+                                                fontSize: 12,
+                                                color:
+                                                    AppTheme.neutralDarkGrey),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ),
-                                
+
                                 // Watch Button
                                 Container(
                                   width: double.infinity,
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 12),
                                   decoration: const BoxDecoration(
                                     color: Color(0xFFF5F7FA),
                                     borderRadius: BorderRadius.only(
@@ -534,12 +559,14 @@ class _MateriViewState extends State<MateriView>
                                     onPressed: () => _launchUrl(video.path),
                                     style: TextButton.styleFrom(
                                       foregroundColor: AppTheme.accentBlue,
-                                      padding: const EdgeInsets.symmetric(vertical: 12),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
                                     ),
                                     icon: const Icon(Icons.play_circle_outline),
                                     label: const Text(
                                       "Tonton di YouTube",
-                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ),

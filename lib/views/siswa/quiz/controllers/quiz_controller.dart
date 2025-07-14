@@ -35,8 +35,8 @@ class QuizController extends GetxController {
     log("Get.arguments: ${Get.arguments.toString()}");
 
     // Check if arguments are available
-    if (Get.arguments == null || !Get.arguments.containsKey('id')) {
-      log("Arguments not available or missing 'id'");
+    if (Get.arguments == null || !Get.arguments.containsKey('matpel_id')) {
+      log("Arguments not available or missing 'matpel_id'");
       isEmptyData.value = true;
       return;
     }
@@ -51,7 +51,7 @@ class QuizController extends GetxController {
     try {
       isLoading(true);
       final url =
-          "${ApiConstants.quizEnpoint}?matapelajaran_id=${Get.arguments['id'].toString()}";
+          "${ApiConstants.quizEnpoint}?matapelajaran_id=${Get.arguments['matpel_id'].toString()}";
       log("Requesting URL: $url");
 
       final response = await http.get(

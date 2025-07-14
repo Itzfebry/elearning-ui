@@ -24,9 +24,22 @@ class _TugasDetailState extends State<TugasDetail> {
   void initState() {
     super.initState();
     log("TugasDetail initState called");
-    log("Arguments received: ${Get.arguments}");
-    log("Arguments type: ${Get.arguments.runtimeType}");
-    tugasC.getTugas(id: Get.arguments, type: "belum");
+    log("Arguments received: " + Get.arguments.toString());
+    log("Arguments type: " + Get.arguments.runtimeType.toString());
+    dynamic arg = Get.arguments;
+    String? tugasId;
+    if (arg is String) {
+      tugasId = arg;
+    } else if (arg is Map && arg['id'] != null) {
+      tugasId = arg['id'].toString();
+    } else if (arg is int) {
+      tugasId = arg.toString();
+    }
+    print(
+        '[DETAIL] ID diterima di detail: $tugasId ( [36m${tugasId.runtimeType} [0m)');
+    if (tugasId != null) {
+      tugasC.getTugas(id: tugasId, type: "belum");
+    }
   }
 
   Future<void> getCurrentTime() async {
@@ -355,6 +368,7 @@ class _TugasDetailState extends State<TugasDetail> {
                                 "id": data.id,
                                 "tipe_tugas": "belum",
                                 "title": data.nama,
+                                "deskripsi": data.deskripsi,
                                 "submitTugas": null
                               },
                             )?.then(
@@ -401,25 +415,93 @@ class _TugasDetailState extends State<TugasDetail> {
                                             color: Colors.black87,
                                           ),
                                         ),
-                                        const SizedBox(height: 4),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                            vertical: 4,
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          data!.deskripsi
+                                                      ?.toString()
+                                                      .isNotEmpty ==
+                                                  true
+                                              ? data!.deskripsi.toString()
+                                              : 'Tidak ada deskripsi tugas.',
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black54,
+                                            fontStyle: FontStyle.italic,
                                           ),
-                                          decoration: BoxDecoration(
-                                            color: Colors.orange.shade100,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                          child: Text(
-                                            "Belum Dikerjakan",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.orange.shade700,
+                                        ),
+                                        const SizedBox(height: 6),
+                                        // Hapus created_at dan updated_at untuk tugas belum
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Icon(Icons.calendar_today,
+                                                    size: 16,
+                                                    color: Colors.blue),
+                                                const SizedBox(width: 6),
+                                                Text(
+                                                  'Tanggal dibuat:',
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.blue,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                              ],
                                             ),
-                                          ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 22.0,
+                                                  top: 2,
+                                                  bottom: 6),
+                                              child: (() {
+                                                final t = data.createdAt;
+                                                final dt = t is! DateTime
+                                                    ? DateTime.parse(
+                                                        t.toString())
+                                                    : t;
+                                                return Text(
+                                                  dt.fullDateTime(),
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color:
+                                                          Colors.blue.shade800,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                );
+                                              })(),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Icon(Icons.schedule,
+                                                    size: 16,
+                                                    color: Colors.red),
+                                                const SizedBox(width: 6),
+                                                Text(
+                                                  'Tenggat tugas:',
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.red,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                              ],
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 22.0, top: 2),
+                                              child: Text(
+                                                data.tenggat.fullDateTime(),
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.red.shade800,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -455,7 +537,7 @@ class _TugasDetailState extends State<TugasDetail> {
                                           const SizedBox(width: 4),
                                           Flexible(
                                             child: Text(
-                                              data.tanggal.simpleDateRevers(),
+                                              data.tanggal.fullDateTime(),
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w600,
@@ -490,7 +572,7 @@ class _TugasDetailState extends State<TugasDetail> {
                                           const SizedBox(width: 4),
                                           Flexible(
                                             child: Text(
-                                              data.tenggat.simpleDateRevers(),
+                                              data.tenggat.fullDateTime(),
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w600,
@@ -672,6 +754,7 @@ class _TugasDetailState extends State<TugasDetail> {
                               "id": data!.submitTugas!.id,
                               "tipe_tugas": "selesai",
                               "title": data.nama,
+                              "deskripsi": data.deskripsi,
                               "submitTugas": {
                                 "id": data.submitTugas!.id,
                                 "tanggal": data.submitTugas!.tanggal,
@@ -716,6 +799,20 @@ class _TugasDetailState extends State<TugasDetail> {
                                             color: Colors.black87,
                                           ),
                                         ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          data!.deskripsi
+                                                      ?.toString()
+                                                      .isNotEmpty ==
+                                                  true
+                                              ? data!.deskripsi.toString()
+                                              : 'Tidak ada deskripsi tugas.',
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black54,
+                                            fontStyle: FontStyle.italic,
+                                          ),
+                                        ),
                                         const SizedBox(height: 4),
                                         Container(
                                           padding: const EdgeInsets.symmetric(
@@ -747,77 +844,129 @@ class _TugasDetailState extends State<TugasDetail> {
                                 ],
                               ),
                               const SizedBox(height: 15),
-                              Row(
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 6,
+                                  Row(
+                                    children: [
+                                      Icon(Icons.calendar_today,
+                                          size: 16, color: Colors.blue),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        'Tanggal dibuat:',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.blue,
+                                            fontWeight: FontWeight.w600),
                                       ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.7),
-                                        borderRadius: BorderRadius.circular(10),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 22.0, top: 2, bottom: 6),
+                                    child: (() {
+                                      final t = data.createdAt;
+                                      final dt = t is! DateTime
+                                          ? DateTime.parse(t.toString())
+                                          : t;
+                                      return Text(
+                                        dt.fullDateTime(),
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.blue.shade800,
+                                            fontWeight: FontWeight.w600),
+                                      );
+                                    })(),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.schedule,
+                                          size: 16, color: Colors.red),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        'Tenggat tugas:',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.w600),
                                       ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.calendar_today,
-                                            size: 14,
-                                            color: Colors.blue.shade600,
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Flexible(
-                                            child: Text(
-                                              data.tanggal.simpleDateRevers(),
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.blue.shade600,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 22.0, top: 2, bottom: 6),
+                                    child: Text(
+                                      data.tenggat.fullDateTime(),
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.red.shade800,
+                                          fontWeight: FontWeight.w600),
                                     ),
                                   ),
-                                  const SizedBox(width: 6),
-                                  Expanded(
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 6,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red.shade50,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.schedule,
-                                            size: 14,
-                                            color: Colors.red.shade600,
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Flexible(
-                                            child: Text(
-                                              data.tenggat.simpleDateRevers(),
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.red.shade600,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                  if (data.submitTugas != null) ...[
+                                    Row(
+                                      children: [
+                                        Icon(Icons.done_all,
+                                            size: 16, color: Colors.green),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          'Waktu submit:',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.green,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
                                     ),
-                                  ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 22.0, top: 2, bottom: 6),
+                                      child: (() {
+                                        final t = data.submitTugas!.createdAt;
+                                        final dt = t is! DateTime
+                                            ? DateTime.parse(t.toString())
+                                            : t;
+                                        return Text(
+                                          dt.fullDateTime(),
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.green.shade800,
+                                              fontWeight: FontWeight.w600),
+                                        );
+                                      })(),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.update,
+                                            size: 16, color: Colors.orange),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          'Diperbarui:',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.orange,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 22.0, top: 2),
+                                      child: (() {
+                                        final t = data.submitTugas!.updatedAt;
+                                        final dt = t is! DateTime
+                                            ? DateTime.parse(t.toString())
+                                            : t;
+                                        return Text(
+                                          dt.fullDateTime(),
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.orange.shade800,
+                                              fontWeight: FontWeight.w600),
+                                        );
+                                      })(),
+                                    ),
+                                  ],
                                 ],
                               ),
                               const SizedBox(height: 10),
@@ -831,20 +980,43 @@ class _TugasDetailState extends State<TugasDetail> {
                                   color: Colors.blue.shade50,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                child: Row(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Icon(
-                                      Icons.upload_file,
-                                      size: 16,
-                                      color: Colors.blue.shade600,
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.upload_file,
+                                          size: 16,
+                                          color: Colors.blue.shade600,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          "Dikumpulkan:",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.blue.shade600,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      "Dikumpulkan: ${data.submitTugas!.tanggal.simpleDateRevers()}",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.blue.shade600,
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 24.0, top: 4),
+                                      child: Text(
+                                        (() {
+                                          final t = data.submitTugas!.updatedAt;
+                                          final dt = t is! DateTime
+                                              ? DateTime.parse(t.toString())
+                                              : t;
+                                          return dt.fullDateTime();
+                                        })(),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.blue.shade600,
+                                        ),
                                       ),
                                     ),
                                   ],

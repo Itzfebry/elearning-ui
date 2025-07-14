@@ -55,6 +55,7 @@ class Datum {
   DateTime updatedAt;
   MataPelajaran mataPelajaran;
   SubmitTugas? submitTugas;
+  String? deskripsi;
 
   Datum({
     required this.id,
@@ -68,14 +69,16 @@ class Datum {
     required this.createdAt,
     required this.updatedAt,
     required this.mataPelajaran,
-    required this.submitTugas,
+    this.submitTugas,
+    this.deskripsi,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) {
     try {
-      log("Parsing Datum with id: ${json['id']}");
-      log("submit_tugas type: ${json['submit_tugas']?.runtimeType}");
-      log("submit_tugas value: ${json['submit_tugas']}");
+      log("Parsing Datum with id: " + json['id'].toString());
+      log("submit_tugas type: " +
+          (json['submit_tugas']?.runtimeType.toString() ?? 'null'));
+      log("submit_tugas value: " + json['submit_tugas'].toString());
 
       SubmitTugas? submitTugas;
       if (json["submit_tugas"] == null) {
@@ -83,7 +86,8 @@ class Datum {
         log("submit_tugas is null");
       } else if (json["submit_tugas"] is List) {
         var submitList = json["submit_tugas"] as List;
-        log("submit_tugas is List with length: ${submitList.length}");
+        log("submit_tugas is List with length: " +
+            submitList.length.toString());
         if (submitList.isNotEmpty) {
           submitTugas = SubmitTugas.fromJson(submitList[0]);
           log("Created SubmitTugas from first item in list");
@@ -96,7 +100,8 @@ class Datum {
         log("Created SubmitTugas from Map");
       } else {
         submitTugas = null;
-        log("submit_tugas is neither List nor Map, type: ${json['submit_tugas'].runtimeType}");
+        log("submit_tugas is neither List nor Map, type: " +
+            json['submit_tugas'].runtimeType.toString());
       }
 
       return Datum(
@@ -107,11 +112,11 @@ class Datum {
         tenggat: json["tenggat"] != null
             ? DateTime.parse(json["tenggat"].toString())
             : DateTime.now(),
-        guruNip: json["guru_nip"] ?? "",
-        nama: json["nama"] ?? "",
+        guruNip: json["guru_nip"]?.toString() ?? "",
+        nama: json["nama"]?.toString() ?? "",
         matapelajaranId: json["matapelajaran_id"] ?? 0,
-        kelas: json["kelas"] ?? "",
-        tahunAjaran: json["tahun_ajaran"] ?? "",
+        kelas: json["kelas"]?.toString() ?? "",
+        tahunAjaran: json["tahun_ajaran"]?.toString() ?? "",
         createdAt: json["created_at"] != null
             ? DateTime.parse(json["created_at"].toString())
             : DateTime.now(),
@@ -130,7 +135,12 @@ class Datum {
                 updatedAt: DateTime.now(),
               ),
         submitTugas: submitTugas,
+        deskripsi:
+            json["deskripsi"] != null ? json["deskripsi"].toString() : null,
       );
+
+      // Log hasil parsing deskripsi
+      log("Final deskripsi value: ${json["deskripsi"] != null ? json["deskripsi"].toString() : null}");
     } catch (e) {
       log("Error parsing Datum: $e");
       throw Exception("Error parsing Datum: $e");
@@ -139,10 +149,8 @@ class Datum {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "tanggal":
-            "${tanggal.year.toString().padLeft(4, '0')}-${tanggal.month.toString().padLeft(2, '0')}-${tanggal.day.toString().padLeft(2, '0')}",
-        "tenggat":
-            "${tenggat.year.toString().padLeft(4, '0')}-${tenggat.month.toString().padLeft(2, '0')}-${tenggat.day.toString().padLeft(2, '0')}",
+        "tanggal": tanggal.toIso8601String(),
+        "tenggat": tenggat.toIso8601String(),
         "guru_nip": guruNip,
         "nama": nama,
         "matapelajaran_id": matapelajaranId,
@@ -152,6 +160,7 @@ class Datum {
         "updated_at": updatedAt.toIso8601String(),
         "mata_pelajaran": mataPelajaran.toJson(),
         "submit_tugas": submitTugas?.toJson(),
+        "deskripsi": deskripsi,
       };
 }
 
@@ -178,10 +187,10 @@ class MataPelajaran {
     try {
       return MataPelajaran(
         id: json["id"] ?? 0,
-        nama: json["nama"] ?? "",
-        guruNip: json["guru_nip"] ?? "",
-        kelas: json["kelas"] ?? "",
-        tahunAjaran: json["tahun_ajaran"] ?? "",
+        nama: json["nama"]?.toString() ?? "",
+        guruNip: json["guru_nip"]?.toString() ?? "",
+        kelas: json["kelas"]?.toString() ?? "",
+        tahunAjaran: json["tahun_ajaran"]?.toString() ?? "",
         createdAt: json["created_at"] != null
             ? DateTime.parse(json["created_at"].toString())
             : DateTime.now(),
@@ -220,8 +229,8 @@ class SubmitTugas {
     required this.tanggal,
     required this.nisn,
     required this.tugasId,
-    required this.text,
-    required this.file,
+    this.text,
+    this.file,
     required this.createdAt,
     required this.updatedAt,
   });
